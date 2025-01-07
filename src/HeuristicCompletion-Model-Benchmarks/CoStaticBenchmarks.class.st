@@ -65,6 +65,7 @@ CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefi
 
 { #category : 'inspector' }
 CoStaticBenchmarks >> averageTimeForPrefix: prefixSize [
+
     | times |
     times := completionTimes at: prefixSize ifAbsent: [ #( 0 0 ) ].
     times second = 0
@@ -73,7 +74,8 @@ CoStaticBenchmarks >> averageTimeForPrefix: prefixSize [
 ]
 
 { #category : 'benchmarks' }
-CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [ 
+CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [
+ 
     | originalSelector |
     originalSelector := aMessageNode selector.
 
@@ -191,6 +193,7 @@ CoStaticBenchmarks >> inspectionResults [
 
 { #category : 'inspector' }
 CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
+
     | times |
     times := completionTimes
         at: prefixSize
@@ -229,6 +232,7 @@ CoStaticBenchmarks >> run [
 
 { #category : 'accessing' }
 CoStaticBenchmarks >> scope: aClass [
+
 	scope := aClass
 ]
 
@@ -240,6 +244,7 @@ CoStaticBenchmarks >> score [
 
 { #category : 'running' }
 CoStaticBenchmarks >> timeResults [
+
     <inspectorPresentationOrder: 1 title: 'Time Results'>
     | table |
     table := SpTablePresenter new
@@ -276,6 +281,7 @@ CoStaticBenchmarks >> totalEntriesPerPrefixSize: aPrefixSize [
 
 { #category : 'running' }
 CoStaticBenchmarks >> totalTime [
+
     "Sum over all prefix sizes"
     ^ completionTimes values
         inject: 0
@@ -284,6 +290,7 @@ CoStaticBenchmarks >> totalTime [
 
 { #category : 'running' }
 CoStaticBenchmarks >> totalTimeForPrefix: prefixSize [
+
     | times |
     times := completionTimes at: prefixSize ifAbsent: [ #( 0 0 ) ].
     ^ times first  "the accumulated total time in ms"
@@ -291,6 +298,7 @@ CoStaticBenchmarks >> totalTimeForPrefix: prefixSize [
 
 { #category : 'running' }
 CoStaticBenchmarks >> totalTimeSummary [
+
     <inspectorPresentationOrder: 2 title: 'Total Time (ms)'>
     ^ self totalTime
 ]
