@@ -97,7 +97,11 @@ CoStaticBenchmarks class >> runAllOnPackage: aPackage [
         
         "Retrieve the actual class object for the symbol"
         sorterClass := Smalltalk at: sorterSymbol ifAbsent: [ 
-            self error: 'Sorter class ', sorterSymbol, ' not found in Smalltalk image.'
+            self error: (String streamContents: [ :s | 
+    				s nextPutAll: 'Sorter class '.
+    				s nextPutAll: sorterSymbol asString.
+    				s nextPutAll: ' not found in Smalltalk image.'
+			])
         ].
 
         "Create and run a new benchmark for that sorter"
@@ -128,7 +132,7 @@ CoStaticBenchmarks class >> runFor: aClass [
 { #category : 'running' }
 CoStaticBenchmarks class >> sorterClasses [
     "Answers an array of the symbols of all sorter classes to be run."
-    ^ #( AlphabeticSorter ReverseAlphabeticSorter )
+    ^ #( AlphabeticSorter ReverseAlphabeticSorter NoSorter SizeSorter )
 ]
 
 { #category : 'inspector' }
