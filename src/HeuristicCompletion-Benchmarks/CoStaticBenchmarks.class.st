@@ -83,11 +83,52 @@ Class {
 }
 
 { #category : 'running' }
+CoStaticBenchmarks class >> runAllOnPackage: aPackage [
+    "Runs the CoStaticBenchmarks for every sorter class in sorterClasses,
+    all using the given package as the scope. 
+    Answers a Dictionary from sorter class symbols to the resulting CoStaticBenchmarks instance 
+    so you can inspect or retrieve results later."
+    
+    | results |
+    results := Dictionary new.
+    
+    self sorterClasses do: [ :sorterSymbol |
+        | sorterClass benchmark |
+        
+        "Retrieve the actual class object for the symbol"
+        sorterClass := Smalltalk at: sorterSymbol ifAbsent: [ 
+            self error: 'Sorter class ', sorterSymbol, ' not found in Smalltalk image.'
+        ].
+
+        "Create and run a new benchmark for that sorter"
+        benchmark := self new
+            scope: (CoBenchmarkPackage on: aPackage);
+            builder: (CoGlobalSorterResultSetBuilder new
+                sorterClass: sorterClass;
+                yourself);
+            yourself.
+
+        benchmark run.
+
+        "Store the instance so we can retrieve/inspect it later"
+        results at: sorterSymbol put: benchmark
+    ].
+
+    ^ results
+]
+
+{ #category : 'running' }
 CoStaticBenchmarks class >> runFor: aClass [
 
 	^ self new
 		scope: aClass;
 		run
+]
+
+{ #category : 'running' }
+CoStaticBenchmarks class >> sorterClasses [
+    "Answers an array of the symbols of all sorter classes to be run."
+    ^ #( AlphabeticSorter ReverseAlphabeticSorter )
 ]
 
 { #category : 'inspector' }
