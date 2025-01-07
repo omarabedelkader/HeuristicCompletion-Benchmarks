@@ -339,5 +339,5 @@ CoStaticBenchmarks >> totalTimeForPrefix: prefixSize [
 CoStaticBenchmarks >> totalTimeSummary [
 
 	<inspectorPresentationOrder: 2 title: 'Total Time (ms)'>
-	^ self totalTime asPresenter 
+	^ self totalTime asPresenter
 ]
