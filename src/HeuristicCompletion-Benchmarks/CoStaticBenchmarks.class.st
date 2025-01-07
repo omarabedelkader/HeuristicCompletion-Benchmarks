@@ -62,12 +62,6 @@ staticHeuristics := CoStaticBenchmarks new
 (staticHeuristics accuracyForCompletionIndex: (1 to: 3) withPrefixSize: 2) asFloat.
 ```
 
-To get all the benchmarks:
-
-```smalltalk
-global := CoStaticBenchmarks runAllOnPackage: SpAbstractAdapter package.
-```
-
 Using these benchmarks, you can measure:
 
 - **Which prefix sizes produce the best completion accuracy.**
