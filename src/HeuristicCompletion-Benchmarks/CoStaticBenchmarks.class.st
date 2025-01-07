@@ -338,6 +338,6 @@ CoStaticBenchmarks >> totalTimeForPrefix: prefixSize [
 { #category : 'running' }
 CoStaticBenchmarks >> totalTimeSummary [
 
-    <inspectorPresentationOrder: 2 title: 'Total Time (ms)'>
-    self totalTime.
+	<inspectorPresentationOrder: 2 title: 'Total Time (ms)'>
+	^ self totalTime asPresenter 
 ]
