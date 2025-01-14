@@ -3,7 +3,7 @@ Reverse alphabetic sorting
 "
 Class {
 	#name : 'ReverseAlphabeticSorter',
-	#superclass : 'CompletionSorter',
+	#superclass : 'Object',
 	#category : 'HeuristicCompletion-Model',
 	#package : 'HeuristicCompletion-Model'
 }

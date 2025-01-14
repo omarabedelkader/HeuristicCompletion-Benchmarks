@@ -3,7 +3,7 @@ no need to comment this functionality, it will be added to pharo soon
 "
 Class {
 	#name : 'SizeSorter',
-	#superclass : 'CompletionSorter',
+	#superclass : 'Object',
 	#category : 'HeuristicCompletion-Model',
 	#package : 'HeuristicCompletion-Model'
 }

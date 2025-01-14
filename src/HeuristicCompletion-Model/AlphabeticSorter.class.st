@@ -3,7 +3,7 @@ Aplhabetical sorting
 "
 Class {
 	#name : 'AlphabeticSorter',
-	#superclass : 'CompletionSorter',
+	#superclass : 'Object',
 	#category : 'HeuristicCompletion-Model',
 	#package : 'HeuristicCompletion-Model'
 }
