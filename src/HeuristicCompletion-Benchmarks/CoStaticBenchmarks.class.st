@@ -425,6 +425,12 @@ CoStaticBenchmarks >> timeResults [
                 title: 'Total (ms)'
                 evaluated: [ :prefixSize | (self totalTimeForPrefix: prefixSize) asString ]
         );
+		  addColumn: (
+            SpStringTableColumn
+                title: 'Count'
+                evaluated: [ :prefixSize |
+                    (completionTimes at: prefixSize ifAbsent: [ #( 0 0 ) ]) second asString ]
+        );
         addColumn: (
             SpStringTableColumn
                 title: 'Average (ms)'
