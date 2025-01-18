@@ -316,7 +316,7 @@ CoStaticBenchmarks >> latexInspectionResults [
             s nextPutAll: ' & '.
             s nextPutAll: pSize asString
         ].
-        s nextPutAll: '\\\\ \hline'; cr.
+        s nextPutAll: '\\ \hline'; cr.
 
         "Body rows"
         completionIndexRanges do: [:range |
@@ -347,7 +347,7 @@ CoStaticBenchmarks >> latexInspectionResults [
                 s nextPutAll: (accuracyPercentage printShowingDecimalPlaces: 2)
             ].
 
-            s nextPutAll: '\\\\ \hline'; cr.
+            s nextPutAll: '\\ \hline'; cr.
         ].
 
         "Close out the table"
