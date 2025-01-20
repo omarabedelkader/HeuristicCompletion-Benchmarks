@@ -436,7 +436,7 @@ CoStaticBenchmarks >> timeResults [
                 title: 'Average (ms)'
                 evaluated: [ :prefixSize | 
                     (self averageTimeForPrefix: prefixSize) 
-                        roundTo: 0.1;  "some rounding if desired"
+                       asFloat round:2;
                         asString 
                 ]
         );
