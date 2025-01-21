@@ -290,6 +290,7 @@ CoStaticBenchmarks >> inspectionResults [
 
 { #category : 'inspector' }
 CoStaticBenchmarks >> latexInspectionResults [
+
     "Generate and return a LaTeX table representation of the data shown
      in #inspectionResults (accuracy table)."
 
@@ -367,6 +368,87 @@ CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
     completionTimes
         at: prefixSize
         put: { times first + executionTime.  times second + 1 }.
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> mmr [
+
+    "Return the overall Mean Reciprocal Rank across all prefix sizes 
+     (2 through 8) in a single number."
+
+    | totalAll sumAll |
+    sumAll := 0.0.
+    totalAll := 0.
+
+    (2 to: 8) do: [ :prefixSize |
+        | prefixCount |
+        prefixCount := self totalEntriesPerPrefixSize: prefixSize.
+        totalAll := totalAll + prefixCount.
+        sumAll := sumAll + (prefixCount * (self mmrForPrefixSize: prefixSize))
+    ].
+
+    totalAll = 0 ifTrue: [ ^ 0 ].
+    ^ sumAll / totalAll
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> mmrForPrefixSize: prefixSize [
+
+    "Return the Mean Reciprocal Rank (MRR) for the given prefix size.
+     MRR = average of 1/rank for each callsite, where 'rank' is the 
+     position in the top-10 completions. If the correct method is not 
+     in the top 10, its reciprocal rank contribution is 0."
+
+    | total sumOfReciprocalRanks |
+    total := self totalEntriesPerPrefixSize: prefixSize.
+    total = 0 ifTrue: [ ^ 0 ].
+
+    sumOfReciprocalRanks := 0.0.
+
+    "Ranks in 'completionBenchs' are stored as keys 0..10, 
+     where 0 means 'not found among top 10'. 
+     So we only consider 1..10. The dictionary value is { count . setOfSelectors }."
+    1 to: 10 do: [ :rank |
+        | entry rankCount |
+        "Navigate completionBenchs at: rank => dictionaryOfPrefixSizes => {count. ...}"
+        entry := (completionBenchs
+                    at: rank
+                    ifAbsent: [ Dictionary new ])
+                  at: prefixSize
+                  ifAbsent: [ #(0 #()) ].
+
+        rankCount := entry first.   "How many times we saw the correct item at this rank"
+        sumOfReciprocalRanks := sumOfReciprocalRanks + (rankCount * (1 / rank))
+    ].
+
+    ^ sumOfReciprocalRanks / total
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> mmrInspectionResults [
+
+    <inspectorPresentationOrder: 4 title: 'MMR Results'>
+    "Presents a table of prefix sizes vs. their mean reciprocal rank."
+    | table |
+    table := SpTablePresenter new
+        items: self prefixSizes;  "2..8"
+        addColumn: (
+            SpStringTableColumn
+                title: 'Prefix'
+                evaluated: [ :prefixSize | prefixSize asString ]
+        );
+        addColumn: (
+            SpStringTableColumn
+                title: 'Mean Reciprocal Rank'
+                evaluated: [ :prefixSize | 
+                    | valueAsString |
+                    valueAsString := (self mmrForPrefixSize: prefixSize) printShowingDecimalPlaces: 4.
+                    valueAsString
+                ]
+        );
+        yourself.
+
+    ^ table
 ]
 
 { #category : 'inspector' }
