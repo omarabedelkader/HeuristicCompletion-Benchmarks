@@ -358,6 +358,34 @@ CoStaticBenchmarks >> latexInspectionResults [
     ]
 ]
 
+{ #category : 'as yet unclassified' }
+CoStaticBenchmarks >> latexMMRResults [
+
+    "Generate a LaTeX table for MRR across all prefix sizes."
+    | prefixSizes |
+    prefixSizes := self prefixSizes.  "2..8"
+
+    ^ String streamContents: [:s |
+        s nextPutAll: '\begin{table}[ht]'; cr.
+        s nextPutAll: '\centering'; cr.
+        s nextPutAll: '\begin{tabular}{|c|c|}'; cr.
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: 'Prefix & MRR \\ \hline'; cr.
+
+        prefixSizes do: [:pSize |
+            | val |
+            val := (self mmrForPrefixSize: pSize) printShowingDecimalPlaces: 4.
+            s nextPutAll: pSize asString; nextPutAll: ' & '.
+            s nextPutAll: val; nextPutAll: ' \\ \hline'; cr.
+        ].
+
+        s nextPutAll: '\end{tabular}'; cr.
+        s nextPutAll: '\caption{Mean Reciprocal Rank by prefix size}'; cr.
+        s nextPutAll: '\end{table}'; cr.
+    ].
+
+]
+
 { #category : 'inspector' }
 CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
 
