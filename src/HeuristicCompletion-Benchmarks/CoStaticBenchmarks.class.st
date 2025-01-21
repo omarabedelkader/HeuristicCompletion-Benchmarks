@@ -72,6 +72,8 @@ To extract the table in latex code to a specific sorter :
 
 ```smalltalk
 latexString := (global at: #AlphabeticSorter) latexInspectionResults.
+latexString := (global at: #AlphabeticSorter) latexTimeResults.
+latexString := (global at: #AlphabeticSorter) latexMRResults.
 
 ```
 
@@ -358,7 +360,7 @@ CoStaticBenchmarks >> latexInspectionResults [
     ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'inspector' }
 CoStaticBenchmarks >> latexMMRResults [
 
     "Generate a LaTeX table for MRR across all prefix sizes."
@@ -384,6 +386,53 @@ CoStaticBenchmarks >> latexMMRResults [
         s nextPutAll: '\end{table}'; cr.
     ].
 
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> latexTimeResults [
+
+    "Generate and return a LaTeX table representation of the data shown
+     in #timeResults (time metrics: total, count, and average)."
+
+    ^ String streamContents: [:s |
+
+        | prefixArray |
+
+        prefixArray := self prefixSizes.   "Typically #(2 3 4 5 6 7 8)"
+
+        "Begin LaTeX environment"
+        s nextPutAll: '\begin{table}[ht]'; cr.
+        s nextPutAll: '\centering'; cr.
+
+        "Define the column layout:
+         (Prefix) + (Total) + (Count) + (Average)"
+        s nextPutAll: '\begin{tabular}{|c|c|c|c|}'; cr.
+        s nextPutAll: '\hline'; cr.
+
+        "Header row"
+        s nextPutAll: 'Prefix & Total (ms) & Count & Average (ms)\\ \hline'; cr.
+
+        "Body rows"
+        prefixArray do: [:pSize |
+
+            | total count average |
+            total := self totalTimeForPrefix: pSize.
+            count := (completionTimes at: pSize ifAbsent: [ #(0 0) ]) second.
+            average := self averageTimeForPrefix: pSize.
+
+            s
+                nextPutAll: pSize asString; nextPutAll: ' & ';
+                print: total; nextPutAll: ' & ';
+                print: count; nextPutAll: ' & ';
+                print: (average roundTo: 0.01);      "round to two decimals"
+                nextPutAll: '\\ \hline'; cr
+        ].
+
+        "Close out the table"
+        s nextPutAll: '\end{tabular}'; cr.
+        s nextPutAll: '\caption{Completion Time Results}'; cr.
+        s nextPutAll: '\end{table}'; cr.
+    ]
 ]
 
 { #category : 'inspector' }
