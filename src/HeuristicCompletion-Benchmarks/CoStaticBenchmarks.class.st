@@ -410,7 +410,8 @@ CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
 ]
 
 { #category : 'benchmarks' }
-CoStaticBenchmarks >> memoryResults [ 
+CoStaticBenchmarks >> memoryResults [
+
     <inspectorPresentationOrder: 3 title: 'Memory Usage Results'>
     | table |
     table := SpTablePresenter new
@@ -428,20 +429,12 @@ CoStaticBenchmarks >> memoryResults [
         );
         addColumn: (
             SpStringTableColumn
-                title: 'Count'
+                title: 'Total (MB)'
                 evaluated: [ :prefixSize |
-                    (memoryUsages at: prefixSize ifAbsent: [ #( 0 0 ) ]) second asString ]
-        );
-        addColumn: (
-            SpStringTableColumn
-                title: 'Average (bytes)'
-                evaluated: [ :prefixSize |
-                    ((self averageMemoryForPrefix: prefixSize) asFloat round: 2) asString ]
-        );
+                    ((self totalMemoryForPrefix: prefixSize) / 1024 / 1024 round: 2) asString ]
+        );       
         yourself.
-
     ^ table
-
 ]
 
 { #category : 'accessing' }
