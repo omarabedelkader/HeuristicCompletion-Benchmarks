@@ -72,6 +72,8 @@ To extract the table in latex code to a specific sorter :
 
 ```smalltalk
 latexString := (global at: #AlphabeticSorter) latexInspectionResults.
+latexString := (global at: #AlphabeticSorter) latexTimeResults.
+latexString := (global at: #AlphabeticSorter) latexMRResults.
 
 ```
 
@@ -290,6 +292,7 @@ CoStaticBenchmarks >> inspectionResults [
 
 { #category : 'inspector' }
 CoStaticBenchmarks >> latexInspectionResults [
+
     "Generate and return a LaTeX table representation of the data shown
      in #inspectionResults (accuracy table)."
 
@@ -358,6 +361,81 @@ CoStaticBenchmarks >> latexInspectionResults [
 ]
 
 { #category : 'inspector' }
+CoStaticBenchmarks >> latexMMRResults [
+
+    "Generate a LaTeX table for MRR across all prefix sizes."
+    | prefixSizes |
+    prefixSizes := self prefixSizes.  "2..8"
+
+    ^ String streamContents: [:s |
+        s nextPutAll: '\begin{table}[ht]'; cr.
+        s nextPutAll: '\centering'; cr.
+        s nextPutAll: '\begin{tabular}{|c|c|}'; cr.
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: 'Prefix & MRR \\ \hline'; cr.
+
+        prefixSizes do: [:pSize |
+            | val |
+            val := (self mmrForPrefixSize: pSize) printShowingDecimalPlaces: 4.
+            s nextPutAll: pSize asString; nextPutAll: ' & '.
+            s nextPutAll: val; nextPutAll: ' \\ \hline'; cr.
+        ].
+
+        s nextPutAll: '\end{tabular}'; cr.
+        s nextPutAll: '\caption{Mean Reciprocal Rank by prefix size}'; cr.
+        s nextPutAll: '\end{table}'; cr.
+    ].
+
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> latexTimeResults [
+
+    "Generate and return a LaTeX table representation of the data shown
+     in #timeResults (time metrics: total, count, and average)."
+
+    ^ String streamContents: [:s |
+
+        | prefixArray |
+
+        prefixArray := self prefixSizes.   "Typically #(2 3 4 5 6 7 8)"
+
+        "Begin LaTeX environment"
+        s nextPutAll: '\begin{table}[ht]'; cr.
+        s nextPutAll: '\centering'; cr.
+
+        "Define the column layout:
+         (Prefix) + (Total) + (Count) + (Average)"
+        s nextPutAll: '\begin{tabular}{|c|c|c|c|}'; cr.
+        s nextPutAll: '\hline'; cr.
+
+        "Header row"
+        s nextPutAll: 'Prefix & Total (ms) & Count & Average (ms)\\ \hline'; cr.
+
+        "Body rows"
+        prefixArray do: [:pSize |
+
+            | total count average |
+            total := self totalTimeForPrefix: pSize.
+            count := (completionTimes at: pSize ifAbsent: [ #(0 0) ]) second.
+            average := self averageTimeForPrefix: pSize.
+
+            s
+                nextPutAll: pSize asString; nextPutAll: ' & ';
+                print: total; nextPutAll: ' & ';
+                print: count; nextPutAll: ' & ';
+                print: (average roundTo: 0.01);      "round to two decimals"
+                nextPutAll: '\\ \hline'; cr
+        ].
+
+        "Close out the table"
+        s nextPutAll: '\end{tabular}'; cr.
+        s nextPutAll: '\caption{Completion Time Results}'; cr.
+        s nextPutAll: '\end{table}'; cr.
+    ]
+]
+
+{ #category : 'inspector' }
 CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
 
     | times |
@@ -367,6 +445,87 @@ CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
     completionTimes
         at: prefixSize
         put: { times first + executionTime.  times second + 1 }.
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> mmr [
+
+    "Return the overall Mean Reciprocal Rank across all prefix sizes 
+     (2 through 8) in a single number."
+
+    | totalAll sumAll |
+    sumAll := 0.0.
+    totalAll := 0.
+
+    (2 to: 8) do: [ :prefixSize |
+        | prefixCount |
+        prefixCount := self totalEntriesPerPrefixSize: prefixSize.
+        totalAll := totalAll + prefixCount.
+        sumAll := sumAll + (prefixCount * (self mmrForPrefixSize: prefixSize))
+    ].
+
+    totalAll = 0 ifTrue: [ ^ 0 ].
+    ^ sumAll / totalAll
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> mmrForPrefixSize: prefixSize [
+
+    "Return the Mean Reciprocal Rank (MRR) for the given prefix size.
+     MRR = average of 1/rank for each callsite, where 'rank' is the 
+     position in the top-10 completions. If the correct method is not 
+     in the top 10, its reciprocal rank contribution is 0."
+
+    | total sumOfReciprocalRanks |
+    total := self totalEntriesPerPrefixSize: prefixSize.
+    total = 0 ifTrue: [ ^ 0 ].
+
+    sumOfReciprocalRanks := 0.0.
+
+    "Ranks in 'completionBenchs' are stored as keys 0..10, 
+     where 0 means 'not found among top 10'. 
+     So we only consider 1..10. The dictionary value is { count . setOfSelectors }."
+    1 to: 10 do: [ :rank |
+        | entry rankCount |
+        "Navigate completionBenchs at: rank => dictionaryOfPrefixSizes => {count. ...}"
+        entry := (completionBenchs
+                    at: rank
+                    ifAbsent: [ Dictionary new ])
+                  at: prefixSize
+                  ifAbsent: [ #(0 #()) ].
+
+        rankCount := entry first.   "How many times we saw the correct item at this rank"
+        sumOfReciprocalRanks := sumOfReciprocalRanks + (rankCount * (1 / rank))
+    ].
+
+    ^ sumOfReciprocalRanks / total
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> mmrInspectionResults [
+
+    <inspectorPresentationOrder: 4 title: 'MMR Results'>
+    "Presents a table of prefix sizes vs. their mean reciprocal rank."
+    | table |
+    table := SpTablePresenter new
+        items: self prefixSizes;  "2..8"
+        addColumn: (
+            SpStringTableColumn
+                title: 'Prefix'
+                evaluated: [ :prefixSize | prefixSize asString ]
+        );
+        addColumn: (
+            SpStringTableColumn
+                title: 'Mean Reciprocal Rank'
+                evaluated: [ :prefixSize | 
+                    | valueAsString |
+                    valueAsString := (self mmrForPrefixSize: prefixSize) printShowingDecimalPlaces: 4.
+                    valueAsString
+                ]
+        );
+        yourself.
+
+    ^ table
 ]
 
 { #category : 'inspector' }
