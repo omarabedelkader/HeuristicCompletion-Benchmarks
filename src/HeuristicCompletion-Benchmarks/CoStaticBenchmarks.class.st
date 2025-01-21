@@ -89,7 +89,8 @@ Class {
 		'scope',
 		'completionBenchs',
 		'builder',
-		'completionTimes'
+		'completionTimes',
+		'memoryUsages'
 	],
 	#category : 'HeuristicCompletion-Benchmarks',
 	#package : 'HeuristicCompletion-Benchmarks'
@@ -160,6 +161,17 @@ CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefi
 	]) / totalEntries
 ]
 
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> averageMemoryForPrefix: prefixSize [ 
+
+    | stats |
+    stats := memoryUsages at: prefixSize ifAbsent: [ #( 0 0 ) ].
+    stats second = 0
+        ifTrue: [ ^ 0 ]
+        ifFalse: [ ^ stats first / stats second ]
+
+]
+
 { #category : 'inspector' }
 CoStaticBenchmarks >> averageTimeForPrefix: prefixSize [
 
@@ -171,18 +183,22 @@ CoStaticBenchmarks >> averageTimeForPrefix: prefixSize [
 ]
 
 { #category : 'benchmarks' }
-CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [
- 
+CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [ 
     | originalSelector |
     originalSelector := aMessageNode selector.
 
     2 to: (aMessageNode selector size min: 8) do: [ :index | 
-        | prefix startTime endTime executionTime 
+        | prefix
+          startTime endTime executionTime
+          startMemory endMemory memoryUsed
           completion candidates completionIndex 
           previousResultsPerIndexPerPrefixSize |
 
-        "Start timing"
+        "1) Start timing"
         startTime := Time millisecondClockValue.
+
+        "2) Start memory usage (adjust to your dialect's API)"
+        startMemory := self currentMemoryUsage.
 
         prefix := originalSelector copyFrom: 1 to: index.
         aMessageNode selector: prefix.
@@ -200,21 +216,28 @@ CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [
 
         completionIndex := (candidates collect: [ :each | each contents ]) indexOf: originalSelector.
 
-        "Existing logic: update completionBenchs dictionary"
-        previousResultsPerIndexPerPrefixSize := completionBenchs
-            at: completionIndex
-            at: prefix size
-            ifAbsent: [ { 0 . Set new } ].
+        "Existing logic to track accuracy..."
+        previousResultsPerIndexPerPrefixSize :=
+            completionBenchs
+                at: completionIndex
+                at: prefix size
+                ifAbsent: [ { 0 . Set new } ].
         previousResultsPerIndexPerPrefixSize second add: originalSelector.
         completionBenchs
             at: completionIndex
             at: prefix size
-            put: { previousResultsPerIndexPerPrefixSize first + 1 . previousResultsPerIndexPerPrefixSize second }.
+            put: { previousResultsPerIndexPerPrefixSize first + 1 .
+                   previousResultsPerIndexPerPrefixSize second }.
 
-        "Stop timing and record it"
+        "3) Stop memory usage"
+        endMemory := self currentMemoryUsage.  "Adjust to your dialect's API"
+        memoryUsed := endMemory - startMemory.
+        self logMemory: memoryUsed forPrefix: prefix size.
+
+        "4) Stop timing and record it"
         endTime := Time millisecondClockValue.
         executionTime := endTime - startTime.
-        self logTime: executionTime forPrefix: prefix size
+        self logTime: executionTime forPrefix: prefix size.
     ].
 
     "Restore the original selector"
@@ -238,6 +261,12 @@ CoStaticBenchmarks >> completionIndexes [
 	}
 ]
 
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> currentMemoryUsage [
+
+    ^ Smalltalk vm memorySize
+]
+
 { #category : 'scoring' }
 CoStaticBenchmarks >> gradeForPrefixSize: prefixSize [
 
@@ -250,7 +279,8 @@ CoStaticBenchmarks >> initialize [
 	super initialize.
 	completionBenchs := Dictionary new.
 	builder := CoASTHeuristicsResultSetBuilder new.
-	completionTimes := Dictionary new.   "Initialize the timing dictionary"	
+	completionTimes := Dictionary new. 
+	memoryUsages := Dictionary new.
 ]
 
 { #category : 'inspector' }
@@ -357,6 +387,16 @@ CoStaticBenchmarks >> latexInspectionResults [
     ]
 ]
 
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> logMemory: usage forPrefix: prefixSize [ 
+
+    | stats |
+    stats := memoryUsages at: prefixSize ifAbsent: [ #( 0 0 ) ].
+    memoryUsages
+        at: prefixSize
+        put: { stats first + usage. stats second + 1 }.
+]
+
 { #category : 'inspector' }
 CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
 
@@ -367,6 +407,53 @@ CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
     completionTimes
         at: prefixSize
         put: { times first + executionTime.  times second + 1 }.
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> memoryResults [ 
+    <inspectorPresentationOrder: 3 title: 'Memory Usage Results'>
+    | table |
+    table := SpTablePresenter new
+        items: self prefixSizes;  "2..8"
+        addColumn: (
+            SpStringTableColumn
+                title: 'Prefix'
+                evaluated: [ :prefixSize | prefixSize asString ]
+        );
+        addColumn: (
+            SpStringTableColumn
+                title: 'Total (bytes)'
+                evaluated: [ :prefixSize |
+                    (self totalMemoryForPrefix: prefixSize) asString ]
+        );
+        addColumn: (
+            SpStringTableColumn
+                title: 'Count'
+                evaluated: [ :prefixSize |
+                    (memoryUsages at: prefixSize ifAbsent: [ #( 0 0 ) ]) second asString ]
+        );
+        addColumn: (
+            SpStringTableColumn
+                title: 'Average (bytes)'
+                evaluated: [ :prefixSize |
+                    ((self averageMemoryForPrefix: prefixSize) asFloat round: 2) asString ]
+        );
+        yourself.
+
+    ^ table
+
+]
+
+{ #category : 'accessing' }
+CoStaticBenchmarks >> memoryUsages [
+
+	^ memoryUsages
+]
+
+{ #category : 'accessing' }
+CoStaticBenchmarks >> memoryUsages: anObject [
+
+	memoryUsages := anObject
 ]
 
 { #category : 'inspector' }
@@ -449,6 +536,15 @@ CoStaticBenchmarks >> timeResults [
 CoStaticBenchmarks >> totalEntriesPerPrefixSize: aPrefixSize [
 
 	^ completionBenchs sum: [ :benchsPerPrefix | (benchsPerPrefix at: aPrefixSize ifAbsent: [ {0} ]) first ]
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> totalMemoryForPrefix: prefixSize [ 
+	
+	"the accumulated total memory usage in bytes"
+   | stats |
+   stats := memoryUsages at: prefixSize ifAbsent: [ #( 0 0 ) ].
+   ^ stats first  
 ]
 
 { #category : 'running' }
