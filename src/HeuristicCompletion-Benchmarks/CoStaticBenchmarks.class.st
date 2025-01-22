@@ -702,6 +702,44 @@ CoStaticBenchmarks >> printOn: aStream [
 		nextPutAll: ')'
 ]
 
+{ #category : 'inspector' }
+CoStaticBenchmarks >> rankDistributionForPrefixSize: prefixSize [ 
+
+    "Returns an Array of length 10, where each element is 
+     how many times we found the correct item at rank i for this prefix size."
+
+    | distribution |
+    distribution := (1 to: 10) collect: [ :rank |
+        ( (completionBenchs at: rank ifAbsent: [ Dictionary new ])
+            at: prefixSize ifAbsent: [ #(0 #()) ]) first
+    ].
+    ^ distribution
+
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> rankDistributionResults [
+
+    <inspectorPresentationOrder: 6 title: 'Rank Distribution'>
+    | table |
+    table := SpTablePresenter new
+        items: self prefixSizes;  "2..8"
+        addColumn: (SpStringTableColumn
+            title: 'Prefix'
+            evaluated: [ :prefixSize | prefixSize asString ]
+        ).
+        1 to: 10 do: [ :rank |
+            table addColumn: (SpStringTableColumn
+                title: 'Rank ', rank asString
+                evaluated: [ :prefixSize |
+                    (self rankDistributionForPrefixSize: prefixSize) at: rank
+                ]
+            )
+        ].
+    ^ table
+
+]
+
 { #category : 'running' }
 CoStaticBenchmarks >> run [
 
