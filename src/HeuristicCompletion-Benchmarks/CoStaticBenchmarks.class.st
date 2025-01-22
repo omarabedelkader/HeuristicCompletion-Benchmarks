@@ -609,6 +609,84 @@ CoStaticBenchmarks >> mmrInspectionResults [
 ]
 
 { #category : 'inspector' }
+CoStaticBenchmarks >> ndcgForPrefixSize: prefixSize [
+
+    "Compute Normalized Discounted Cumulative Gain for each prefix size."
+
+    | total relevantCount idealDcg actualDcg |
+
+    "Ensure totalEntriesPerPrefixSize: is implemented and returns a valid number."
+    total := self totalEntriesPerPrefixSize: prefixSize.
+    total isNumber ifFalse: [ ^ 0 ].
+    total = 0 ifTrue: [ ^ 0 ].
+
+    "We consider rank 1..10. For each rank, DCG is sum( (2^rel - 1) / log2(rank+1) )
+     Where rel = 1 if correct, 0 if incorrect."
+    actualDcg := 0.0.
+    1 to: 10 do: [ :rank |
+        | entry rankCount rel factor |
+        "Validate completionBenchs is a Dictionary or similar collection"
+        (completionBenchs respondsTo: #at:ifAbsent:) ifFalse: [ ^ 0 ].
+
+        entry := (completionBenchs 
+                    at: rank 
+                    ifAbsent: [ Dictionary new ]) 
+                  at: prefixSize 
+                  ifAbsent: [ #(0 #()) ].
+
+        "Validate entry is a collection with at least one element"
+        (entry isArray and: [ entry size > 0 ]) ifFalse: [ ^ 0 ].
+
+        rankCount := entry first.
+        
+        "Ensure rankCount is a number"
+        rankCount isNumber ifFalse: [ ^ 0 ].
+
+        "rel is 1 if the correct item is at this rank, but we might consider weighting. 
+         For a binary relevance system, just use 1 or 0."
+        rel := 1.  
+        factor := (2 raisedTo: rel) - 1.
+        
+        "We multiply by how many times we found the correct item at this rank."
+        actualDcg := actualDcg + (rankCount * (factor / ((rank + 1) log: 2))).
+    ].
+
+    "Compute ideal DCG for 'total' items with all correct items at rank 1.
+     For simplicity assume a perfect scenario or break down if you track partial correctness."
+    idealDcg := 0.0.
+    relevantCount := total.  "If all were correct, they appear at rank=1, or distributed."
+
+    1 to: (relevantCount min: 10) do: [ :r |
+        idealDcg := idealDcg 
+            + ( (2 raisedTo: 1) - 1 ) / ((r + 1) log: 2). "since rel=1 for each item"
+    ].
+
+    "Handle case where idealDcg is zero"
+    idealDcg = 0  
+        ifTrue: [ ^ 0 ]  
+        ifFalse: [ ^ (actualDcg / idealDcg) ].
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> ndcgInspectionResults [ 
+
+    <inspectorPresentationOrder: 5 title: 'NDCG Results'>
+    | table |
+    table := SpTablePresenter new
+        items: self prefixSizes; 
+        addColumn: (SpStringTableColumn
+            title: 'Prefix'
+            evaluated: [ :prefixSize | prefixSize asString ]);
+        addColumn: (SpStringTableColumn
+            title: 'NDCG'
+            evaluated: [ :prefixSize |
+                (self ndcgForPrefixSize: prefixSize) printShowingDecimalPlaces: 4
+            ]);
+        yourself.
+    ^ table
+]
+
+{ #category : 'inspector' }
 CoStaticBenchmarks >> prefixSizes [
 
 	^ 2 to: 8
