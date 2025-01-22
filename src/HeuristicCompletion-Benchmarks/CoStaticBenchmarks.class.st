@@ -77,6 +77,14 @@ latexString := (global at: #AlphabeticSorter) latexMRResults.
 
 ```
 
+To see how well completions do on 5-character selectors:
+
+```smalltalk
+
+accuracyPerSelectorLength: 5
+
+```
+
 Using these benchmarks, you can measure:
 
 - **Which prefix sizes produce the best completion accuracy.**
@@ -161,6 +169,34 @@ CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefi
 	^ (completionIndexRange sum: [ :index |
 		(completionBenchs at: index at: prefixSize ifAbsent: [ {0} ]) first
 	]) / totalEntries
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> accuracyPerSelectorLength: selectorLength [ 
+
+    | relevantCallsites correctCount totalCount |
+    relevantCallsites := 0.
+    correctCount := 0.
+    totalCount := 0.
+
+    completionBenchs keysAndValuesDo: [ :rank :prefixDict |
+        prefixDict keysAndValuesDo: [ :pSize :info |
+            | count usedSelectors |
+            count := info first. "How many times correct item was found at this rank"
+            usedSelectors := info second. "Set of actual selectors that ended up at this rank"
+            usedSelectors do: [ :sel |
+                (sel size = selectorLength) ifTrue: [
+                    relevantCallsites := relevantCallsites + 1.
+                    rank ~= 0 
+                        ifTrue: [ correctCount := correctCount + 1 ]. 
+                ].
+            ].
+            totalCount := totalCount + count
+        ]
+    ].
+
+    relevantCallsites = 0 ifTrue: [ ^ 0 ].
+    ^ correctCount asFloat / relevantCallsites
 ]
 
 { #category : 'benchmarks' }
