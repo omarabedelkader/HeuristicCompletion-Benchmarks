@@ -390,16 +390,6 @@ CoStaticBenchmarks >> latexInspectionResults [
     ]
 ]
 
-{ #category : 'benchmarks' }
-CoStaticBenchmarks >> logMemory: usage forPrefix: prefixSize [ 
-
-    | stats |
-    stats := memoryUsages at: prefixSize ifAbsent: [ #( 0 0 ) ].
-    memoryUsages
-        at: prefixSize
-        put: { stats first + usage. stats second + 1 }.
-]
-
 { #category : 'inspector' }
 CoStaticBenchmarks >> latexMMRResults [
 
@@ -473,6 +463,16 @@ CoStaticBenchmarks >> latexTimeResults [
         s nextPutAll: '\caption{Completion Time Results}'; cr.
         s nextPutAll: '\end{table}'; cr.
     ]
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> logMemory: usage forPrefix: prefixSize [ 
+
+    | stats |
+    stats := memoryUsages at: prefixSize ifAbsent: [ #( 0 0 ) ].
+    memoryUsages
+        at: prefixSize
+        put: { stats first + usage. stats second + 1 }.
 ]
 
 { #category : 'inspector' }
@@ -675,8 +675,8 @@ CoStaticBenchmarks >> timeResults [
                 title: 'Average (ms)'
                 evaluated: [ :prefixSize | 
                     (self averageTimeForPrefix: prefixSize) 
-                       asFloat round:2;
-                        asString 
+                       asFloat round:1;
+                       printShowingDecimalPlaces: 4.
                 ]
         );
         yourself.
