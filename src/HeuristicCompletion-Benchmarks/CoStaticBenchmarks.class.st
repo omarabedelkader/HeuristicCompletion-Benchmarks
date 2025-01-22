@@ -776,6 +776,55 @@ CoStaticBenchmarks >> rankDistributionResults [
 
 ]
 
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> recallAtK: k withPrefixSize: prefixSize [
+    "Return the fraction (0..1) of callsites whose correct selector
+     appears in the top k for the given prefix size."
+
+    "If k > 10, we'll just take the top-10 maximum, since we only
+     store up to 10 anyway."
+    | effectiveK |
+    effectiveK := k min: 10.
+
+    ^ self
+        accuracyForCompletionIndex: (1 to: effectiveK)
+        withPrefixSize: prefixSize
+]
+
+{ #category : 'inspector' }
+CoStaticBenchmarks >> recallInspectionResults [
+    <inspectorPresentationOrder: 7 title: 'Recall@K Results'>
+
+    | table kValues |
+    "Choose whichever K values you'd like to display, e.g. K=1..10"
+    kValues := #(1 3 5 10).
+
+    table := SpTablePresenter new
+        addColumn: (
+            SpStringTableColumn
+                title: 'K'
+                evaluated: [ :k | k asString ]
+        );
+        yourself.
+
+    "For each prefix size, add a column showing the recall@K"
+    self prefixSizes do: [ :prefixSize |
+        table addColumn: (
+            SpStringTableColumn
+                title: 'Prefix ', prefixSize asString
+                evaluated: [ :k |
+                    ((self recallAtK: k withPrefixSize: prefixSize)
+                        * 100
+                        roundTo: 0.01) asString, '%' ]
+        )
+    ].
+
+    table items: kValues.
+
+    ^ table
+
+]
+
 { #category : 'running' }
 CoStaticBenchmarks >> run [
 
