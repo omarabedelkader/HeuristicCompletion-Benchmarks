@@ -283,9 +283,27 @@ CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [
 ]
 
 { #category : 'accessing' }
+CoStaticBenchmarks >> builder [
+
+	^ builder
+]
+
+{ #category : 'accessing' }
 CoStaticBenchmarks >> builder: aCompletionBuilder [
 
 	builder := aCompletionBuilder
+]
+
+{ #category : 'accessing' }
+CoStaticBenchmarks >> completionBenchs [
+
+	^ completionBenchs
+]
+
+{ #category : 'accessing' }
+CoStaticBenchmarks >> completionBenchs: anObject [
+
+	completionBenchs := anObject
 ]
 
 { #category : 'inspector' }
@@ -297,6 +315,18 @@ CoStaticBenchmarks >> completionIndexes [
 	  4 to: 10.
 	  0 to: 0.
 	}
+]
+
+{ #category : 'accessing' }
+CoStaticBenchmarks >> completionTimes [
+
+	^ completionTimes
+]
+
+{ #category : 'accessing' }
+CoStaticBenchmarks >> completionTimes: anObject [
+
+	completionTimes := anObject
 ]
 
 { #category : 'benchmarks' }
@@ -834,6 +864,12 @@ CoStaticBenchmarks >> run [
 				self benchCallsite: node atPosition: node keywordsIntervals first ]
 		]
 	]
+]
+
+{ #category : 'accessing' }
+CoStaticBenchmarks >> scope [
+
+	^ scope
 ]
 
 { #category : 'accessing' }
