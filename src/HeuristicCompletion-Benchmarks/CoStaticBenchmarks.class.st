@@ -901,7 +901,7 @@ CoStaticBenchmarks >> totalTimeForPrefix: prefixSize [
 
     | times |
     times := completionTimes at: prefixSize ifAbsent: [ #( 0 0 ) ].
-    ^ times first  "the accumulated total time in ms"
+    ^ times first
 ]
 
 { #category : 'inspector' }
