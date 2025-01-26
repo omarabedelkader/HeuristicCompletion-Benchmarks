@@ -183,8 +183,8 @@ CoStaticBenchmarks >> accuracyPerSelectorLength: selectorLength [
     completionBenchs keysAndValuesDo: [ :rank :prefixDict |
         prefixDict keysAndValuesDo: [ :pSize :info |
             | count usedSelectors |
-            count := info first. "How many times correct item was found at this rank"
-            usedSelectors := info second. "Set of actual selectors that ended up at this rank"
+            count := info first. 
+            usedSelectors := info second.
             usedSelectors do: [ :sel |
                 (sel size = selectorLength) ifTrue: [
                     relevantCallsites := relevantCallsites + 1.
@@ -223,9 +223,9 @@ CoStaticBenchmarks >> averageTimeForPrefix: prefixSize [
 
 { #category : 'benchmarks' }
 CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [ 
+
     | originalSelector |
     originalSelector := aMessageNode selector.
-
     2 to: (aMessageNode selector size min: 8) do: [ :index | 
         | prefix
           startTime endTime executionTime
@@ -278,8 +278,6 @@ CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [
         executionTime := endTime - startTime.
         self logTime: executionTime forPrefix: prefix size.
     ].
-
-    "Restore the original selector"
     aMessageNode selector: originalSelector
 ]
 
@@ -375,6 +373,7 @@ CoStaticBenchmarks >> inspectionResults [
 										                     , completionIndexRange last asString ]).
 							           label ]);
 				          yourself).
+				
 	self prefixSizes do: [ :prefixSize |
 		table addColumn: (SpStringTableColumn
 				 title: prefixSize asString
@@ -390,27 +389,21 @@ CoStaticBenchmarks >> inspectionResults [
 { #category : 'inspector' }
 CoStaticBenchmarks >> latexInspectionResults [
 
-    "Generate and return a LaTeX table representation of the data shown
-     in #inspectionResults (accuracy table)."
-
+    "Generate and return a LaTeX table representation of the data shown in #inspectionResults (accuracy table)."
     | prefixSizes completionIndexRanges |
     ^ String streamContents: [:s |
 
-        prefixSizes := self prefixSizes.                 "Typically #(2 3 4 5 6 7 8)"
-        completionIndexRanges := self completionIndexes.  "Typically {1 to: 1. 2 to: 2. 3 to: 3. 4 to: 10. 0 to: 0.}"
+        prefixSizes := self prefixSizes.
+        completionIndexRanges := self completionIndexes.  
 
-        "Begin LaTeX environment"
         s nextPutAll: '\begin{table}[ht]'; cr.
         s nextPutAll: '\centering'; cr.
-
-        "Define the column layout:
-         1 column for 'Prefix' + (size of prefixSizes) columns of 'c'"
         s nextPutAll: '\begin{tabular}{|l'.
+
         prefixSizes size timesRepeat: [ s nextPutAll: '|c' ].
         s nextPutAll: '|}'; cr.
         s nextPutAll: '\hline'; cr.
 
-        "Header row"
         s nextPutAll: 'Prefix'.
         prefixSizes do: [:pSize |
             s nextPutAll: ' & '.
@@ -418,18 +411,10 @@ CoStaticBenchmarks >> latexInspectionResults [
         ].
         s nextPutAll: '\\ \hline'; cr.
 
-        "Body rows"
         completionIndexRanges do: [:range |
             | label accuracyPercentage |
-            "Generate a label similar to inspector table:
-             - 0 to: 0 => 'fail'
-             - 1 to: 1 => '1st'
-             - 2 to: 2 => '2nd'
-             - 3 to: 3 => '3rd'
-             - 4 to: 10 => '4-10', etc."
             label := (range size = 1
                 ifTrue: [
-                    "Small literal array for 0->fail, 1->1st, 2->2nd, 3->3rd"
                     #('fail' '1st' '2nd' '3rd')
                         at: (range first + 1)
                         ifAbsent: [ range first asString ]
@@ -437,11 +422,9 @@ CoStaticBenchmarks >> latexInspectionResults [
                 ifFalse: [
                     (range first asString), '-', (range last asString)
                 ]).
-
             s nextPutAll: label.
 
             prefixSizes do: [:pSize |
-                "Compute the accuracy (0.0..1.0), turn it into a percentage"
                 accuracyPercentage := (self accuracyForCompletionIndex: range withPrefixSize: pSize) * 100.
                 s nextPutAll: ' & '.
                 s nextPutAll: (accuracyPercentage printShowingDecimalPlaces: 2)
@@ -449,8 +432,6 @@ CoStaticBenchmarks >> latexInspectionResults [
 
             s nextPutAll: '\\ \hline'; cr.
         ].
-
-        "Close out the table"
         s nextPutAll: '\end{tabular}'; cr.
         s nextPutAll: '\caption{Completion Accuracy Results}'; cr.
         s nextPutAll: '\end{table}'; cr.

@@ -47,6 +47,44 @@ CoStaticBenchmarksTest >> testAccuracyForCompletionIndex [
 ]
 
 { #category : 'running' }
+CoStaticBenchmarksTest >> testAccuracyForCompletionIndexCalculation [
+
+    "Simulate the following data:
+    - Rank=1, Prefix=2, Count=2 (two successful completions at rank 1 with prefix 2)
+    - Rank=2, Prefix=2, Count=1 (one successful completion at rank 2 with prefix 2)
+    
+    Total entries for prefix=2 => 3 (2 + 1)."
+
+    | prefixDict1 prefixDict2 result |
+    
+    prefixDict1 := Dictionary new.
+    prefixDict1 at: 2 put: { 2 . #(selA selB) }. "Rank 1, Prefix 2, Count=2"
+    
+    prefixDict2 := Dictionary new.
+    prefixDict2 at: 2 put: { 1 . #(selC) }. "Rank 2, Prefix 2, Count=1"
+    
+    benchmarks completionBenchs at: 1 put: prefixDict1. "Simulate rank 1 completions"
+    benchmarks completionBenchs at: 2 put: prefixDict2. "Simulate rank 2 completions"
+    
+    "Calculate accuracy for rank range 1 to 1 (rank 1 only) with prefix size 2.
+    Expected: 2/3 = 0.6667."
+    result := benchmarks accuracyForCompletionIndex: (1 to: 1) withPrefixSize: 2.
+    self assert: result equals: 2/3.
+    
+    "Calculate accuracy for rank range 1 to 2 (ranks 1 and 2 combined) with prefix size 2.
+    Expected: (2 + 1)/3 = 1.0."
+    result := benchmarks accuracyForCompletionIndex: (1 to: 2) withPrefixSize: 2.
+    self assert: result equals: 1.0.
+    
+    "Calculate accuracy for rank range 3 to 3 (rank 3 only) with prefix size 2.
+    Expected: 0/3 = 0.0."
+    result := benchmarks accuracyForCompletionIndex: (3 to: 3) withPrefixSize: 2.
+    self assert: result equals: 0.0.
+
+
+]
+
+{ #category : 'running' }
 CoStaticBenchmarksTest >> testAccuracyPerSelectorLength [
 
     "We log a correct find at rank=1, prefix=2, for the selector 'abcd' (size=4). 
