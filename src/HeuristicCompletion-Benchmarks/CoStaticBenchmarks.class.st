@@ -155,6 +155,7 @@ CoStaticBenchmarks class >> runFor: aClass [
 
 { #category : 'running' }
 CoStaticBenchmarks class >> sorterClasses [
+
     "Answers an array of the symbols of all sorter classes to be run."
     ^ #( AlphabeticSorter ReverseAlphabeticSorter NoSorter SizeSorter )
 ]
