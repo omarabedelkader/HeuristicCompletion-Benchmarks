@@ -160,7 +160,7 @@ CoStaticBenchmarks class >> sorterClasses [
     ^ #( AlphabeticSorter ReverseAlphabeticSorter NoSorter SizeSorter )
 ]
 
-{ #category : 'inspector' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefixSize: prefixSize [
 
 	| totalEntries |
@@ -172,7 +172,7 @@ CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefi
 	]) / totalEntries
 ]
 
-{ #category : 'inspector' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> accuracyPerSelectorLength: selectorLength [ 
 
     | relevantCallsites correctCount totalCount |
@@ -200,7 +200,7 @@ CoStaticBenchmarks >> accuracyPerSelectorLength: selectorLength [
     ^ correctCount asFloat / relevantCallsites
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> averageMemoryForPrefix: prefixSize [ 
 
     | stats |
@@ -211,7 +211,7 @@ CoStaticBenchmarks >> averageMemoryForPrefix: prefixSize [
 
 ]
 
-{ #category : 'inspector' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> averageTimeForPrefix: prefixSize [
 
     | times |
@@ -307,7 +307,7 @@ CoStaticBenchmarks >> completionBenchs: anObject [
 	completionBenchs := anObject
 ]
 
-{ #category : 'inspector' }
+{ #category : 'benchmarks' }
 CoStaticBenchmarks >> completionIndexes [
 
 	^ { 1 to: 1.
@@ -336,7 +336,7 @@ CoStaticBenchmarks >> currentMemoryUsage [
     ^ Smalltalk vm memorySize
 ]
 
-{ #category : 'scoring' }
+{ #category : 'benchmarks' }
 CoStaticBenchmarks >> gradeForPrefixSize: prefixSize [
 
 	^ self accuracyForCompletionIndex: (2 to: 8) withPrefixSize: prefixSize
@@ -532,7 +532,7 @@ CoStaticBenchmarks >> latexTimeResults [
     ]
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> logMemory: usage forPrefix: prefixSize [ 
 
     | stats |
@@ -554,7 +554,7 @@ CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
         put: { times first + executionTime.  times second + 1 }.
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'inspector' }
 CoStaticBenchmarks >> memoryResults [
 
     <inspectorPresentationOrder: 3 title: 'Memory Usage Results'>
@@ -594,7 +594,7 @@ CoStaticBenchmarks >> memoryUsages: anObject [
 	memoryUsages := anObject
 ]
 
-{ #category : 'inspector' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> mmr [
 
     "Return the overall Mean Reciprocal Rank across all prefix sizes 
@@ -615,7 +615,7 @@ CoStaticBenchmarks >> mmr [
     ^ sumAll / totalAll
 ]
 
-{ #category : 'inspector' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> mmrForPrefixSize: prefixSize [
 
     "Return the Mean Reciprocal Rank (MRR) for the given prefix size.
@@ -675,7 +675,7 @@ CoStaticBenchmarks >> mmrInspectionResults [
     ^ table
 ]
 
-{ #category : 'inspector' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> ndcgForPrefixSize: prefixSize [
 
     "Compute Normalized Discounted Cumulative Gain for each prefix size."
@@ -753,7 +753,7 @@ CoStaticBenchmarks >> ndcgInspectionResults [
     ^ table
 ]
 
-{ #category : 'inspector' }
+{ #category : 'benchmarks' }
 CoStaticBenchmarks >> prefixSizes [
 
 	^ 2 to: 8
@@ -769,7 +769,7 @@ CoStaticBenchmarks >> printOn: aStream [
 		nextPutAll: ')'
 ]
 
-{ #category : 'inspector' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> rankDistributionForPrefixSize: prefixSize [ 
 
     "Returns an Array of length 10, where each element is 
@@ -807,7 +807,7 @@ CoStaticBenchmarks >> rankDistributionResults [
 
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> recallAtK: k withPrefixSize: prefixSize [
     "Return the fraction (0..1) of callsites whose correct selector
      appears in the top k for the given prefix size."
@@ -885,7 +885,7 @@ CoStaticBenchmarks >> score [
 	^ ((1 to: 7) sum: [ :i | (self gradeForPrefixSize: i + 1) / i ]) * 100 / ((1 to: 7) sum: [ :index | 1/index ])
 ]
 
-{ #category : 'running' }
+{ #category : 'inspector' }
 CoStaticBenchmarks >> timeResults [
 
     <inspectorPresentationOrder: 1 title: 'Time Results'>
@@ -922,13 +922,13 @@ CoStaticBenchmarks >> timeResults [
     ^ table
 ]
 
-{ #category : 'running' }
+{ #category : 'benchmarks' }
 CoStaticBenchmarks >> totalEntriesPerPrefixSize: aPrefixSize [
 
 	^ completionBenchs sum: [ :benchsPerPrefix | (benchsPerPrefix at: aPrefixSize ifAbsent: [ {0} ]) first ]
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> totalMemoryForPrefix: prefixSize [ 
 	
 	"the accumulated total memory usage in bytes"
@@ -937,7 +937,7 @@ CoStaticBenchmarks >> totalMemoryForPrefix: prefixSize [
    ^ stats first  
 ]
 
-{ #category : 'running' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> totalTime [
 
     "Sum over all prefix sizes"
@@ -946,7 +946,7 @@ CoStaticBenchmarks >> totalTime [
         into: [ :sum :timeArray | sum + timeArray first ]
 ]
 
-{ #category : 'running' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> totalTimeForPrefix: prefixSize [
 
     | times |
@@ -954,7 +954,7 @@ CoStaticBenchmarks >> totalTimeForPrefix: prefixSize [
     ^ times first  "the accumulated total time in ms"
 ]
 
-{ #category : 'running' }
+{ #category : 'inspector' }
 CoStaticBenchmarks >> totalTimeSummary [
 
 	<inspectorPresentationOrder: 2 title: 'Total Time (ms)'>
