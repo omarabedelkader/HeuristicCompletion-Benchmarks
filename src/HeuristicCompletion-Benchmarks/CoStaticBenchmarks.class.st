@@ -160,7 +160,7 @@ CoStaticBenchmarks class >> sorterClasses [
     ^ #( AlphabeticSorter ReverseAlphabeticSorter NoSorter SizeSorter )
 ]
 
-{ #category : 'metrics' }
+{ #category : 'benchmarks' }
 CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefixSize: prefixSize [
 
 	| totalEntries |
@@ -172,7 +172,7 @@ CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefi
 	]) / totalEntries
 ]
 
-{ #category : 'metrics' }
+{ #category : 'benchmarks' }
 CoStaticBenchmarks >> accuracyPerSelectorLength: selectorLength [ 
 
     | relevantCallsites correctCount totalCount |
@@ -328,7 +328,7 @@ CoStaticBenchmarks >> completionTimes: anObject [
 	completionTimes := anObject
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> currentMemoryUsage [
 
     ^ Smalltalk vm memorySize
@@ -523,13 +523,13 @@ CoStaticBenchmarks >> logMemory: usage forPrefix: prefixSize [
         put: { stats first + usage. stats second + 1 }.
 ]
 
-{ #category : 'inspector' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
 
     | times |
     times := completionTimes
         at: prefixSize
-        ifAbsent: [ #( 0 0 )  ].  "Default is { totalTime = 0 . count = 0 }"
+        ifAbsent: [ #( 0 0 )  ].
     completionTimes
         at: prefixSize
         put: { times first + executionTime.  times second + 1 }.
@@ -829,7 +829,7 @@ CoStaticBenchmarks >> scope: aClass [
 	scope := aClass
 ]
 
-{ #category : 'scoring' }
+{ #category : 'benchmarks' }
 CoStaticBenchmarks >> score [
 
 	^ ((1 to: 7) sum: [ :i | (self gradeForPrefixSize: i + 1) / i ]) * 100 / ((1 to: 7) sum: [ :index | 1/index ])
