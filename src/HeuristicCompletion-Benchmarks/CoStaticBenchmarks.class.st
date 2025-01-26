@@ -386,7 +386,7 @@ CoStaticBenchmarks >> inspectionResults [
 	^ table
 ]
 
-{ #category : 'inspector' }
+{ #category : 'printing' }
 CoStaticBenchmarks >> latexInspectionResults [
 
     "Generate and return a LaTeX table representation of the data shown in #inspectionResults (accuracy table)."
@@ -438,7 +438,7 @@ CoStaticBenchmarks >> latexInspectionResults [
     ]
 ]
 
-{ #category : 'inspector' }
+{ #category : 'printing' }
 CoStaticBenchmarks >> latexMMRResults [
 
     "Generate a LaTeX table for MRR across all prefix sizes."
@@ -466,7 +466,7 @@ CoStaticBenchmarks >> latexMMRResults [
 
 ]
 
-{ #category : 'inspector' }
+{ #category : 'printing' }
 CoStaticBenchmarks >> latexTimeResults [
 
     "Generate and return a LaTeX table representation of the data shown
@@ -578,9 +578,7 @@ CoStaticBenchmarks >> memoryUsages: anObject [
 { #category : 'metrics' }
 CoStaticBenchmarks >> mmr [
 
-    "Return the overall Mean Reciprocal Rank across all prefix sizes 
-     (2 through 8) in a single number."
-
+    "Return the overall Mean Reciprocal Rank across all prefix sizes  (2 through 8) in a single number."
     | totalAll sumAll |
     sumAll := 0.0.
     totalAll := 0.
@@ -610,19 +608,15 @@ CoStaticBenchmarks >> mmrForPrefixSize: prefixSize [
 
     sumOfReciprocalRanks := 0.0.
 
-    "Ranks in 'completionBenchs' are stored as keys 0..10, 
-     where 0 means 'not found among top 10'. 
-     So we only consider 1..10. The dictionary value is { count . setOfSelectors }."
     1 to: 10 do: [ :rank |
         | entry rankCount |
-        "Navigate completionBenchs at: rank => dictionaryOfPrefixSizes => {count. ...}"
         entry := (completionBenchs
                     at: rank
                     ifAbsent: [ Dictionary new ])
                   at: prefixSize
                   ifAbsent: [ #(0 #()) ].
 
-        rankCount := entry first.   "How many times we saw the correct item at this rank"
+        rankCount := entry first.
         sumOfReciprocalRanks := sumOfReciprocalRanks + (rankCount * (1 / rank))
     ].
 
@@ -633,7 +627,6 @@ CoStaticBenchmarks >> mmrForPrefixSize: prefixSize [
 CoStaticBenchmarks >> mmrInspectionResults [
 
     <inspectorPresentationOrder: 4 title: 'MMR Results'>
-    "Presents a table of prefix sizes vs. their mean reciprocal rank."
     | table |
     table := SpTablePresenter new
         items: self prefixSizes;  "2..8"
@@ -662,54 +655,37 @@ CoStaticBenchmarks >> ndcgForPrefixSize: prefixSize [
     "Compute Normalized Discounted Cumulative Gain for each prefix size."
 
     | total relevantCount idealDcg actualDcg |
-
-    "Ensure totalEntriesPerPrefixSize: is implemented and returns a valid number."
     total := self totalEntriesPerPrefixSize: prefixSize.
     total isNumber ifFalse: [ ^ 0 ].
     total = 0 ifTrue: [ ^ 0 ].
 
-    "We consider rank 1..10. For each rank, DCG is sum( (2^rel - 1) / log2(rank+1) )
-     Where rel = 1 if correct, 0 if incorrect."
     actualDcg := 0.0.
     1 to: 10 do: [ :rank |
         | entry rankCount rel factor |
-        "Validate completionBenchs is a Dictionary or similar collection"
         (completionBenchs respondsTo: #at:ifAbsent:) ifFalse: [ ^ 0 ].
-
         entry := (completionBenchs 
                     at: rank 
                     ifAbsent: [ Dictionary new ]) 
                   at: prefixSize 
                   ifAbsent: [ #(0 #()) ].
 
-        "Validate entry is a collection with at least one element"
         (entry isArray and: [ entry size > 0 ]) ifFalse: [ ^ 0 ].
 
         rankCount := entry first.
-        
-        "Ensure rankCount is a number"
         rankCount isNumber ifFalse: [ ^ 0 ].
 
-        "rel is 1 if the correct item is at this rank, but we might consider weighting. 
-         For a binary relevance system, just use 1 or 0."
         rel := 1.  
         factor := (2 raisedTo: rel) - 1.
-        
-        "We multiply by how many times we found the correct item at this rank."
         actualDcg := actualDcg + (rankCount * (factor / ((rank + 1) log: 2))).
     ].
 
-    "Compute ideal DCG for 'total' items with all correct items at rank 1.
-     For simplicity assume a perfect scenario or break down if you track partial correctness."
     idealDcg := 0.0.
-    relevantCount := total.  "If all were correct, they appear at rank=1, or distributed."
+    relevantCount := total. 
 
     1 to: (relevantCount min: 10) do: [ :r |
         idealDcg := idealDcg 
-            + ( (2 raisedTo: 1) - 1 ) / ((r + 1) log: 2). "since rel=1 for each item"
+            + ( (2 raisedTo: 1) - 1 ) / ((r + 1) log: 2). 
     ].
-
-    "Handle case where idealDcg is zero"
     idealDcg = 0  
         ifTrue: [ ^ 0 ]  
         ifFalse: [ ^ (actualDcg / idealDcg) ].
@@ -753,9 +729,7 @@ CoStaticBenchmarks >> printOn: aStream [
 { #category : 'metrics' }
 CoStaticBenchmarks >> rankDistributionForPrefixSize: prefixSize [ 
 
-    "Returns an Array of length 10, where each element is 
-     how many times we found the correct item at rank i for this prefix size."
-
+    "Returns an Array of length 10, where each element is  how many times we found the correct item at rank i for this prefix size."
     | distribution |
     distribution := (1 to: 10) collect: [ :rank |
         ( (completionBenchs at: rank ifAbsent: [ Dictionary new ])
@@ -790,11 +764,9 @@ CoStaticBenchmarks >> rankDistributionResults [
 
 { #category : 'metrics' }
 CoStaticBenchmarks >> recallAtK: k withPrefixSize: prefixSize [
-    "Return the fraction (0..1) of callsites whose correct selector
-     appears in the top k for the given prefix size."
 
-    "If k > 10, we'll just take the top-10 maximum, since we only
-     store up to 10 anyway."
+    "Return the fraction (0..1) of callsites whose correct selector appears in the top k for the given prefix size."
+    "If k > 10, we'll just take the top-10 maximum, since we only store up to 10 anyway."
     | effectiveK |
     effectiveK := k min: 10.
 
@@ -805,12 +777,10 @@ CoStaticBenchmarks >> recallAtK: k withPrefixSize: prefixSize [
 
 { #category : 'inspector' }
 CoStaticBenchmarks >> recallInspectionResults [
+
     <inspectorPresentationOrder: 7 title: 'Recall@K Results'>
-
     | table kValues |
-    "Choose whichever K values you'd like to display, e.g. K=1..10"
     kValues := #(1 3 5 10).
-
     table := SpTablePresenter new
         addColumn: (
             SpStringTableColumn
@@ -819,7 +789,6 @@ CoStaticBenchmarks >> recallInspectionResults [
         );
         yourself.
 
-    "For each prefix size, add a column showing the recall@K"
     self prefixSizes do: [ :prefixSize |
         table addColumn: (
             SpStringTableColumn
