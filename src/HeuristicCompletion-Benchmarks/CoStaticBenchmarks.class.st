@@ -179,7 +179,6 @@ CoStaticBenchmarks >> accuracyPerSelectorLength: selectorLength [
     relevantCallsites := 0.
     correctCount := 0.
     totalCount := 0.
-
     completionBenchs keysAndValuesDo: [ :rank :prefixDict |
         prefixDict keysAndValuesDo: [ :pSize :info |
             | count usedSelectors |
@@ -195,7 +194,6 @@ CoStaticBenchmarks >> accuracyPerSelectorLength: selectorLength [
             totalCount := totalCount + count
         ]
     ].
-
     relevantCallsites = 0 ifTrue: [ ^ 0 ].
     ^ correctCount asFloat / relevantCallsites
 ]
@@ -390,6 +388,7 @@ CoStaticBenchmarks >> inspectionResults [
 CoStaticBenchmarks >> latexInspectionResults [
 
     "Generate and return a LaTeX table representation of the data shown in #inspectionResults (accuracy table)."
+
     | prefixSizes completionIndexRanges |
     ^ String streamContents: [:s |
 
@@ -442,23 +441,21 @@ CoStaticBenchmarks >> latexInspectionResults [
 CoStaticBenchmarks >> latexMMRResults [
 
     "Generate a LaTeX table for MRR across all prefix sizes."
-    | prefixSizes |
-    prefixSizes := self prefixSizes.  "2..8"
 
+    | prefixSizes |
+    prefixSizes := self prefixSizes.
     ^ String streamContents: [:s |
         s nextPutAll: '\begin{table}[ht]'; cr.
         s nextPutAll: '\centering'; cr.
         s nextPutAll: '\begin{tabular}{|c|c|}'; cr.
         s nextPutAll: '\hline'; cr.
         s nextPutAll: 'Prefix & MRR \\ \hline'; cr.
-
         prefixSizes do: [:pSize |
             | val |
             val := (self mmrForPrefixSize: pSize) printShowingDecimalPlaces: 4.
             s nextPutAll: pSize asString; nextPutAll: ' & '.
             s nextPutAll: val; nextPutAll: ' \\ \hline'; cr.
         ].
-
         s nextPutAll: '\end{tabular}'; cr.
         s nextPutAll: '\caption{Mean Reciprocal Rank by prefix size}'; cr.
         s nextPutAll: '\end{table}'; cr.
@@ -469,44 +466,29 @@ CoStaticBenchmarks >> latexMMRResults [
 { #category : 'printing' }
 CoStaticBenchmarks >> latexTimeResults [
 
-    "Generate and return a LaTeX table representation of the data shown
-     in #timeResults (time metrics: total, count, and average)."
+    "Generate and return a LaTeX table representation of the data shown in #timeResults (time metrics: total, count, and average)."
 
     ^ String streamContents: [:s |
-
         | prefixArray |
-
-        prefixArray := self prefixSizes.   "Typically #(2 3 4 5 6 7 8)"
-
-        "Begin LaTeX environment"
+        prefixArray := self prefixSizes.
         s nextPutAll: '\begin{table}[ht]'; cr.
         s nextPutAll: '\centering'; cr.
-
-        "Define the column layout:
-         (Prefix) + (Total) + (Count) + (Average)"
         s nextPutAll: '\begin{tabular}{|c|c|c|c|}'; cr.
         s nextPutAll: '\hline'; cr.
-
-        "Header row"
         s nextPutAll: 'Prefix & Total (ms) & Count & Average (ms)\\ \hline'; cr.
 
-        "Body rows"
         prefixArray do: [:pSize |
-
             | total count average |
             total := self totalTimeForPrefix: pSize.
             count := (completionTimes at: pSize ifAbsent: [ #(0 0) ]) second.
             average := self averageTimeForPrefix: pSize.
-
             s
                 nextPutAll: pSize asString; nextPutAll: ' & ';
                 print: total; nextPutAll: ' & ';
                 print: count; nextPutAll: ' & ';
-                print: (average roundTo: 0.01);      "round to two decimals"
+                print: (average roundTo: 0.01); 
                 nextPutAll: '\\ \hline'; cr
         ].
-
-        "Close out the table"
         s nextPutAll: '\end{tabular}'; cr.
         s nextPutAll: '\caption{Completion Time Results}'; cr.
         s nextPutAll: '\end{table}'; cr.
@@ -582,14 +564,12 @@ CoStaticBenchmarks >> mmr [
     | totalAll sumAll |
     sumAll := 0.0.
     totalAll := 0.
-
     (2 to: 8) do: [ :prefixSize |
         | prefixCount |
         prefixCount := self totalEntriesPerPrefixSize: prefixSize.
         totalAll := totalAll + prefixCount.
         sumAll := sumAll + (prefixCount * (self mmrForPrefixSize: prefixSize))
     ].
-
     totalAll = 0 ifTrue: [ ^ 0 ].
     ^ sumAll / totalAll
 ]
@@ -653,7 +633,6 @@ CoStaticBenchmarks >> mmrInspectionResults [
 CoStaticBenchmarks >> ndcgForPrefixSize: prefixSize [
 
     "Compute Normalized Discounted Cumulative Gain for each prefix size."
-
     | total relevantCount idealDcg actualDcg |
     total := self totalEntriesPerPrefixSize: prefixSize.
     total isNumber ifFalse: [ ^ 0 ].
