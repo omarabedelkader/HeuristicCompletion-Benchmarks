@@ -166,7 +166,6 @@ CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefi
 	| totalEntries |
 	totalEntries := self totalEntriesPerPrefixSize: prefixSize.
 	totalEntries = 0 ifTrue: [ ^ 0 ].
-
 	^ (completionIndexRange sum: [ :index |
 		(completionBenchs at: index at: prefixSize ifAbsent: [ {0} ]) first
 	]) / totalEntries
@@ -440,8 +439,6 @@ CoStaticBenchmarks >> latexInspectionResults [
 { #category : 'printing' }
 CoStaticBenchmarks >> latexMMRResults [
 
-    "Generate a LaTeX table for MRR across all prefix sizes."
-
     | prefixSizes |
     prefixSizes := self prefixSizes.
     ^ String streamContents: [:s |
@@ -465,8 +462,6 @@ CoStaticBenchmarks >> latexMMRResults [
 
 { #category : 'printing' }
 CoStaticBenchmarks >> latexTimeResults [
-
-    "Generate and return a LaTeX table representation of the data shown in #timeResults (time metrics: total, count, and average)."
 
     ^ String streamContents: [:s |
         | prefixArray |
@@ -523,7 +518,7 @@ CoStaticBenchmarks >> memoryResults [
     <inspectorPresentationOrder: 3 title: 'Memory Usage Results'>
     | table |
     table := SpTablePresenter new
-        items: self prefixSizes;  "2..8"
+        items: self prefixSizes;
         addColumn: (
             SpStringTableColumn
                 title: 'Prefix'
@@ -539,7 +534,7 @@ CoStaticBenchmarks >> memoryResults [
             SpStringTableColumn
                 title: 'Total (MB)'
                 evaluated: [ :prefixSize |
-                    ((self totalMemoryForPrefix: prefixSize) / 1024 / 1024 round: 2) asString ]
+                    ((self totalMemoryForPrefix: prefixSize) / 1024 / 1024 round: 2; printShowingDecimalPlaces:2) asString ]
         );       
         yourself.
     ^ table
@@ -820,7 +815,7 @@ CoStaticBenchmarks >> timeResults [
     <inspectorPresentationOrder: 1 title: 'Time Results'>
     | table |
     table := SpTablePresenter new
-        items: self prefixSizes;  "2..8"
+        items: self prefixSizes;
         addColumn: (
             SpStringTableColumn
                 title: 'Prefix'
@@ -842,8 +837,8 @@ CoStaticBenchmarks >> timeResults [
                 title: 'Average (ms)'
                 evaluated: [ :prefixSize | 
                     (self averageTimeForPrefix: prefixSize) 
-                       asFloat round:1;
-                       printShowingDecimalPlaces: 4.
+                       asFloat round: 1;
+                       printShowingDecimalPlaces: 2.
                 ]
         );
         yourself.
