@@ -678,7 +678,7 @@ CoStaticBenchmarks >> ndcgInspectionResults [
         addColumn: (SpStringTableColumn
             title: 'NDCG'
             evaluated: [ :prefixSize |
-                (self ndcgForPrefixSize: prefixSize) printShowingDecimalPlaces: 4
+                (self ndcgForPrefixSize: prefixSize) printShowingDecimalPlaces: 2
             ]);
         yourself.
     ^ table
