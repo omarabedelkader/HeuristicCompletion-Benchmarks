@@ -615,7 +615,7 @@ CoStaticBenchmarks >> mmrInspectionResults [
                 title: 'Mean Reciprocal Rank'
                 evaluated: [ :prefixSize | 
                     | valueAsString |
-                    valueAsString := (self mmrForPrefixSize: prefixSize) printShowingDecimalPlaces: 4.
+                    valueAsString := (self mmrForPrefixSize: prefixSize) printShowingDecimalPlaces: 2.
                     valueAsString
                 ]
         );
