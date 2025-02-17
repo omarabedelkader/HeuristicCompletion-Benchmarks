@@ -145,8 +145,8 @@ CoStaticBenchmarksTest >> testInspectionResults [
 
     "Just verify it returns something without error; 
      you might parse the returned table or string to ensure correct formatting."
-    self shouldnt: [ benchmarks inspectionResults ] raise: Error.
-    self assert: (benchmarks inspectionResults isKindOf: SpTablePresenter).
+    self shouldnt: [ benchmarks accuracyInspectionResults ] raise: Error.
+    self assert: (benchmarks accuracyInspectionResults isKindOf: SpTablePresenter).
 ]
 
 { #category : 'running' }

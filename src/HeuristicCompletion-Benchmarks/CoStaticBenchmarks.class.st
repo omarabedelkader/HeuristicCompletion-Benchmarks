@@ -160,7 +160,7 @@ CoStaticBenchmarks class >> sorterClasses [
     ^ #( AlphabeticSorter ReverseAlphabeticSorter NoSorter SizeSorter )
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'metrics' }
 CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefixSize: prefixSize [
 
 	| totalEntries |
@@ -171,7 +171,43 @@ CoStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPrefi
 	]) / totalEntries
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'inspector' }
+CoStaticBenchmarks >> accuracyInspectionResults [
+
+	<inspectorPresentationOrder: 0 title: 'Accuracy'>
+	| table |
+	table := SpTablePresenter new
+		         items: self completionIndexes;
+		         addColumn: (SpCompositeTableColumn new
+				          title: 'Prefix';
+				          addColumn:
+					          (SpStringTableColumn evaluated: [ :completionIndexRange |
+							           | label |
+							           label := '% '.
+							           label := label , (completionIndexRange size = 1
+									                     ifTrue: [
+										                     { 'fail'. '1st'. '2nd'. '3rd' } at:
+												                     completionIndexRange first + 1 ]
+									                     ifFalse: [
+										                     completionIndexRange first asString
+										                     , '-'
+										                     , completionIndexRange last asString ]).
+							           label ]);
+				          yourself).
+				
+	self prefixSizes do: [ :prefixSize |
+		table addColumn: (SpStringTableColumn
+				 title: prefixSize asString
+				 evaluated: [ :completionIndexRange |
+					 | float |
+					 float := self
+						          accuracyForCompletionIndex: completionIndexRange
+						          withPrefixSize: prefixSize.
+					 float * 100 printShowingDecimalPlaces: 2 ]) ].
+	^ table
+]
+
+{ #category : 'metrics' }
 CoStaticBenchmarks >> accuracyPerSelectorLength: selectorLength [ 
 
     | relevantCallsites correctCount totalCount |
@@ -347,42 +383,6 @@ CoStaticBenchmarks >> initialize [
 	memoryUsages := Dictionary new.
 ]
 
-{ #category : 'inspector' }
-CoStaticBenchmarks >> inspectionResults [
-
-	<inspectorPresentationOrder: 0 title: 'Results'>
-	| table |
-	table := SpTablePresenter new
-		         items: self completionIndexes;
-		         addColumn: (SpCompositeTableColumn new
-				          title: 'Prefix';
-				          addColumn:
-					          (SpStringTableColumn evaluated: [ :completionIndexRange |
-							           | label |
-							           label := '% '.
-							           label := label , (completionIndexRange size = 1
-									                     ifTrue: [
-										                     { 'fail'. '1st'. '2nd'. '3rd' } at:
-												                     completionIndexRange first + 1 ]
-									                     ifFalse: [
-										                     completionIndexRange first asString
-										                     , '-'
-										                     , completionIndexRange last asString ]).
-							           label ]);
-				          yourself).
-				
-	self prefixSizes do: [ :prefixSize |
-		table addColumn: (SpStringTableColumn
-				 title: prefixSize asString
-				 evaluated: [ :completionIndexRange |
-					 | float |
-					 float := self
-						          accuracyForCompletionIndex: completionIndexRange
-						          withPrefixSize: prefixSize.
-					 float * 100 printShowingDecimalPlaces: 2 ]) ].
-	^ table
-]
-
 { #category : 'printing' }
 CoStaticBenchmarks >> latexInspectionResults [
 
@@ -513,9 +513,9 @@ CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
 ]
 
 { #category : 'inspector' }
-CoStaticBenchmarks >> memoryResults [
+CoStaticBenchmarks >> memoryInspectionResults [
 
-    <inspectorPresentationOrder: 3 title: 'Memory Usage Results'>
+    <inspectorPresentationOrder: 3 title: 'Memory Usage'>
     | table |
     table := SpTablePresenter new
         items: self prefixSizes;
@@ -604,7 +604,7 @@ CoStaticBenchmarks >> mmrInspectionResults [
     <inspectorPresentationOrder: 4 title: 'MMR Results'>
     | table |
     table := SpTablePresenter new
-        items: self prefixSizes;  "2..8"
+        items: self prefixSizes;
         addColumn: (
             SpStringTableColumn
                 title: 'Prefix'
@@ -714,7 +714,7 @@ CoStaticBenchmarks >> rankDistributionForPrefixSize: prefixSize [
 ]
 
 { #category : 'inspector' }
-CoStaticBenchmarks >> rankDistributionResults [
+CoStaticBenchmarks >> rankDistributionInspectionResults [
 
     <inspectorPresentationOrder: 6 title: 'Rank Distribution'>
     | table |
@@ -762,7 +762,6 @@ CoStaticBenchmarks >> recallInspectionResults [
                 evaluated: [ :k | k asString ]
         );
         yourself.
-
     self prefixSizes do: [ :prefixSize |
         table addColumn: (
             SpStringTableColumn
@@ -773,9 +772,7 @@ CoStaticBenchmarks >> recallInspectionResults [
                         roundTo: 0.01) asString, '%' ]
         )
     ].
-
     table items: kValues.
-
     ^ table
 
 ]
@@ -810,7 +807,7 @@ CoStaticBenchmarks >> score [
 ]
 
 { #category : 'inspector' }
-CoStaticBenchmarks >> timeResults [
+CoStaticBenchmarks >> timeInspectionResults [
 
     <inspectorPresentationOrder: 1 title: 'Time Results'>
     | table |
@@ -879,8 +876,8 @@ CoStaticBenchmarks >> totalTimeForPrefix: prefixSize [
 ]
 
 { #category : 'inspector' }
-CoStaticBenchmarks >> totalTimeSummary [
+CoStaticBenchmarks >> totalTimeInspectionResults [
 
-	<inspectorPresentationOrder: 2 title: 'Total Time (ms)'>
+	<inspectorPresentationOrder: 2 title: 'Total Time'>
 	^ self totalTime asPresenter
 ]
