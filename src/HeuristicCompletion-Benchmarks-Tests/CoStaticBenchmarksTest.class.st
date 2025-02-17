@@ -129,7 +129,6 @@ CoStaticBenchmarksTest >> testBuilder [
 
 { #category : 'running' }
 CoStaticBenchmarksTest >> testDiff [
-    "Test #diff: in MyCoStaticBenchmarks without referencing real code or packages."
 
     | benchA benchB diffResult |
     benchA := CoStaticBenchmarksMock new.
