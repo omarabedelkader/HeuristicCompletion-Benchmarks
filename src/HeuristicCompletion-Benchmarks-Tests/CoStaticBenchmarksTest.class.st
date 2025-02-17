@@ -128,6 +128,37 @@ CoStaticBenchmarksTest >> testBuilder [
 ]
 
 { #category : 'running' }
+CoStaticBenchmarksTest >> testDiff [
+    "Test #diff: in MyCoStaticBenchmarks without referencing real code or packages."
+
+    | benchA benchB diffResult |
+    benchA := CoStaticBenchmarksMock new.
+    benchB := CoStaticBenchmarksMock new.
+
+    diffResult := benchA diff: benchB.
+
+    "Check that diffResult is an array."
+    self assert: diffResult isArray.
+
+    "Ensure it contains exactly 3 associations."
+    self assert: (diffResult size = 3).
+
+    "Check that each entry is an association (key -> value)."
+    diffResult do: [ :entry |
+        self assert: entry isAssociation.  "Each entry should be a key -> value pair"
+        self assert: entry value isArray.  "The value of the association should be an array"
+        self assert: (entry value size = 3).  "Ensure the outer array contains 3 elements"
+        
+        "Ensure that each sub-array has 5 elements"
+        entry value do: [ :subArray |
+            self assert: subArray isArray.  "Each sub-array should be an array"
+            self assert: (subArray size = 5).  "Each sub-array should have 5 elements"
+        ].
+    ].
+
+]
+
+{ #category : 'running' }
 CoStaticBenchmarksTest >> testInitialize [
 
 	| bench time memory |
