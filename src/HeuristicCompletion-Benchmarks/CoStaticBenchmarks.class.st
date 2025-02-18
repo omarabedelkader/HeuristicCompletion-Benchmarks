@@ -603,7 +603,7 @@ CoStaticBenchmarks >> latexResultsFor: metricType [
 						                         accuracyForCompletionIndex: range
 						                         withPrefixSize: pSize) * 100.
 					  s nextPutAll: ' & '.
-					  s nextPutAll: (accuracyPercentage asFloat round: 2) ].
+					  s nextPutAll: (accuracyPercentage printShowingDecimalPlaces: 2) ].
 				  s
 					  nextPutAll: '\\ \hline';
 					  cr ].
@@ -641,7 +641,7 @@ CoStaticBenchmarks >> latexResultsFor: metricType [
 					  nextPutAll: ' & ';
 					  print: count;
 					  nextPutAll: ' & ';
-					  print: (average asFloat round: 2);
+					  print: (average roundTo: 0.01);
 					  nextPutAll: '\\ \hline';
 					  cr ].
 			  s
@@ -666,7 +666,7 @@ CoStaticBenchmarks >> latexResultsFor: metricType [
 			  prefixSizes do: [ :pSize |
 				  | val |
 				  val := (self mmrForPrefixSize: pSize)
-					         asFloat round: 2.
+					         printShowingDecimalPlaces: 2.
 				  s
 					  nextPutAll: pSize asString;
 					  nextPutAll: ' & '.
@@ -696,7 +696,7 @@ CoStaticBenchmarks >> latexResultsFor: metricType [
 			  prefixSizes do: [ :pSize |
 				  | val |
 				  val := (self ndcgForPrefixSize: pSize)
-					         asFloat round: 2.
+					         printShowingDecimalPlaces: 2.
 				  s
 					  nextPutAll: pSize asString;
 					  nextPutAll: ' & '.
@@ -716,21 +716,25 @@ CoStaticBenchmarks >> latexResultsFor: metricType [
 			  | prefixSizes |
 			  prefixSizes := self prefixSizes.
 			  s nextPutAll: '\begin{tabular}{|c|'.
-			  (1 to: 10) do: [:i | s nextPutAll: 'c|' ].
+
+			  (1 to: 10) do: [ :i | s nextPutAll: 'c|' ]. "✅ Fixed here"
+
 			  s
 				  nextPutAll: '}';
 				  cr.
 			  s
 				  nextPutAll: '\hline';
 				  cr.
+
 			  s nextPutAll: 'Prefix'.
 			  (1 to: 10) do: [ :rank |
-				  s
-					  nextPutAll: ' & Rank ';
-					  nextPutAll: rank asString ].
+				  s nextPutAll: ' & Rank '.
+				  s nextPutAll: rank asString ].
+
 			  s
 				  nextPutAll: '\\ \hline';
 				  cr.
+
 			  prefixSizes do: [ :pSize |
 				  s nextPutAll: pSize asString.
 				  (self rankDistributionForPrefixSize: pSize) do: [ :val |
@@ -739,6 +743,7 @@ CoStaticBenchmarks >> latexResultsFor: metricType [
 				  s
 					  nextPutAll: '\\ \hline';
 					  cr ].
+
 			  s
 				  nextPutAll: '\end{tabular}';
 				  cr.
@@ -760,9 +765,7 @@ CoStaticBenchmarks >> latexResultsFor: metricType [
 				  cr.
 			  s nextPutAll: 'K'.
 			  prefixSizes do: [ :pSize |
-				  s
-					  nextPutAll: ' & Prefix ';
-					  nextPutAll: pSize asString ].
+				  s nextPutAll: ' & Prefix ' , pSize asString ].
 			  s
 				  nextPutAll: '\\ \hline';
 				  cr.
@@ -771,7 +774,7 @@ CoStaticBenchmarks >> latexResultsFor: metricType [
 				  prefixSizes do: [ :pSize |
 					  s nextPutAll: ' & '.
 					  s nextPutAll:
-						  ((self recallAtK: k withPrefixSize: pSize) * 100 asFloat round: 2)
+						  ((self recallAtK: k withPrefixSize: pSize) * 100 printShowingDecimalPlaces: 2)
 							  asString ].
 				  s
 					  nextPutAll: '\\ \hline';
