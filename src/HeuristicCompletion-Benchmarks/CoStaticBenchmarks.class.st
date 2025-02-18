@@ -477,10 +477,8 @@ CoStaticBenchmarks >> initialize [
 CoStaticBenchmarks >> latexInspectionResults [
 
     "Generate and return a LaTeX table representation of the data shown in #inspectionResults (accuracy table)."
-
     | prefixSizes completionIndexRanges |
     ^ String streamContents: [:s |
-
         prefixSizes := self prefixSizes.
         completionIndexRanges := self completionIndexes.  
 
