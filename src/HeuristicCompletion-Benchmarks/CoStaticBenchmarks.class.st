@@ -65,7 +65,7 @@ staticHeuristics := CoStaticBenchmarks new
 To show all the Benchmarks use:
 
 ```smalltalk
-global := CoStaticBenchmarks runAllOnClass: SpAbstractAdapter package 
+global := CoStaticBenchmarks runAllOnClass: SpAbstractAdapter package.
 
 global := CoStaticBenchmarks runAllOnPackage: 'NECompletion'.
 ```
@@ -80,7 +80,7 @@ latex := (global at: #SizeSorter) latexResultsFor: #mmr.
 To see how well completions do on 5-character selectors:
 
 ```smalltalk
-accuracyPerSelectorLength: 5
+global := accuracyPerSelectorLength: 5
 ```
 
 To make Comparaison between two benchmarks:
