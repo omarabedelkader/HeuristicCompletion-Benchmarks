@@ -65,7 +65,7 @@ staticHeuristics := CoStaticBenchmarks new
 To show all the Benchmarks use:
 
 ```smalltalk
-global := CoStaticBenchmarks runAllOnPackage: SpAbstractAdapter package 
+global := CoStaticBenchmarks runAllOnClass: SpAbstractAdapter package 
 ```
 
 To extract the table in latex code to a specific sorter and for a specific metric :
@@ -127,7 +127,7 @@ Class {
 }
 
 { #category : 'running' }
-CoStaticBenchmarks class >> runAllOnPackage: aPackage [
+CoStaticBenchmarks class >> runAllOnClass: aPackage [
     "Runs the CoStaticBenchmarks for every sorter class in sorterClasses,
     all using the given package as the scope. 
     Answers a Dictionary from sorter class symbols to the resulting CoStaticBenchmarks instance 
@@ -162,6 +162,40 @@ CoStaticBenchmarks class >> runAllOnPackage: aPackage [
         results at: sorterSymbol put: benchmark
     ].
 
+    ^ results
+]
+
+{ #category : 'running' }
+CoStaticBenchmarks class >> runAllOnPackage: aPackageIdentifier [
+    "Runs the CoStaticBenchmarks for every sorter class in sorterClasses using the given package as the scope.
+    Returns a Dictionary mapping sorter class symbols to their benchmark instances."
+
+    | pkg results isPkg |
+    isPkg := aPackageIdentifier isKindOf: Package.
+    isPkg ifTrue: [ pkg := aPackageIdentifier ]
+         ifFalse: [ pkg := PackageOrganizer default packageNamed: aPackageIdentifier ].
+    
+    results := Dictionary new.
+    
+    self sorterClasses do: [ :sorterSymbol |
+        | sorterClass benchmark |
+        
+        sorterClass := Smalltalk at: sorterSymbol ifAbsent: [
+            self error: 'Sorter class ', sorterSymbol asString, ' not found in Smalltalk image.'
+        ].
+    
+        benchmark := self new
+            scope: (CoBenchmarkPackage on: pkg);
+            builder: (CoGlobalSorterResultSetBuilder new
+                        sorterClass: sorterClass;
+                        yourself);
+            yourself.
+    
+        benchmark run.
+    
+        results at: sorterSymbol put: benchmark.
+    ].
+    
     ^ results
 ]
 
