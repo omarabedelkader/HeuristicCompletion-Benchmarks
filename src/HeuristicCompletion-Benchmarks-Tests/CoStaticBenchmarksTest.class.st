@@ -20,7 +20,8 @@ CoStaticBenchmarksTest >> setUp [
 { #category : 'running' }
 CoStaticBenchmarksTest >> tearDown [ 
 
-	benchmarks := nil
+	benchmarks := nil.
+	super tearDown
 ]
 
 { #category : 'running' }
@@ -172,11 +173,12 @@ CoStaticBenchmarksTest >> testInitialize [
 
 { #category : 'tests' }
 CoStaticBenchmarksTest >> testInspectionResults [
-
-    "Just verify it returns something without error; 
+	"Just verify it returns something without error; 
      you might parse the returned table or string to ensure correct formatting."
-    self shouldnt: [ benchmarks accuracyInspectionResults ] raise: Error.
-    self assert: (benchmarks accuracyInspectionResults isKindOf: SpTablePresenter).
+
+	benchmarks accuracyInspectionResults.
+	self assert:
+		(benchmarks accuracyInspectionResults isKindOf: SpTablePresenter)
 ]
 
 { #category : 'running' }
@@ -290,14 +292,13 @@ CoStaticBenchmarksTest >> testScope [
 
 { #category : 'tests' }
 CoStaticBenchmarksTest >> testScore [
-
-    "The #score method is a bit arbitrary; it uses #gradeForPrefixSize, 
+	"The #score method is a bit arbitrary; it uses #gradeForPrefixSize, 
      which uses #accuracyForCompletionIndex: (2..8). 
      Here we just ensure it doesn't crash 
      and returns a numeric value in the expected range [0..100]."
-    
-    self shouldnt: [ benchmarks score ] raise: Error.
-    self assert: (benchmarks score between: 0 and: 100).
+
+	benchmarks score.
+	self assert: (benchmarks score between: 0 and: 100)
 ]
 
 { #category : 'running' }

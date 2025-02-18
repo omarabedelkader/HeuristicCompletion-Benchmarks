@@ -1,3 +1,6 @@
+"
+This is a mock class to simulate an exmpale of data to test some functionalities in the Benchmarks like `diff` ...
+"
 Class {
 	#name : 'CoStaticBenchmarksMock',
 	#superclass : 'CoStaticBenchmarks',
