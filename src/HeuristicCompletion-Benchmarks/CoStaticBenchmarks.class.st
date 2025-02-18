@@ -68,14 +68,12 @@ To show all the Benchmarks use:
 global := CoStaticBenchmarks runAllOnPackage: SpAbstractAdapter package 
 ```
 
-To extract the table in latex code to a specific sorter :
-
-```smalltalk
-latexString := (global at: #AlphabeticSorter) latexInspectionResults.
-latexString := (global at: #AlphabeticSorter) latexTimeResults.
-latexString := (global at: #AlphabeticSorter) latexMRResults.
+To extract the table in latex code to a specific sorter and for a specific metric :
 
 ```
+latex := (global at: #SizeSorter) latexResultsFor: #mmr.
+```
+
 
 To see how well completions do on 5-character selectors:
 
@@ -216,7 +214,7 @@ CoStaticBenchmarks >> accuracyInspectionResults [
 										                     , completionIndexRange last asString ]).
 							           label ]);
 				          yourself).
-				
+
 	self prefixSizes do: [ :prefixSize |
 		table addColumn: (SpStringTableColumn
 				 title: prefixSize asString
@@ -225,7 +223,7 @@ CoStaticBenchmarks >> accuracyInspectionResults [
 					 float := self
 						          accuracyForCompletionIndex: completionIndexRange
 						          withPrefixSize: prefixSize.
-					 float * 100 printShowingDecimalPlaces: 2 ]) ].
+					 float * 100 asFloat round: 2 ]) ].
 	^ table
 ]
 
@@ -549,6 +547,248 @@ CoStaticBenchmarks >> latexMMRResults [
 ]
 
 { #category : 'printing' }
+CoStaticBenchmarks >> latexResultsFor: metricType [
+	"Generate a LaTeX table representation for the specified metricType.
+    Available metricType values:
+    - #accuracy -> Completion Accuracy table
+    - #time -> Completion Time table
+    - #mmr -> Mean Reciprocal Rank (MRR) table
+    - #ndcg -> Normalized Discounted Cumulative Gain (NDCG) table
+    - #rankDistribution -> Rank Distribution table
+    - #recall -> Recall@K table"
+
+	^ String streamContents: [ :s |
+		  s
+			  nextPutAll: '\begin{table}[ht]';
+			  cr.
+		  s
+			  nextPutAll: '\centering';
+			  cr.
+
+		  metricType = #accuracy ifTrue: [
+			  | prefixSizes completionIndexRanges |
+			  prefixSizes := self prefixSizes.
+			  completionIndexRanges := self completionIndexes.
+
+			  s nextPutAll: '\begin{tabular}{|l'.
+			  prefixSizes size timesRepeat: [ s nextPutAll: '|c' ].
+			  s
+				  nextPutAll: '|}';
+				  cr.
+			  s
+				  nextPutAll: '\hline';
+				  cr.
+
+			  s nextPutAll: 'Prefix'.
+			  prefixSizes do: [ :pSize |
+				  s nextPutAll: ' & '.
+				  s nextPutAll: pSize asString ].
+			  s
+				  nextPutAll: '\\ \hline';
+				  cr.
+
+			  completionIndexRanges do: [ :range |
+				  | label accuracyPercentage |
+				  label := range size = 1
+					           ifTrue: [
+						           #( 'fail' '1st' '2nd' '3rd' )
+							           at: range first + 1
+							           ifAbsent: [ range first asString ] ]
+					           ifFalse: [
+					           range first asString , '-' , range last asString ].
+				  s nextPutAll: label.
+
+				  prefixSizes do: [ :pSize |
+					  accuracyPercentage := (self
+						                         accuracyForCompletionIndex: range
+						                         withPrefixSize: pSize) * 100.
+					  s nextPutAll: ' & '.
+					  s nextPutAll: (accuracyPercentage asFloat round: 2) ].
+				  s
+					  nextPutAll: '\\ \hline';
+					  cr ].
+			  s
+				  nextPutAll: '\end{tabular}';
+				  cr.
+			  s
+				  nextPutAll: '\caption{Completion Accuracy Results}';
+				  cr ].
+
+		  metricType = #time ifTrue: [
+			  | prefixArray |
+			  prefixArray := self prefixSizes.
+			  s
+				  nextPutAll: '\begin{tabular}{|c|c|c|c|}';
+				  cr.
+			  s
+				  nextPutAll: '\hline';
+				  cr.
+			  s
+				  nextPutAll:
+					  'Prefix & Total (ms) & Count & Average (ms)\\ \hline';
+				  cr.
+
+			  prefixArray do: [ :pSize |
+				  | total count average |
+				  total := self totalTimeForPrefix: pSize.
+				  count := (completionTimes at: pSize ifAbsent: [ #( 0 0 ) ])
+					           second.
+				  average := self averageTimeForPrefix: pSize.
+				  s
+					  nextPutAll: pSize asString;
+					  nextPutAll: ' & ';
+					  print: total;
+					  nextPutAll: ' & ';
+					  print: count;
+					  nextPutAll: ' & ';
+					  print: (average asFloat round: 2);
+					  nextPutAll: '\\ \hline';
+					  cr ].
+			  s
+				  nextPutAll: '\end{tabular}';
+				  cr.
+			  s
+				  nextPutAll: '\caption{Completion Time Results}';
+				  cr ].
+
+		  metricType = #mmr ifTrue: [
+			  | prefixSizes |
+			  prefixSizes := self prefixSizes.
+			  s
+				  nextPutAll: '\begin{tabular}{|c|c|}';
+				  cr.
+			  s
+				  nextPutAll: '\hline';
+				  cr.
+			  s
+				  nextPutAll: 'Prefix & MRR \\ \hline';
+				  cr.
+			  prefixSizes do: [ :pSize |
+				  | val |
+				  val := (self mmrForPrefixSize: pSize)
+					         asFloat round: 2.
+				  s
+					  nextPutAll: pSize asString;
+					  nextPutAll: ' & '.
+				  s
+					  nextPutAll: val;
+					  nextPutAll: ' \\ \hline';
+					  cr ].
+			  s
+				  nextPutAll: '\end{tabular}';
+				  cr.
+			  s
+				  nextPutAll: '\caption{Mean Reciprocal Rank by prefix size}';
+				  cr ].
+
+		  metricType = #ndcg ifTrue: [
+			  | prefixSizes |
+			  prefixSizes := self prefixSizes.
+			  s
+				  nextPutAll: '\begin{tabular}{|c|c|}';
+				  cr.
+			  s
+				  nextPutAll: '\hline';
+				  cr.
+			  s
+				  nextPutAll: 'Prefix & NDCG \\ \hline';
+				  cr.
+			  prefixSizes do: [ :pSize |
+				  | val |
+				  val := (self ndcgForPrefixSize: pSize)
+					         asFloat round: 2.
+				  s
+					  nextPutAll: pSize asString;
+					  nextPutAll: ' & '.
+				  s
+					  nextPutAll: val;
+					  nextPutAll: ' \\ \hline';
+					  cr ].
+			  s
+				  nextPutAll: '\end{tabular}';
+				  cr.
+			  s
+				  nextPutAll:
+					  '\caption{Normalized Discounted Cumulative Gain (NDCG) by prefix size}';
+				  cr ].
+
+		  metricType = #rankDistribution ifTrue: [
+			  | prefixSizes |
+			  prefixSizes := self prefixSizes.
+			  s nextPutAll: '\begin{tabular}{|c|'.
+			  (1 to: 10) do: [:i | s nextPutAll: 'c|' ].
+			  s
+				  nextPutAll: '}';
+				  cr.
+			  s
+				  nextPutAll: '\hline';
+				  cr.
+			  s nextPutAll: 'Prefix'.
+			  (1 to: 10) do: [ :rank |
+				  s
+					  nextPutAll: ' & Rank ';
+					  nextPutAll: rank asString ].
+			  s
+				  nextPutAll: '\\ \hline';
+				  cr.
+			  prefixSizes do: [ :pSize |
+				  s nextPutAll: pSize asString.
+				  (self rankDistributionForPrefixSize: pSize) do: [ :val |
+					  s nextPutAll: ' & '.
+					  s nextPutAll: val asString ].
+				  s
+					  nextPutAll: '\\ \hline';
+					  cr ].
+			  s
+				  nextPutAll: '\end{tabular}';
+				  cr.
+			  s
+				  nextPutAll: '\caption{Rank Distribution by prefix size}';
+				  cr ].
+
+		  metricType = #recall ifTrue: [
+			  | prefixSizes kValues |
+			  prefixSizes := self prefixSizes.
+			  kValues := #( 1 3 5 10 ).
+			  s nextPutAll: '\begin{tabular}{|c|'.
+			  prefixSizes size timesRepeat: [ s nextPutAll: 'c|' ].
+			  s
+				  nextPutAll: '}';
+				  cr.
+			  s
+				  nextPutAll: '\hline';
+				  cr.
+			  s nextPutAll: 'K'.
+			  prefixSizes do: [ :pSize |
+				  s
+					  nextPutAll: ' & Prefix ';
+					  nextPutAll: pSize asString ].
+			  s
+				  nextPutAll: '\\ \hline';
+				  cr.
+			  kValues do: [ :k |
+				  s nextPutAll: k asString.
+				  prefixSizes do: [ :pSize |
+					  s nextPutAll: ' & '.
+					  s nextPutAll:
+						  ((self recallAtK: k withPrefixSize: pSize) * 100 asFloat round: 2)
+							  asString ].
+				  s
+					  nextPutAll: '\\ \hline';
+					  cr ].
+			  s
+				  nextPutAll: '\end{tabular}';
+				  cr.
+			  s
+				  nextPutAll: '\caption{Recall@K by prefix size}';
+				  cr ].
+
+		  s
+			  nextPutAll: '\end{table}';
+			  cr ]
+]
+
+{ #category : 'printing' }
 CoStaticBenchmarks >> latexTimeResults [
 
     ^ String streamContents: [:s |
@@ -603,29 +843,25 @@ CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
 { #category : 'inspector' }
 CoStaticBenchmarks >> memoryInspectionResults [
 
-    <inspectorPresentationOrder: 3 title: 'Memory Usage'>
-    | table |
-    table := SpTablePresenter new
-        items: self prefixSizes;
-        addColumn: (
-            SpStringTableColumn
-                title: 'Prefix'
-                evaluated: [ :prefixSize | prefixSize asString ]
-        );
-        addColumn: (
-            SpStringTableColumn
-                title: 'Total (bytes)'
-                evaluated: [ :prefixSize |
-                    (self totalMemoryForPrefix: prefixSize) asString ]
-        );
-        addColumn: (
-            SpStringTableColumn
-                title: 'Total (MB)'
-                evaluated: [ :prefixSize |
-                    ((self totalMemoryForPrefix: prefixSize) / 1024 / 1024 round: 2; printShowingDecimalPlaces:2) asString ]
-        );       
-        yourself.
-    ^ table
+	<inspectorPresentationOrder: 3 title: 'Memory Usage'>
+	| table |
+	table := SpTablePresenter new
+		         items: self prefixSizes;
+		         addColumn: (SpStringTableColumn
+				          title: 'Prefix'
+				          evaluated: [ :prefixSize | prefixSize asString ]);
+		         addColumn: (SpStringTableColumn
+				          title: 'Total (bytes)'
+				          evaluated: [ :prefixSize |
+					          (self totalMemoryForPrefix: prefixSize) asString ]);
+		         addColumn:
+			         (SpStringTableColumn
+				          title: 'Total (MB)'
+				          evaluated: [ :prefixSize |
+					          ((self totalMemoryForPrefix: prefixSize) / 1024 / 1024)
+						           asFloat round: 2; asString ]);
+		         yourself.
+	^ table
 ]
 
 { #category : 'accessing' }
@@ -689,27 +925,23 @@ CoStaticBenchmarks >> mmrForPrefixSize: prefixSize [
 { #category : 'inspector' }
 CoStaticBenchmarks >> mmrInspectionResults [
 
-    <inspectorPresentationOrder: 4 title: 'MMR Results'>
-    | table |
-    table := SpTablePresenter new
-        items: self prefixSizes;
-        addColumn: (
-            SpStringTableColumn
-                title: 'Prefix'
-                evaluated: [ :prefixSize | prefixSize asString ]
-        );
-        addColumn: (
-            SpStringTableColumn
-                title: 'Mean Reciprocal Rank'
-                evaluated: [ :prefixSize | 
-                    | valueAsString |
-                    valueAsString := (self mmrForPrefixSize: prefixSize) printShowingDecimalPlaces: 2.
-                    valueAsString
-                ]
-        );
-        yourself.
+	<inspectorPresentationOrder: 4 title: 'MMR Results'>
+	| table |
+	table := SpTablePresenter new
+		         items: self prefixSizes;
+		         addColumn: (SpStringTableColumn
+				          title: 'Prefix'
+				          evaluated: [ :prefixSize | prefixSize asString ]);
+		         addColumn: (SpStringTableColumn
+				          title: 'Mean Reciprocal Rank'
+				          evaluated: [ :prefixSize |
+					          | valueAsString |
+					          valueAsString := (self mmrForPrefixSize: prefixSize)
+						                           asFloat round: 2.
+					          valueAsString ]);
+		         yourself.
 
-    ^ table
+	^ table
 ]
 
 { #category : 'metrics' }
@@ -754,22 +986,23 @@ CoStaticBenchmarks >> ndcgForPrefixSize: prefixSize [
 ]
 
 { #category : 'inspector' }
-CoStaticBenchmarks >> ndcgInspectionResults [ 
+CoStaticBenchmarks >> ndcgInspectionResults [
 
-    <inspectorPresentationOrder: 5 title: 'NDCG Results'>
-    | table |
-    table := SpTablePresenter new
-        items: self prefixSizes; 
-        addColumn: (SpStringTableColumn
-            title: 'Prefix'
-            evaluated: [ :prefixSize | prefixSize asString ]);
-        addColumn: (SpStringTableColumn
-            title: 'NDCG'
-            evaluated: [ :prefixSize |
-                (self ndcgForPrefixSize: prefixSize) printShowingDecimalPlaces: 2
-            ]);
-        yourself.
-    ^ table
+	<inspectorPresentationOrder: 5 title: 'NDCG Results'>
+	| table |
+	table := SpTablePresenter new
+		         items: self prefixSizes;
+		         addColumn: (SpStringTableColumn
+				          title: 'Prefix'
+				          evaluated: [ :prefixSize | prefixSize asString ]);
+		         addColumn:
+			         (SpStringTableColumn
+				          title: 'NDCG'
+				          evaluated: [ :prefixSize |
+					          (self ndcgForPrefixSize: prefixSize)
+						          asFloat round: 2 ]);
+		         yourself.
+	^ table
 ]
 
 { #category : 'benchmarks' }
@@ -804,24 +1037,19 @@ CoStaticBenchmarks >> rankDistributionForPrefixSize: prefixSize [
 { #category : 'inspector' }
 CoStaticBenchmarks >> rankDistributionInspectionResults [
 
-    <inspectorPresentationOrder: 6 title: 'Rank Distribution'>
-    | table |
-    table := SpTablePresenter new
-        items: self prefixSizes;  "2..8"
-        addColumn: (SpStringTableColumn
-            title: 'Prefix'
-            evaluated: [ :prefixSize | prefixSize asString ]
-        ).
-        1 to: 10 do: [ :rank |
-            table addColumn: (SpStringTableColumn
-                title: 'Rank ', rank asString
-                evaluated: [ :prefixSize |
-                    (self rankDistributionForPrefixSize: prefixSize) at: rank
-                ]
-            )
-        ].
-    ^ table
-
+	<inspectorPresentationOrder: 6 title: 'Rank Distribution'>
+	| table |
+	table := SpTablePresenter new
+		         items: self prefixSizes;
+		         addColumn: (SpStringTableColumn
+				          title: 'Prefix'
+				          evaluated: [ :prefixSize | prefixSize asString ]).
+	1 to: 10 do: [ :rank |
+		table addColumn: (SpStringTableColumn
+				 title: 'Rank ' , rank asString
+				 evaluated: [ :prefixSize |
+					 (self rankDistributionForPrefixSize: prefixSize) at: rank ]) ].
+	^ table
 ]
 
 { #category : 'metrics' }
@@ -840,29 +1068,23 @@ CoStaticBenchmarks >> recallAtK: k withPrefixSize: prefixSize [
 { #category : 'inspector' }
 CoStaticBenchmarks >> recallInspectionResults [
 
-    <inspectorPresentationOrder: 7 title: 'Recall@K Results'>
-    | table kValues |
-    kValues := #(1 3 5 10).
-    table := SpTablePresenter new
-        addColumn: (
-            SpStringTableColumn
-                title: 'K'
-                evaluated: [ :k | k asString ]
-        );
-        yourself.
-    self prefixSizes do: [ :prefixSize |
-        table addColumn: (
-            SpStringTableColumn
-                title: 'Prefix ', prefixSize asString
-                evaluated: [ :k |
-                    ((self recallAtK: k withPrefixSize: prefixSize)
-                        * 100
-                        roundTo: 0.01) asString, '%' ]
-        )
-    ].
-    table items: kValues.
-    ^ table
-
+	<inspectorPresentationOrder: 7 title: 'Recall@K Results'>
+	| table kValues |
+	kValues := #( 1 3 5 10 ).
+	table := SpTablePresenter new
+		         addColumn:
+			         (SpStringTableColumn
+				          title: 'K'
+				          evaluated: [ :k | k asString ]);
+		         yourself.
+	self prefixSizes do: [ :prefixSize |
+		table addColumn: (SpStringTableColumn
+				 title: 'Prefix ' , prefixSize asString
+				 evaluated: [ :k |
+					 ((self recallAtK: k withPrefixSize: prefixSize) * 100 asFloat
+						  round: 2) asString ]) ].
+	table items: kValues.
+	^ table
 ]
 
 { #category : 'running' }
@@ -897,38 +1119,32 @@ CoStaticBenchmarks >> score [
 { #category : 'inspector' }
 CoStaticBenchmarks >> timeInspectionResults [
 
-    <inspectorPresentationOrder: 1 title: 'Time Results'>
-    | table |
-    table := SpTablePresenter new
-        items: self prefixSizes;
-        addColumn: (
-            SpStringTableColumn
-                title: 'Prefix'
-                evaluated: [ :prefixSize | prefixSize asString ]
-        );
-        addColumn: (
-            SpStringTableColumn
-                title: 'Total (ms)'
-                evaluated: [ :prefixSize | (self totalTimeForPrefix: prefixSize) asString ]
-        );
-		  addColumn: (
-            SpStringTableColumn
-                title: 'Count'
-                evaluated: [ :prefixSize |
-                    (completionTimes at: prefixSize ifAbsent: [ #( 0 0 ) ]) second asString ]
-        );
-        addColumn: (
-            SpStringTableColumn
-                title: 'Average (ms)'
-                evaluated: [ :prefixSize | 
-                    (self averageTimeForPrefix: prefixSize) 
-                       asFloat round: 1;
-                       printShowingDecimalPlaces: 2.
-                ]
-        );
-        yourself.
+	<inspectorPresentationOrder: 1 title: 'Time Results'>
+	| table |
+	table := SpTablePresenter new
+		         items: self prefixSizes;
+		         addColumn: (SpStringTableColumn
+				          title: 'Prefix'
+				          evaluated: [ :prefixSize | prefixSize asString ]);
+		         addColumn: (SpStringTableColumn
+				          title: 'Total (ms)'
+				          evaluated: [ :prefixSize |
+					          (self totalTimeForPrefix: prefixSize) asString ]);
+		         addColumn:
+			         (SpStringTableColumn
+				          title: 'Count'
+				          evaluated: [ :prefixSize |
+					          (completionTimes at: prefixSize ifAbsent: [ #( 0 0 ) ])
+						          second asString ]);
+		         addColumn:
+			         (SpStringTableColumn
+				          title: 'Average (ms)'
+				          evaluated: [ :prefixSize |
+					          (self averageTimeForPrefix: prefixSize) asFloat
+						          round: 2]);
+		         yourself.
 
-    ^ table
+	^ table
 ]
 
 { #category : 'benchmarks' }
