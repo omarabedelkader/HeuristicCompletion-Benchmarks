@@ -66,11 +66,13 @@ To show all the Benchmarks use:
 
 ```smalltalk
 global := CoStaticBenchmarks runAllOnClass: SpAbstractAdapter package 
+
+global := CoStaticBenchmarks runAllOnPackage: 'NECompletion'.
 ```
 
 To extract the table in latex code to a specific sorter and for a specific metric :
 
-```
+```smalltalk
 latex := (global at: #SizeSorter) latexResultsFor: #mmr.
 ```
 
@@ -78,9 +80,7 @@ latex := (global at: #SizeSorter) latexResultsFor: #mmr.
 To see how well completions do on 5-character selectors:
 
 ```smalltalk
-
 accuracyPerSelectorLength: 5
-
 ```
 
 To make Comparaison between two benchmarks:
