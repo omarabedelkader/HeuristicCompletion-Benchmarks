@@ -309,63 +309,16 @@ CoStaticBenchmarks >> averageTimeForPrefix: prefixSize [
 ]
 
 { #category : 'benchmarks' }
-CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [ 
+CoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [
 
-    | originalSelector |
-    originalSelector := aMessageNode selector.
-    2 to: (aMessageNode selector size min: 8) do: [ :index | 
-        | prefix
-          startTime endTime executionTime
-          startMemory endMemory memoryUsed
-          completion candidates completionIndex 
-          previousResultsPerIndexPerPrefixSize |
+	self subclassResponsibility
+]
 
-        "1) Start timing"
-        startTime := Time millisecondClockValue.
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> buildCompletionFor: aMessageNode atPosition: aPosition [
 
-        "2) Start memory usage (adjust to your dialect's API)"
-        startMemory := self currentMemoryUsage.
-
-        prefix := originalSelector copyFrom: 1 to: index.
-        aMessageNode selector: prefix.
-
-        completion := builder
-            node: aMessageNode;
-            completionContext: (CoBenchmarkContext new
-                callsite: aMessageNode;
-                position: aPosition;
-                yourself);
-            buildCompletion.
-
-        completion replaceFilterWith: (CoCaseSensitiveBeginsWithFilter filterString: prefix).
-        candidates := completion first: 10.
-
-        completionIndex := (candidates collect: [ :each | each contents ]) indexOf: originalSelector.
-
-        "Existing logic to track accuracy..."
-        previousResultsPerIndexPerPrefixSize :=
-            completionBenchs
-                at: completionIndex
-                at: prefix size
-                ifAbsent: [ { 0 . Set new } ].
-        previousResultsPerIndexPerPrefixSize second add: originalSelector.
-        completionBenchs
-            at: completionIndex
-            at: prefix size
-            put: { previousResultsPerIndexPerPrefixSize first + 1 .
-                   previousResultsPerIndexPerPrefixSize second }.
-
-        "3) Stop memory usage"
-        endMemory := self currentMemoryUsage.  "Adjust to your dialect's API"
-        memoryUsed := endMemory - startMemory.
-        self logMemory: memoryUsed forPrefix: prefix size.
-
-        "4) Stop timing and record it"
-        endTime := Time millisecondClockValue.
-        executionTime := endTime - startTime.
-        self logTime: executionTime forPrefix: prefix size.
-    ].
-    aMessageNode selector: originalSelector
+	"Method to generate completion suggestions."
+	self subclassResponsibility
 ]
 
 { #category : 'accessing' }
@@ -487,6 +440,24 @@ CoStaticBenchmarks >> diff: anotherBenchmark [
     ^ { 'BenchmarkA' -> tableDataSelf. 'BenchmarkB' -> tableDataOther. 'Difference' -> tableDataDifference }.
 
 
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> extractPrefixFrom: receiver at: index [
+
+	self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> fetchTopCandidatesFrom: completion usingPrefix: prefix [
+
+	self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> findCompletionIndexFor: receiver inCandidates: candidates [
+
+	self subclassResponsibility
 ]
 
 { #category : 'benchmarks' }
@@ -855,6 +826,12 @@ CoStaticBenchmarks >> latexTimeResults [
     ]
 ]
 
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> logExecutionTimeSince: startTime forPrefixSize: prefixSize [
+
+	self subclassResponsibility
+]
+
 { #category : 'metrics' }
 CoStaticBenchmarks >> logMemory: usage forPrefix: prefixSize [ 
 
@@ -863,6 +840,12 @@ CoStaticBenchmarks >> logMemory: usage forPrefix: prefixSize [
     memoryUsages
         at: prefixSize
         put: { stats first + usage. stats second + 1 }.
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> logMemoryUsageSince: startMemory forPrefixSize: prefixSize [
+
+	self subclassResponsibility
 ]
 
 { #category : 'metrics' }
@@ -875,6 +858,12 @@ CoStaticBenchmarks >> logTime: executionTime forPrefix: prefixSize [
     completionTimes
         at: prefixSize
         put: { times first + executionTime.  times second + 1 }.
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> maxPrefixSizeFor: receiver [
+
+	self subclassResponsibility
 ]
 
 { #category : 'inspector' }
@@ -1153,6 +1142,18 @@ CoStaticBenchmarks >> score [
 	^ ((1 to: 7) sum: [ :i | (self gradeForPrefixSize: i + 1) / i ]) * 100 / ((1 to: 7) sum: [ :index | 1/index ])
 ]
 
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> startMemoryMeasurement [
+
+	self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> startTimeMeasurement [
+
+	self subclassResponsibility
+]
+
 { #category : 'inspector' }
 CoStaticBenchmarks >> timeInspectionResults [
 
@@ -1221,4 +1222,11 @@ CoStaticBenchmarks >> totalTimeInspectionResults [
 
 	<inspectorPresentationOrder: 2 title: 'Total Time'>
 	^ self totalTime asPresenter
+]
+
+{ #category : 'benchmarks' }
+CoStaticBenchmarks >> trackCompletionResultsFor: receiver atIndex: completionIndex withPrefix: prefix [
+	
+	"Track completion accuracy."
+	self subclassResponsibility
 ]
