@@ -127,6 +127,18 @@ Class {
 }
 
 { #category : 'running' }
+CoStaticBenchmarks class >> customHeuristics: aBuilder [
+
+	self subclassResponsibility
+]
+
+{ #category : 'running' }
+CoStaticBenchmarks class >> defaultHeuristics: aBuilder [
+
+	self subclassResponsibility
+]
+
+{ #category : 'running' }
 CoStaticBenchmarks class >> runAllOnClass: aPackage [
     "Runs the CoStaticBenchmarks for every sorter class in sorterClasses,
     all using the given package as the scope. 
@@ -197,6 +209,31 @@ CoStaticBenchmarks class >> runAllOnPackage: aPackageIdentifier [
     ].
     
     ^ results
+]
+
+{ #category : 'running' }
+CoStaticBenchmarks class >> runAllOnPackage: aPackageOrName heuristics: aHeuristicsBlock [
+
+	| benchmark builder package |
+	package := aPackageOrName isString
+		           ifTrue: [
+		           PackageOrganizer default packageNamed: aPackageOrName ]
+		           ifFalse: [ aPackageOrName ].
+
+	package ifNil: [
+		^ self error: 'Package not found: ' , aPackageOrName printString ].
+
+	builder := CoASTHeuristicsResultSetBuilder new.
+	aHeuristicsBlock value: builder.
+
+	"Create and run the benchmark"
+	benchmark := self new
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             yourself.
+
+	benchmark run.
+	^ benchmark
 ]
 
 { #category : 'running' }
