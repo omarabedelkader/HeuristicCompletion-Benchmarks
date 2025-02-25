@@ -1,116 +1,21 @@
 "
-`CoStaticBenchmarks`, is designed to run completion benchmarks over a given **scope** (typically a class or package). It explores **completion suggestions** by trying out various prefix sizes (from 2 to 8 characters) and recording:
+`CoStaticBenchmarks` provides a benchmarking framework for evaluating the performance and accuracy of various sorting algorithms in the context of heuristic-based completion systems. It defines methods for executing benchmarks, collecting metrics such as completion accuracy, memory usage, and execution time, and generating statistical reports. The benchmarks can be executed on different sorter classes, and results are stored for further inspection and analysis.
+
+`CoStaticBenchmarks`, is designed to run completion benchmarks over a given **scope** (typically a class or package).
 
 1. **Accuracy** (whether the correct selector is found among the top 10 suggestions and at which index).
 2. **Timing** (the total and average time taken to compute suggestions for each prefix size).
-
-Below is a short overview of the main responsibilities and methods:
-
-## Main Responsibilities
-
-1. **Setup and Running (`run`, `runFor:`)**
-   - `run` iterates through all methods in the given scope, parsing them and finding message callsites to benchmark.
-   - `runFor:` is a convenience class method to instantiate and immediately run benchmarks for a given class.
-
-2. **Benchmarking a Callsite (`benchCallsite:atPosition:`)**
-   - For each callsite, it loops from a prefix length of 2 to 8 characters (or fewer if the selector is shorter).
-   - It records whether the original selector was found among the top 10 completion candidates and at which index.
-   - It also tracks the time it took to produce the suggestions, accumulating them in `completionTimes`.
-
-3. **Measuring Accuracy (`accuracyForCompletionIndex:withPrefixSize:`)**
-   - Determines how often the correct selector is found within specific top-index ranges (e.g., 1st, 2nd, 3rd) for a given prefix size.
-   - This is computed by dividing the number of successful finds by the total number of attempts.
-
-4. **Measuring Time (`logTime:forPrefix:`, `totalTimeForPrefix:`)**
-   - Each benchmark run logs the execution time in `completionTimes`.
-   - Methods such as `totalTimeForPrefix:` and `averageTimeForPrefix:` allow for aggregating and presenting these timings.
-
-5. **Inspection and Presentation (`inspectionResults`, `timeResults`)**
-   - Includes methods decorated with `<inspectorPresentationOrder:>` to present **accuracy results** in a table (via `SpTablePresenter`).
-   - Presents **timing results** in a similar way, showing total and average execution times per prefix size.
-
-## Key Data Structures
-
-- **`completionBenchs`**: A nested dictionary storing the count of how many times a selector was found at a certain prefix size and position (index in the top-10 list).
-- **`completionTimes`**: A dictionary storing the total and count of all execution times, keyed by prefix size.
-
-## Typical Usage
-
-Here is an example of how you might run benchmarks on a given package or class:
-
-```smalltalk
-global := CoStaticBenchmarks new
-    scope: (CoBenchmarkPackage on: SpAbstractAdapter package);
-    builder: (CoGlobalSorterResultSetBuilder new
-        sorterClass: AlphabeticSorter;
-        yourself);
-    run.
-
-""Get the total accuracy of finding the right result among the first 3 results when typing 2 characters.""
-(global accuracyForCompletionIndex: (1 to: 3) withPrefixSize: 2) asFloat.
-```
-
-And similarly:
-
-```smalltalk
-staticHeuristics := CoStaticBenchmarks new
-    scope: (CoBenchmarkPackage on: SpAbstractAdapter package);
-    builder: CoASTHeuristicsResultSetBuilder new;
-    run.
-
-""Get the total accuracy of finding the right result among the first 3 when typing 2 characters.""
-(staticHeuristics accuracyForCompletionIndex: (1 to: 3) withPrefixSize: 2) asFloat.
-```
-
-To show all the Benchmarks use:
-
-```smalltalk
-global := CoStaticBenchmarks runAllOnClass: SpAbstractAdapter package.
-
-global := CoStaticBenchmarks runAllOnPackage: 'NECompletion'.
-```
-
-To extract the table in latex code to a specific sorter and for a specific metric :
-
-```smalltalk
-latex := (global at: #SizeSorter) latexResultsFor: #mmr.
-```
+3. **Memory Usage** (the total and average memory consumed during benchmark execution).
+4. **Mean Reciprocal Rank (MRR)** (measures how high the correct suggestion appears in the ranked list).
+5. **Normalized Discounted Cumulative Gain (NDCG)** (evaluates ranking quality based on relevance distribution).
+6. **Rank Distribution** (counts how frequently the correct completion appears in each ranking position).
+7. **Recall@K** (measures how often the correct result appears within the top-K results).
 
 
-To see how well completions do on 5-character selectors:
 
-```smalltalk
-global := accuracyPerSelectorLength: 5
-```
+## Typical Usage:
 
-To make Comparaison between two benchmarks:
-
-```smalltalk
-benhA := CoStaticBenchmarks new
-    scope: (CoBenchmarkPackage on: SpAbstractAdapter package);
-    builder: (CoGlobalSorterResultSetBuilder new
-        sorterClass: AlphabeticSorter;
-        yourself);
-    run.
-
-
-benhB := CoStaticBenchmarks new
-    scope: (CoBenchmarkPackage on: SpAbstractValidation package);
-    builder: (CoGlobalSorterResultSetBuilder new
-        sorterClass: AlphabeticSorter;
-        yourself);
-    run.
-
-
-comparison := benhA diff: benhB.
-```
-
-Using these benchmarks, you can measure:
-
-- **Which prefix sizes produce the best completion accuracy.**
-- **How quickly the suggestions are generated** (i.e., performance considerations).
-- **Overall completion performance** for different sets of heuristics or sorters.
-
+See my subclasses
 "
 Class {
 	#name : 'CoStaticBenchmarks',

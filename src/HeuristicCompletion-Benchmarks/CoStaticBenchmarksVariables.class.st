@@ -1,3 +1,86 @@
+"
+`CoStaticBenchmarksMessage` is a subclass of `CoStaticBenchmarks`  focuses on benchmarking variable name (Class Name) completions. It measures the effectiveness of completion algorithms in predicting variable names based on given prefixes. The class includes methods for extracting variable name prefixes, fetching top-ranked completion candidates, and tracking execution performance through various metrics.""
+
+
+## Typical Usage:
+
+
+### First way (We recommand to use this one :):
+
+
+```smalltalk
+global := CoStaticBenchmarksVariables runAllOnClass: SpAbstractAdapter package.
+
+global := CoStaticBenchmarksVariables runAllOnPackage: 'NECompletion'.
+
+""To add the which templates of heurisitcs you want to use""
+
+global := CoStaticBenchmarksVariables runAllOnPackage: 'NECompletion' heuristics: [ :b | CoStaticBenchmarksVariables defaultHeuristics: b ].
+
+global := CoStaticBenchmarksVariables runAllOnPackage: 'NECompletion' heuristics: [ :b | CoStaticBenchmarksVariables customHeuristics: b ].
+
+```
+
+### Second way:
+
+
+```smalltalk
+global := CoStaticBenchmarksVariables new
+    scope: (CoBenchmarkPackage on: SpAbstractAdapter package);
+    builder: (CoGlobalSorterResultSetBuilder new
+        sorterClass: AlphabeticSorter;
+        yourself);
+    run.
+
+""Get the total accuracy of finding the right result among the first 3 results when typing 2 characters.""
+(global accuracyForCompletionIndex: (1 to: 3) withPrefixSize: 2) asFloat.
+
+""To see how well completions do on 5-character selectors""
+
+global := accuracyPerSelectorLength: 5
+
+```
+### Second way:
+
+```smalltalk
+staticHeuristics := CoStaticBenchmarksVariables new
+    scope: (CoBenchmarkPackage on: SpAbstractAdapter package);
+    builder: CoASTHeuristicsResultSetBuilder new;
+    run.
+
+""Get the total accuracy of finding the right result among the first 3 when typing 2 characters.""
+(staticHeuristics accuracyForCompletionIndex: (1 to: 3) withPrefixSize: 2) asFloat.
+```
+
+
+## Extracting the tables into Latex:
+
+```smalltalk
+latex := (global at: #SizeSorter) latexResultsFor: #mmr.
+```
+
+## Comparing the tables 
+
+```smalltalk
+benchA := CoStaticBenchmarksVariables new
+    scope: (CoBenchmarkPackage on: SpAbstractAdapter package);
+    builder: (CoGlobalSorterResultSetBuilder new
+        sorterClass: AlphabeticSorter;
+        yourself);
+    run.
+
+
+benchB := CoStaticBenchmarksVariables new
+    scope: (CoBenchmarkPackage on: SpAbstractValidation package);
+    builder: (CoGlobalSorterResultSetBuilder new
+        sorterClass: AlphabeticSorter;
+        yourself);
+    run.
+
+
+comparison := benchA diff: benchB.
+```
+"
 Class {
 	#name : 'CoStaticBenchmarksVariables',
 	#superclass : 'CoStaticBenchmarks',
