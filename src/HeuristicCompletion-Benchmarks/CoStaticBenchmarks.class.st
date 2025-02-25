@@ -410,7 +410,7 @@ CoStaticBenchmarks >> currentMemoryUsage [
     ^ Smalltalk vm memorySize
 ]
 
-{ #category : 'comparing' }
+{ #category : 'diff' }
 CoStaticBenchmarks >> diff: anotherBenchmark [ 
 
     | tableDataSelf tableDataOther tableDataDifference |
