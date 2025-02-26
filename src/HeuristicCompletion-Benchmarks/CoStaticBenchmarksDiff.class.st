@@ -1,3 +1,13 @@
+"
+`CoStaticBenchmarksDiff`, is designed to compare two benchmark results by computing their accuracy metrics and displaying the differences. It encapsulates the logic for:
+
+- Storing and initializing two benchmark datasets (`benchA` and `benchB`).
+- Computing tabular representations of benchmark results and their differences.
+- Providing inspection results that allow structured visualization of the data.
+- Constructing table presenters for easy analysis.
+
+The class effectively organizes benchmarking data, performs numerical computations, and ensures results are accessible through a structured table format. It could benefit from clearer documentation for methods categorized as ""as yet unclassified"" to improve maintainability and readability.
+"
 Class {
 	#name : 'CoStaticBenchmarksDiff',
 	#superclass : 'Object',
