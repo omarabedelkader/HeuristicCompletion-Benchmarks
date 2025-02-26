@@ -288,15 +288,14 @@ CoStaticBenchmarksTest >> testNDCGWithMultipleRanks [
 
 { #category : 'tests' }
 CoStaticBenchmarksTest >> testNDCGWithZeroEntries [
-    | ndcgValue |
-    "Test when there are entries but no valid counts."
 
-    benchmarks completionBenchs 
-        at: 1 
-        put: (Dictionary new at: 2 put: #(0 ()); yourself).
-    ndcgValue := benchmarks ndcgForPrefixSize: 2.
-
-    self assert: ndcgValue = 0.
+	| ndcgValue |
+	"Test when there are entries but no valid counts."
+	benchmarks completionBenchs at: 1 put: (Dictionary new
+			 at: 2 put: #( 0 #(  ) );
+			 yourself).
+	ndcgValue := benchmarks ndcgForPrefixSize: 2.
+	self assert: ndcgValue equals: 0
 ]
 
 { #category : 'tests' }
