@@ -29,14 +29,14 @@ CoStaticBenchmarksDiff class >> initializeWith: benchA and: benchB [
         benchB: benchB
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'inspector' }
 CoStaticBenchmarksDiff >> accuracyInspectionResults [
 	"Defines how this object is presented in the Inspector as a tab labeled 'Accuracy'."
 	<inspectorPresentationOrder: 0 title: 'Difference'>
 	^ self inspectionResults
 ]
 
-{ #category : 'benchmarking' }
+{ #category : 'diff' }
 CoStaticBenchmarksDiff >> benchA: aBenchmark benchB: anotherBenchmark [
 
 	benchA := aBenchmark.
@@ -44,7 +44,7 @@ CoStaticBenchmarksDiff >> benchA: aBenchmark benchB: anotherBenchmark [
 	^ self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'diff' }
 CoStaticBenchmarksDiff >> compute [
 	"Compute the table data for benchA and benchB, then compute the difference."
 	tableDataA := self computeTableDataFor: benchA.
@@ -54,7 +54,7 @@ CoStaticBenchmarksDiff >> compute [
 		and: tableDataB
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'diff' }
 CoStaticBenchmarksDiff >> computeDifferenceBetween: tableA and: tableB [
 	"Given two arrays of rows with the same structure,
 	 compute the difference row by row, column by column."
@@ -79,7 +79,7 @@ CoStaticBenchmarksDiff >> computeDifferenceBetween: tableA and: tableB [
 	]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'diff' }
 CoStaticBenchmarksDiff >> computeTableDataFor: aBenchmark [
 	"Compute an array of rows for the given aBenchmark.
 	 Each row looks like #(#('Prefix') 'val1' 'val2' ...). 
@@ -118,7 +118,7 @@ CoStaticBenchmarksDiff >> computeTableDataFor: aBenchmark [
 	^ tableData
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'diff' }
 CoStaticBenchmarksDiff >> inspectionResults [
 	"Returns a dictionary that the Inspector can render as nested tabs:
 	   - 'BenchmarkA'
@@ -136,7 +136,7 @@ CoStaticBenchmarksDiff >> inspectionResults [
 	}
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'diff' }
 CoStaticBenchmarksDiff >> tablePresenterFromTableData: tableData [
 	"Build and return an SpTablePresenter from an array of rows,
 	 each of the form #(#('Prefix') 'val1' 'val2' ...)."
