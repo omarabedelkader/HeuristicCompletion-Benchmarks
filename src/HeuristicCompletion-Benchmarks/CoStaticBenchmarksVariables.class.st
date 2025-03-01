@@ -137,7 +137,9 @@ CoStaticBenchmarksVariables >> benchCallsite: aMessageNode atPosition: aPosition
 		completionIndex := self
 			                   findCompletionIndexFor: receiver
 			                   inCandidates: candidates.
-			
+		Transcript
+      cr;
+      show: '--- Benchmarking Callsite for Target: ', receiver name; cr.	
 		Transcript
 			show: 'Prefix: ''', prefix, ''' (size: ', index printString, ')';
 			show: '  ->  Completion Index: ', completionIndex printString;
