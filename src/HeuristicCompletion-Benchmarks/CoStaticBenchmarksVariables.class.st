@@ -137,14 +137,24 @@ CoStaticBenchmarksVariables >> benchCallsite: aMessageNode atPosition: aPosition
 		completionIndex := self
 			                   findCompletionIndexFor: receiver
 			                   inCandidates: candidates.
-		Transcript
-      cr;
-      show: '--- Benchmarking Callsite for Target: ', receiver name; cr.	
-		Transcript
-			show: 'Prefix: ''', prefix, ''' (size: ', index printString, ')';
+		Transcript cr; show: '--- Benchmarking Callsite for Target: ', receiver name; cr.
+		Transcript show: 'Prefix: ''', prefix, ''' (size: ', index printString, ')';
 			show: '  ->  Completion Index: ', completionIndex printString;
 			show: '  ->  Found? ', (completionIndex > 0) asString; cr.
-		Transcript show: 'Top Candidates: ', (candidates collect: #contents) printString; cr; cr.			
+		Transcript show: 'Top Candidates: ', (candidates collect: #contents) printString; cr.
+
+		self trackCompletionResultsFor: receiver atIndex: completionIndex withPrefix: prefix.
+		self logExecutionTimeSince: startTime forPrefixSize: prefix size.
+		self logMemoryUsageSince: startMemory forPrefixSize: prefix size.
+
+		"Log Accuracy, MRR, NDCG, Rank Distribution, and Recall@K"
+		Transcript show: 'Accuracy: ', (self accuracyForCompletionIndex: (1 to: 3) withPrefixSize: prefix size) printString; cr.
+		Transcript show: 'Mean Reciprocal Rank (MRR): ', (self mmrForPrefixSize: prefix size) printString; cr.
+		Transcript show: 'Normalized Discounted Cumulative Gain (NDCG): ', (self ndcgForPrefixSize: prefix size) printString; cr.
+		Transcript show: 'Rank Distribution: ', (self rankDistributionForPrefixSize: prefix size) printString; cr.
+		Transcript show: 'Recall@3: ', (self recallAtK: 3 withPrefixSize: prefix size) printString; cr.
+		Transcript show: 'Recall@5: ', (self recallAtK: 5 withPrefixSize: prefix size) printString; cr.
+		Transcript show: 'Recall@10: ', (self recallAtK: 10 withPrefixSize: prefix size) printString; cr.
 			
 
 		self
