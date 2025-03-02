@@ -226,28 +226,12 @@ CoStaticBenchmarksVariables >> maxPrefixSizeFor: receiver [
 { #category : 'benchmarks' }
 CoStaticBenchmarksVariables >> run [
 
-    | foundVariables |
-
-    foundVariables := OrderedCollection new.
-
-    scope methodsDo: [ :method |
-        method parseTree nodesDo: [ :node |
-            (node isMessage and: [
-                node receiver isVariable and: [
-                    node receiver name first isUppercase ] ]) ifTrue: [ 
-                        foundVariables add: node receiver name ] ] ].
-
-    "Print all found variables before running benchmarks"
-    Transcript cr; show: '--- Found Variables: ', foundVariables asArray printString; cr; cr.
-
-    "Now run the benchmarks"
-    scope methodsDo: [ :method |
-        method parseTree nodesDo: [ :node |
-            (node isMessage and: [
-                node receiver isVariable and: [
-                    node receiver name first isUppercase ] ]) ifTrue: [ 
-                        self benchCallsite: node atPosition: node keywordsIntervals first ] ] ].
-
+	scope methodsDo: [ :method |
+		method parseTree nodesDo: [ :node |
+			(node isMessage and: [
+				 node receiver isVariable and: [
+					 node receiver name first isUppercase ] ]) ifTrue: [
+				self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
 ]
 
 { #category : 'benchmarks' }
