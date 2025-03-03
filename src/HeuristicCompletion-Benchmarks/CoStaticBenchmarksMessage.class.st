@@ -109,6 +109,7 @@ CoStaticBenchmarksMessage class >> defaultHeuristics: aBuilder [
 		add: CoLiteralMessageHeuristic new;
 		add: CoGlobalVariableMessageHeuristic new;
 		add: CoVariableWithTypeNameMessageHeuristic new;
+		"add: CoVariableValueMessageHeuristic new;"
 		add: CoUnknownMessageHeuristic new;
 			 build)
 ]
