@@ -223,7 +223,7 @@ CoStaticBenchmarksVariables >> maxPrefixSizeFor: receiver [
 	^ receiver name size min: 8
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'running' }
 CoStaticBenchmarksVariables >> run [
 
     | className |
