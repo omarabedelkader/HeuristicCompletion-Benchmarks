@@ -91,7 +91,7 @@ Class {
 { #category : 'running' }
 CoStaticBenchmarksVariables class >> customHeuristics: aBuilder [
 
-" For now `CoPackageScopedGlobalVariableFetcher` is NOT implemented, there will be another PR where `CoPackageScopedGlobalVariableFetcher` is implement, then you can use this template.
+" For now `CoPackageScopedGlobalVariableFetcher` is NOT implemented, there will be another PR where `CoPackageScopedGlobalVariableFetcher` is implement, then you can use this template."
 	aBuilder variablesHeuristic: (aBuilder newHeuristicBuilder
 			 add: CoLocalScopeVariablesHeuristic new;
 			 add: CoWorkspaceVariablesHeuristic new;
@@ -99,7 +99,7 @@ CoStaticBenchmarksVariables class >> customHeuristics: aBuilder [
 			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
 						  CoPackageScopedGlobalVariableFetcher);
 			 build)
-"
+
 ]
 
 { #category : 'running' }
