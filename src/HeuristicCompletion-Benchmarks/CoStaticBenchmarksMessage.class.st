@@ -224,11 +224,29 @@ CoStaticBenchmarksMessage >> maxPrefixSizeFor: selector [
 
 { #category : 'running' }
 CoStaticBenchmarksMessage >> run [
+    | allMessages |
+    allMessages := OrderedCollection new.
+    
+    scope methodsDo: [ :method |
+        method parseTree nodesDo: [ :node |
+            node isMessage ifTrue: [
+                allMessages add: node
+            ]
+        ]
+    ].
 
-	scope methodsDo: [ :method |
-		method parseTree nodesDo: [ :node |
-			node isMessage ifTrue: [
-				self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
+    Transcript show: '--- All Found Messages ---'; cr.
+    allMessages do: [ :msgNode |
+        Transcript
+            show: msgNode selector asString;
+            cr.
+    ].
+
+    Transcript cr; show: '--- Now benchmarking each message ---'; cr.
+    allMessages do: [ :msgNode |
+        self benchCallsite: msgNode atPosition: msgNode keywordsIntervals first
+    ].
+
 ]
 
 { #category : 'benchmarks' }
