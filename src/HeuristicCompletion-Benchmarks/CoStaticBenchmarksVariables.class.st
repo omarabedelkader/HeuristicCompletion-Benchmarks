@@ -226,12 +226,39 @@ CoStaticBenchmarksVariables >> maxPrefixSizeFor: receiver [
 { #category : 'benchmarks' }
 CoStaticBenchmarksVariables >> run [
 
-	scope methodsDo: [ :method |
-		method parseTree nodesDo: [ :node |
-			(node isMessage and: [
-				 node receiver isVariable and: [
-					 node receiver name first isUppercase ] ]) ifTrue: [
-				self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
+    | className |
+    className := OrderedCollection new.
+
+    "1) Gather all message nodes where receiver is a variable with an uppercase first letter"
+    scope methodsDo: [ :method |
+        method parseTree nodesDo: [ :node |
+            (node isMessage and: [
+                 node receiver isVariable and: [
+                     node receiver name first isUppercase
+                 ]
+            ]) ifTrue: [
+                className add: node
+            ]
+        ]
+    ].
+
+    "2) Print them all first"
+    Transcript show: '--- All Found Uppercase Receiver Messages ---'; cr.
+    className do: [ :msgNode |
+        Transcript
+            show: 'Found message: ';
+            show: msgNode selector asString;
+            show: ' -- Receiver: ';
+            show: msgNode receiver name;
+            cr
+    ].
+
+    "3) Now run the benchmark on each one"
+    Transcript cr; show: '--- Now benchmarking each message ---'; cr.
+    className do: [ :msgNode |
+        self benchCallsite: msgNode atPosition: msgNode keywordsIntervals first
+    ].
+
 ]
 
 { #category : 'benchmarks' }
