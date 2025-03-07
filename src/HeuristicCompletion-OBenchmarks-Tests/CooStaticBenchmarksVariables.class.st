@@ -114,48 +114,48 @@ CooStaticBenchmarksVariables class >> defaultHeuristics: aBuilder [
 ]
 
 { #category : 'benchmarks' }
-CooStaticBenchmarksVariables >> benchCallsite: aMessageNode atPosition: aPosition [
+CooStaticBenchmarksVariables >> benchCallsite: aVariable atPosition: aPosition [
 
-	| receiver |
-	receiver := aMessageNode receiver.
-
-	2 to: (self maxPrefixSizeFor: receiver) do: [ :index |
+	| oldName |
+	oldName := aVariable name.
+	2 to: (self maxPrefixSizeFor: aVariable) do: [ :index |
 		| prefix startTime startMemory completion candidates completionIndex |
 		startTime := self startTimeMeasurement.
 		startMemory := self startMemoryMeasurement.
 
-		prefix := self extractPrefixFrom: receiver at: index.
-		aMessageNode receiver: (OCVariableNode named: prefix).
+		prefix := self extractPrefixFrom: aVariable at: index.
+		aVariable name: prefix.
 
 		completion := self
-			              buildCompletionFor: aMessageNode
+			              buildCompletionFor: aVariable
 			              atPosition: aPosition.
 
 		candidates := self
 			              fetchTopCandidatesFrom: completion
 			              usingPrefix: prefix.
 		completionIndex := self
-			                   findCompletionIndexFor: receiver
+			                   findCompletionIndexFor: aVariable
 			                   inCandidates: candidates.
 
 		self
-			trackCompletionResultsFor: receiver
+			trackCompletionResultsFor: aVariable
 			atIndex: completionIndex
 			withPrefix: prefix.
 
 		self logMemoryUsageSince: startMemory forPrefixSize: prefix size.
 		self logExecutionTimeSince: startTime forPrefixSize: prefix size ].
+	
+		aVariable name: oldName 
 
-	aMessageNode receiver: receiver
 ]
 
 { #category : 'benchmarks' }
-CooStaticBenchmarksVariables >> buildCompletionFor: aMessageNode atPosition: aPosition [
+CooStaticBenchmarksVariables >> buildCompletionFor: aVariableNode atPosition: aPosition [
 
 	^ builder
-		  node: aMessageNode receiver;
+		  node: aVariableNode;
 		  completionContext: (CoBenchmarkContext new
-				   callsite: aMessageNode;
+				   callsite: aVariableNode;
 				   position: aPosition;
 				   yourself);
 		  buildCompletion
@@ -199,9 +199,9 @@ CooStaticBenchmarksVariables >> logMemoryUsageSince: startMemory forPrefixSize: 
 ]
 
 { #category : 'benchmarks' }
-CooStaticBenchmarksVariables >> maxPrefixSizeFor: receiver [
+CooStaticBenchmarksVariables >> maxPrefixSizeFor: aVariable [
 
-	^ receiver name size min: 8
+	^ aVariable name size min: 8
 ]
 
 { #category : 'running' }
@@ -209,10 +209,10 @@ CooStaticBenchmarksVariables >> run [
 
 	scope methodsDo: [ :method |
 		method parseTree nodesDo: [ :node |
-			(node isMessage and: [
-				 node receiver isVariable and: [
-					 node receiver name first isUppercase ] ]) ifTrue: [
-				self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
+			(node isVariable and: [
+					 node name first isUppercase ]) 
+					ifTrue: [
+			self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
 ]
 
 { #category : 'benchmarks' }

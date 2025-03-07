@@ -20,6 +20,7 @@ Class {
 { #category : 'initialization' }
 BenchAnalyser >> allReferencedClasses [
 	"Returns a collection of all classes referenced within the package, regardless of whether they are defined in the package."
+	
 	^ referencesByClass keys
 ]
 
@@ -41,7 +42,7 @@ BenchAnalyser >> collectClassReferences [
 
 		parseTree nodesDo: [ :node |
 			(self isClassReferenceNode: node)
-				ifTrue: [ self noteReferenceIn: method forClass: node receiver name ]
+				ifTrue: [ self noteReferenceIn: method forClass: node name ]
 		]
 	]
 ]
@@ -84,9 +85,8 @@ BenchAnalyser >> internalUserRatio [
 BenchAnalyser >> isClassReferenceNode: aNode [
 	"Determine if 'aNode' is a message node referencing a class name.
 	 We assume it if the receiver is a variable whose first letter is uppercase."
-	^ aNode isMessage
-		and: [ aNode receiver isVariable
-		and: [ aNode receiver name first isUppercase ] ]
+	^ aNode isVariable
+		and: [ aNode receiver name first isUppercase ]
 ]
 
 { #category : 'initialization' }
