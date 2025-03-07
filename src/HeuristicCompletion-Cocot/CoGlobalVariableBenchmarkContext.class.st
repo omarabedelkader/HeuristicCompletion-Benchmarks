@@ -1,6 +1,6 @@
 Class {
 	#name : 'CoGlobalVariableBenchmarkContext',
-	#superclass : 'CoBenchmarkContext',
+	#superclass : 'AnObsoleteCoBenchmarkContext',
 	#category : 'HeuristicCompletion-Cocot-Benchmark',
 	#package : 'HeuristicCompletion-Cocot',
 	#tag : 'Benchmark'
