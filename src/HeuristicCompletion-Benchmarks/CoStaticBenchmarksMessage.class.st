@@ -46,7 +46,7 @@ global := accuracyPerSelectorLength: 5
 
 ```smalltalk
 staticHeuristics := CoStaticBenchmarksMessage new
-    scope: (CoBenchmarkPackage on: CompletionSorter package);
+    scope: (CoBenchmarkPackage on: SpAbstractAdapter package);
     builder: CoASTHeuristicsResultSetBuilder new;
     run.
 
@@ -89,30 +89,6 @@ Class {
 	#category : 'HeuristicCompletion-Benchmarks',
 	#package : 'HeuristicCompletion-Benchmarks'
 }
-
-{ #category : 'running' }
-CoStaticBenchmarksMessage class >> customHeuristics: aBuilder [
-
-	aBuilder messageHeuristic: (aBuilder newHeuristicBuilder
-			 add: CoSessionMessagesHeuristic new;
-			 build)
-]
-
-{ #category : 'running' }
-CoStaticBenchmarksMessage class >> defaultHeuristics: aBuilder [
-	
-	aBuilder messageHeuristic: (aBuilder newHeuristicBuilder
-			 		add: CoSelfMessageHeuristic new;
-		add: CoSuperMessageHeuristic new;
-		add: CoTypedReceiverMessageHeuristic new;
-		add: CoInitializeInferencedMessageHeuristic new;
-		add: CoLiteralMessageHeuristic new;
-		add: CoGlobalVariableMessageHeuristic new;
-		add: CoVariableWithTypeNameMessageHeuristic new;
-		"add: CoVariableValueMessageHeuristic new;"
-		add: CoUnknownMessageHeuristic new;
-			 build)
-]
 
 { #category : 'benchmarks' }
 CoStaticBenchmarksMessage >> benchCallsite: aMessageNode atPosition: aPosition [
