@@ -44,7 +44,7 @@ global := accuracyPerSelectorLength: 5
 
 ```smalltalk
 staticHeuristics := CoStaticBenchmarksVariables new
-    scope: (CoBenchmarkPackage on: CompletionSorter package);
+    scope: (CoBenchmarkPackage on: SpAbstractAdapter package);
     builder: CoASTHeuristicsResultSetBuilder new;
     run.
 
@@ -91,7 +91,7 @@ Class {
 { #category : 'running' }
 CoStaticBenchmarksVariables class >> customHeuristics: aBuilder [
 
-" For now `CoPackageScopedGlobalVariableFetcher` is NOT implemented, there will be another PR where `CoPackageScopedGlobalVariableFetcher` is implement, then you can use this template."
+" For now `CoPackageScopedGlobalVariableFetcher` is NOT implemented, there will be another PR where `CoPackageScopedGlobalVariableFetcher` is implement, then you can use this template.
 	aBuilder variablesHeuristic: (aBuilder newHeuristicBuilder
 			 add: CoLocalScopeVariablesHeuristic new;
 			 add: CoWorkspaceVariablesHeuristic new;
@@ -99,7 +99,7 @@ CoStaticBenchmarksVariables class >> customHeuristics: aBuilder [
 			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
 						  CoPackageScopedGlobalVariableFetcher);
 			 build)
-
+"
 ]
 
 { #category : 'running' }
@@ -137,25 +137,6 @@ CoStaticBenchmarksVariables >> benchCallsite: aMessageNode atPosition: aPosition
 		completionIndex := self
 			                   findCompletionIndexFor: receiver
 			                   inCandidates: candidates.
-		Transcript cr; show: '--- Benchmarking Callsite for Target: ', receiver name; cr.
-		Transcript show: 'Prefix: ''', prefix, ''' (size: ', index printString, ')';
-			show: '  ->  Completion Index: ', completionIndex printString;
-			show: '  ->  Found? ', (completionIndex > 0) asString; cr.
-		Transcript show: 'Top Candidates: ', (candidates collect: #contents) printString; cr.
-
-		self trackCompletionResultsFor: receiver atIndex: completionIndex withPrefix: prefix.
-		self logExecutionTimeSince: startTime forPrefixSize: prefix size.
-		self logMemoryUsageSince: startMemory forPrefixSize: prefix size.
-
-		"Log Accuracy, MRR, NDCG, Rank Distribution, and Recall@K"
-		Transcript show: 'Accuracy: ', (self accuracyForCompletionIndex: (1 to: 3) withPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Mean Reciprocal Rank (MRR): ', (self mmrForPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Normalized Discounted Cumulative Gain (NDCG): ', (self ndcgForPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Rank Distribution: ', (self rankDistributionForPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Recall@3: ', (self recallAtK: 3 withPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Recall@5: ', (self recallAtK: 5 withPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Recall@10: ', (self recallAtK: 10 withPrefixSize: prefix size) printString; cr.
-			
 
 		self
 			trackCompletionResultsFor: receiver
@@ -226,39 +207,12 @@ CoStaticBenchmarksVariables >> maxPrefixSizeFor: receiver [
 { #category : 'running' }
 CoStaticBenchmarksVariables >> run [
 
-    | className |
-    className := OrderedCollection new.
-
-    "1) Gather all message nodes where receiver is a variable with an uppercase first letter"
-    scope methodsDo: [ :method |
-        method parseTree nodesDo: [ :node |
-            (node isMessage and: [
-                 node receiver isVariable and: [
-                     node receiver name first isUppercase
-                 ]
-            ]) ifTrue: [
-                className add: node
-            ]
-        ]
-    ].
-
-    "2) Print them all first"
-    Transcript show: '--- All Found Uppercase Receiver Messages ---'; cr.
-    className do: [ :msgNode |
-        Transcript
-            show: 'Found message: ';
-            show: msgNode selector asString;
-            show: ' -- Receiver: ';
-            show: msgNode receiver name;
-            cr
-    ].
-
-    "3) Now run the benchmark on each one"
-    Transcript cr; show: '--- Now benchmarking each message ---'; cr.
-    className do: [ :msgNode |
-        self benchCallsite: msgNode atPosition: msgNode keywordsIntervals first
-    ].
-
+	scope methodsDo: [ :method |
+		method parseTree nodesDo: [ :node |
+			(node isMessage and: [
+				 node receiver isVariable and: [
+					 node receiver name first isUppercase ] ]) ifTrue: [
+				self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
 ]
 
 { #category : 'benchmarks' }

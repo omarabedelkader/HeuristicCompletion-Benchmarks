@@ -46,7 +46,7 @@ global := accuracyPerSelectorLength: 5
 
 ```smalltalk
 staticHeuristics := CoStaticBenchmarksMessage new
-    scope: (CoBenchmarkPackage on: CompletionSorter package);
+    scope: (CoBenchmarkPackage on: SpAbstractAdapter package);
     builder: CoASTHeuristicsResultSetBuilder new;
     run.
 
@@ -90,30 +90,6 @@ Class {
 	#package : 'HeuristicCompletion-Benchmarks'
 }
 
-{ #category : 'running' }
-CoStaticBenchmarksMessage class >> customHeuristics: aBuilder [
-
-	aBuilder messageHeuristic: (aBuilder newHeuristicBuilder
-			 add: CoSessionMessagesHeuristic new;
-			 build)
-]
-
-{ #category : 'running' }
-CoStaticBenchmarksMessage class >> defaultHeuristics: aBuilder [
-	
-	aBuilder messageHeuristic: (aBuilder newHeuristicBuilder
-			 		add: CoSelfMessageHeuristic new;
-		add: CoSuperMessageHeuristic new;
-		add: CoTypedReceiverMessageHeuristic new;
-		add: CoInitializeInferencedMessageHeuristic new;
-		add: CoLiteralMessageHeuristic new;
-		add: CoGlobalVariableMessageHeuristic new;
-		add: CoVariableWithTypeNameMessageHeuristic new;
-		"add: CoVariableValueMessageHeuristic new;"
-		add: CoUnknownMessageHeuristic new;
-			 build)
-]
-
 { #category : 'benchmarks' }
 CoStaticBenchmarksMessage >> benchCallsite: aMessageNode atPosition: aPosition [
 
@@ -138,24 +114,7 @@ CoStaticBenchmarksMessage >> benchCallsite: aMessageNode atPosition: aPosition [
 		completionIndex := self
 			                   findCompletionIndexFor: originalSelector
 			                   inCandidates: candidates.
-		Transcript cr; show: '--- Benchmarking Callsite for Target: ', originalSelector ; cr.
-		Transcript show: 'Prefix: ''', prefix, ''' (size: ', index printString, ')';
-			show: '  ->  Completion Index: ', completionIndex printString;
-			show: '  ->  Found? ', (completionIndex > 0) asString; cr.
-		Transcript show: 'Top Candidates: ', (candidates collect: #contents) printString; cr.
 
-		self trackCompletionResultsFor: originalSelector atIndex: completionIndex withPrefix: prefix.
-		self logExecutionTimeSince: startTime forPrefixSize: prefix size.
-		self logMemoryUsageSince: startMemory forPrefixSize: prefix size.
-
-		"Log Accuracy, MRR, NDCG, Rank Distribution, and Recall@K"
-		Transcript show: 'Accuracy: ', (self accuracyForCompletionIndex: (1 to: 3) withPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Mean Reciprocal Rank (MRR): ', (self mmrForPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Normalized Discounted Cumulative Gain (NDCG): ', (self ndcgForPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Rank Distribution: ', (self rankDistributionForPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Recall@3: ', (self recallAtK: 3 withPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Recall@5: ', (self recallAtK: 5 withPrefixSize: prefix size) printString; cr.
-		Transcript show: 'Recall@10: ', (self recallAtK: 10 withPrefixSize: prefix size) printString; cr.
 		self
 			trackCompletionResultsFor: originalSelector
 			atIndex: completionIndex
@@ -224,29 +183,11 @@ CoStaticBenchmarksMessage >> maxPrefixSizeFor: selector [
 
 { #category : 'running' }
 CoStaticBenchmarksMessage >> run [
-    | allMessages |
-    allMessages := OrderedCollection new.
-    
-    scope methodsDo: [ :method |
-        method parseTree nodesDo: [ :node |
-            node isMessage ifTrue: [
-                allMessages add: node
-            ]
-        ]
-    ].
 
-    Transcript show: '--- All Found Messages ---'; cr.
-    allMessages do: [ :msgNode |
-        Transcript
-            show: msgNode selector asString;
-            cr.
-    ].
-
-    Transcript cr; show: '--- Now benchmarking each message ---'; cr.
-    allMessages do: [ :msgNode |
-        self benchCallsite: msgNode atPosition: msgNode keywordsIntervals first
-    ].
-
+	scope methodsDo: [ :method |
+		method parseTree nodesDo: [ :node |
+			node isMessage ifTrue: [
+				self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
 ]
 
 { #category : 'benchmarks' }
