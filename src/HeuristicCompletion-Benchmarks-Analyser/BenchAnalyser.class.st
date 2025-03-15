@@ -41,7 +41,8 @@ Class {
 		'package',
 		'scope',
 		'definedClassNames',
-		'referencesByClass'
+		'referencesByClass',
+		'packagesByClass'
 	],
 	#category : 'HeuristicCompletion-Benchmarks-Analyser',
 	#package : 'HeuristicCompletion-Benchmarks-Analyser'
@@ -82,12 +83,20 @@ BenchAnalyser >> definedClassNames [
 	^ definedClassNames
 ]
 
+{ #category : 'as yet unclassified' }
+BenchAnalyser >> externalReferences [ 
+    "Return all classes that are not in my definedClassNames"
+    ^ (self allReferencedClasses) select: [ :className |
+        self isClassExternal: className ]
+]
+
 { #category : 'initialization' }
 BenchAnalyser >> initialize [
 	"Initialize default state. This method is called automatically upon creation."
 	super initialize.
 	definedClassNames := Set new.
-	referencesByClass := Dictionary new
+	referencesByClass := Dictionary new.
+	packagesByClass   := Dictionary new.
 ]
 
 { #category : 'initialization' }
@@ -108,6 +117,12 @@ BenchAnalyser >> internalUserRatio [
 	^ definedClassNames isEmpty
 		ifTrue: [ 0.0 ]
 		ifFalse: [ (self internalUserCount / definedClassNames size) asFloat ]
+]
+
+{ #category : 'testing' }
+BenchAnalyser >> isClassExternal: aClassName [
+    "Answer whether aClassName is defined outside of the target package."
+    ^ (definedClassNames includes: aClassName) not
 ]
 
 { #category : 'initialization' }
@@ -133,6 +148,20 @@ BenchAnalyser >> referencesForClass: aClassName [
 	^ referencesByClass
 		at: aClassName
 		ifAbsent: [ #() ]
+]
+
+{ #category : 'initialization' }
+BenchAnalyser >> referencesGroupedByDefiningPackage [ 
+
+    | dict |
+    dict := Dictionary new.
+    referencesByClass keysAndValuesDo: [ :className :methods |
+        | pkgName subDict |
+        pkgName := (packagesByClass at: className ifAbsent: [ 'UnknownPackage' ]) asString.
+        subDict := dict at: pkgName ifAbsentPut: [ Dictionary new ].
+        subDict at: className put: methods
+    ].
+    ^ dict
 ]
 
 { #category : 'initialization' }
