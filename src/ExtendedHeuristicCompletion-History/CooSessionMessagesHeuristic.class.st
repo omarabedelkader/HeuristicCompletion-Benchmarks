@@ -2,7 +2,7 @@
 I am an heuristic that autocompletes messages based on a session vocabulary.
 "
 Class {
-	#name : 'CoSessionMessagesHeuristic',
+	#name : 'CooSessionMessagesHeuristic',
 	#superclass : 'CoASTNodeFetcherHeuristic',
 	#instVars : [
 		'session'
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : 'requests' }
-CoSessionMessagesHeuristic class >> installSessionInSystem [
+CooSessionMessagesHeuristic class >> installSessionInSystem [
 	<script>
 	"self installSessionInSystem"
 	
@@ -20,7 +20,7 @@ CoSessionMessagesHeuristic class >> installSessionInSystem [
 	engine := CoCompletionEngine new.
 	builder := CoASTHeuristicsResultSetBuilder new. 
 	heuBuilder := CoHeuristicBuilder new. 
-	newElement := heuBuilder add: CoSessionMessagesHeuristic new; build.
+	newElement := heuBuilder add: CooSessionMessagesHeuristic new; build.
 	newElement next: builder messageHeuristic.
 	engine completionBuilder: ( builder messageHeuristic: newElement ).  
 
@@ -28,24 +28,24 @@ CoSessionMessagesHeuristic class >> installSessionInSystem [
 ]
 
 { #category : 'requests' }
-CoSessionMessagesHeuristic >> appliesForNode: aNode inContext: aContext [
+CooSessionMessagesHeuristic >> appliesForNode: aNode inContext: aContext [
 
 	^ aNode isMethod or: [ aNode isMessage ]
 ]
 
 { #category : 'requests' }
-CoSessionMessagesHeuristic >> buildFetcherFor: aMessageNode inContext: aContext [
+CooSessionMessagesHeuristic >> buildFetcherFor: aMessageNode inContext: aContext [
 	
 	^ CoCollectionFetcher onCollection: 
 			( self session words collect: [ :each | (NECSelectorEntry contents: each key node: each value) ])
 ]
 
 { #category : 'accessing' }
-CoSessionMessagesHeuristic >> session [
+CooSessionMessagesHeuristic >> session [
 	^ session ifNil: [ session := CoSession current ]
 ]
 
 { #category : 'accessing' }
-CoSessionMessagesHeuristic >> session: anObject [
+CooSessionMessagesHeuristic >> session: anObject [
 	session := anObject
 ]

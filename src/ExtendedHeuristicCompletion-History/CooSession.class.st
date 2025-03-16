@@ -3,7 +3,7 @@ I implement a session that collects execution information.
 I collect the last words in modified methods.
 "
 Class {
-	#name : 'CoSession',
+	#name : 'CooSession',
 	#superclass : 'Object',
 	#instVars : [
 		'vocabularyCache'
@@ -16,22 +16,22 @@ Class {
 }
 
 { #category : 'actions' }
-CoSession class >> current [ 
+CooSession class >> current [ 
 
 	^ Current ifNil: [ Current := self new ]
 ]
 
 { #category : 'actions' }
-CoSession class >> deinstall [
+CooSession class >> deinstall [
 	<script>
 	
 	self environment codeChangeAnnouncer unsubscribe: self current.
-	CoSession allInstances 
+	CooSession allInstances 
 		do: [ :each | self environment codeChangeAnnouncer unsubscribe: each ]
 ]
 
 { #category : 'actions' }
-CoSession class >> install [
+CooSession class >> install [
 	<script>
 	
 	self environment codeChangeAnnouncer
@@ -48,7 +48,7 @@ CoSession class >> install [
 ]
 
 { #category : 'actions' }
-CoSession class >> reset [
+CooSession class >> reset [
 	<script>
 	Current ifNotNil: [ 
 		self environment codeChangeAnnouncer
@@ -57,37 +57,37 @@ CoSession class >> reset [
 ]
 
 { #category : 'accessing' }
-CoSession >> addMessageInVocabulary: anAnn [
+CooSession >> addMessageInVocabulary: anAnn [
 
 	self addVocabulary: anAnn selectedItem selector  at: DateAndTime now
 ]
 
 { #category : 'vocabulary' }
-CoSession >> addNewMethodInVocabulary: anAnn [
+CooSession >> addNewMethodInVocabulary: anAnn [
 	
 	self addVocabulary: (anAnn selector -> anAnn method ast) at: DateAndTime now 
 ]
 
 { #category : 'vocabulary' }
-CoSession >> addVocabulary: aString at: aDateAndTime [
+CooSession >> addVocabulary: aString at: aDateAndTime [
 
 	vocabularyCache at: aString put: aDateAndTime
 ]
 
 { #category : 'initialization' }
-CoSession >> initialize [
+CooSession >> initialize [
 
 	super initialize.
 	vocabularyCache := LRUCache new maximumWeight: 1000
 ]
 
 { #category : 'accessing' }
-CoSession >> size [
+CooSession >> size [
 	^ vocabularyCache size
 ]
 
 { #category : 'accessing' }
-CoSession >> words [
+CooSession >> words [
 
 	^ vocabularyCache keys
 ]
