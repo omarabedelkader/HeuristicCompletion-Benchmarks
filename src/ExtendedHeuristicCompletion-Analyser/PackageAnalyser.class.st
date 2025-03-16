@@ -86,7 +86,7 @@ PackageAnalyser >> isClassReferenceNode: aNode [
 	"Determine if 'aNode' is a message node referencing a class name.
 	 We assume it if the receiver is a variable whose first letter is uppercase."
 	^ aNode isVariable
-		and: [ aNode receiver name first isUppercase ]
+		and: [ aNode name first isUppercase ]
 ]
 
 { #category : 'initialization' }
