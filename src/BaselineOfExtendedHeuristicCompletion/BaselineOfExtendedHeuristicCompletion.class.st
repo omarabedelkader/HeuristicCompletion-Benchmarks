@@ -10,11 +10,20 @@ BaselineOfExtendedHeuristicCompletion >> baseline: spec [
 	<baseline>
 	
 	spec for: #common do: [ 
+		
 		spec package: 'ExtendedHeuristicCompletion-Benchmarks'.
 		spec package: 'HeuristicCompletion-PackageScope' with: [ 
 			spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
 		spec package: 'ExtendedHeuristicCompletion-History'.
-		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Analyser'.
+	
+		"analyser"
+		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Analyser-Data'.
+		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Analyser-Data2'.
+		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Analyser'
+			 with: [ spec requires: #( 
+						'ExtendedHeuristicCompletion-Benchmarks-Analyser-Data' 
+					 	'ExtendedHeuristicCompletion-Benchmarks-Analyser-Data2') ].
+		
 		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Data'
 			 with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ]]
 ]
