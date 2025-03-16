@@ -17,12 +17,12 @@ BaselineOfExtendedHeuristicCompletion >> baseline: spec [
 		spec package: 'ExtendedHeuristicCompletion-History'.
 	
 		"analyser"
-		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Analyser-Data'.
-		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Analyser-Data2'.
-		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Analyser'
+		spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.
+		spec package: 'ExtendedHeuristicCompletion-Analyser-Data2'.
+		spec package: 'ExtendedHeuristicCompletion-Analyser'
 			 with: [ spec requires: #( 
-						'ExtendedHeuristicCompletion-Benchmarks-Analyser-Data' 
-					 	'ExtendedHeuristicCompletion-Benchmarks-Analyser-Data2') ].
+						'ExtendedHeuristicCompletion-Analyser-Data' 
+					 	'ExtendedHeuristicCompletion-Analyser-Data2') ].
 		
 		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Data'
 			 with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ]]
