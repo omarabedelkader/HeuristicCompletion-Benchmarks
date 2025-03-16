@@ -59,7 +59,6 @@ CoAlternateGlobalVariableFetcherTest >> testCaseSensitive [
 
 { #category : 'running' }
 CoAlternateGlobalVariableFetcherTest >> testEmptyPrefix [
-
 	"Tests fetching with an empty prefix, which should return everything in the environment."
 	
 	| localFetcher fetchedElements localSystemNavigation globals |
@@ -75,14 +74,16 @@ CoAlternateGlobalVariableFetcherTest >> testEmptyPrefix [
 
 	fetchedElements := localFetcher upToEnd.
 
-	self assert: fetchedElements size equals: globals size.
+	self 
+		assert: fetchedElements size 
+		equals: globals size.
 	
 	"Check contents match. The order is determined by the fetcher logic, 
 	 so we only check the set equivalence for simplicity here."
 
-	self assert: 
-		(fetchedElements collect: #contents) asSet 
-		= globals asSet
+	self 
+		assert: (fetchedElements collect: #contents) asSet 
+		equals: globals asSet
 ]
 
 { #category : 'running' }

@@ -31,7 +31,6 @@ CoPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	| string case closeClassNames keys organizer packageNamePart friendClassNames friendPackageNames | 
 	completionClass isNil
 		ifTrue: [
-				self halt.
 				"can we call another fetcher?" 
 					^ self systemNavigation
 							allGlobalNamesStartingWith: filter completionString
