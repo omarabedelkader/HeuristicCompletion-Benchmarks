@@ -3,6 +3,35 @@ I am an Analyser, responsible for analyzing how classes are defined
  and referenced within a given package. My analysis identifies which
  classes are internal versus external, how many references exist, and
  provides relevant metrics.
+
+
+
+```smalltalk
+""""1. Create analyzer instance""""
+analyser := BenchAnalyser new.
+
+""""2. Get target package (replace with actual package name)""""
+targetPackage := PackageOrganizer default packageNamed: 'NECompletion'.
+
+""""3. Execute analysis""""
+analyser runAnalysisForPackage: targetPackage.
+
+""""4. Access results""""
+internalRatio := analyser internalUserRatio.
+references := analyser referencesForClass: #CompletionSorter.
+
+
+""""Total defined classes""""
+analyser definedClassNames.
+
+""""Internal usage ratio""""
+analyser internalUserRatio.
+
+""""External references""""
+analyser allReferencedClasses difference: analyser definedClassNames.
+
+
+
 "
 Class {
 	#name : 'PackageAnalyser',
@@ -11,7 +40,8 @@ Class {
 		'package',
 		'scope',
 		'definedClassNames',
-		'referencesByClass'
+		'referencesByClass',
+		'packagesByClass'
 	],
 	#category : 'ExtendedHeuristicCompletion-Analyser',
 	#package : 'ExtendedHeuristicCompletion-Analyser'
@@ -54,11 +84,20 @@ PackageAnalyser >> definedClassNames [
 ]
 
 { #category : 'initialization' }
+PackageAnalyser >> externalReferences [
+    "Return all classes that are not in my definedClassNames"
+
+    ^ (self allReferencedClasses) select: [ :className |
+        self isClassExternal: className ]
+]
+
+{ #category : 'initialization' }
 PackageAnalyser >> initialize [
 	"Initialize default state. This method is called automatically upon creation."
 	super initialize.
 	definedClassNames := Set new.
-	referencesByClass := Dictionary new
+	referencesByClass := Dictionary new.
+	packagesByClass   := Dictionary new.
 ]
 
 { #category : 'initialization' }
@@ -79,6 +118,12 @@ PackageAnalyser >> internalUserRatio [
 	^ definedClassNames isEmpty
 		ifTrue: [ 0.0 ]
 		ifFalse: [ (self internalUserCount / definedClassNames size) asFloat ]
+]
+
+{ #category : 'initialization' }
+PackageAnalyser >> isClassExternal: aClassName [
+    "Answer whether aClassName is defined outside of the target package."
+    ^ (definedClassNames includes: aClassName) not
 ]
 
 { #category : 'initialization' }
@@ -103,6 +148,20 @@ PackageAnalyser >> referencesForClass: aClassName [
 	^ referencesByClass
 		at: aClassName
 		ifAbsent: [ #() ]
+]
+
+{ #category : 'as yet unclassified' }
+PackageAnalyser >> referencesGroupedByDefiningPackage [
+
+    | dict |
+    dict := Dictionary new.
+    referencesByClass keysAndValuesDo: [ :className :methods |
+        | pkgName subDict |
+        pkgName := (packagesByClass at: className ifAbsent: [ 'UnknownPackage' ]) asString.
+        subDict := dict at: pkgName ifAbsentPut: [ Dictionary new ].
+        subDict at: className put: methods
+    ].
+    ^ dict
 ]
 
 { #category : 'initialization' }
