@@ -7,8 +7,8 @@ Class {
 	#instVars : [
 		'packages'
 	],
-	#category : 'HeuristicCompletion-Cocot-Experiments',
-	#package : 'HeuristicCompletion-Cocot',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Experiments',
+	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'Experiments'
 }
 

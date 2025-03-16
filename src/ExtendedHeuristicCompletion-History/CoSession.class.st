@@ -11,8 +11,8 @@ Class {
 	#classVars : [
 		'Current'
 	],
-	#category : 'HeuristicCompletion-History',
-	#package : 'HeuristicCompletion-History'
+	#category : 'ExtendedHeuristicCompletion-History',
+	#package : 'ExtendedHeuristicCompletion-History'
 }
 
 { #category : 'actions' }

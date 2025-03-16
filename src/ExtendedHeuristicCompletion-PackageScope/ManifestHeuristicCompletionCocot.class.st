@@ -4,8 +4,8 @@ Please describe the package using the class comment of the included manifest cla
 Class {
 	#name : 'ManifestHeuristicCompletionCocot',
 	#superclass : 'PackageManifest',
-	#category : 'HeuristicCompletion-Cocot-Manifest',
-	#package : 'HeuristicCompletion-Cocot',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Manifest',
+	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'Manifest'
 }
 

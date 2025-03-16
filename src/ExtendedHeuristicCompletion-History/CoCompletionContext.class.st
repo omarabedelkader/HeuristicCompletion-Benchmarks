@@ -16,8 +16,8 @@ Class {
 		'completion',
 		'completionToken'
 	],
-	#category : 'HeuristicCompletion-History',
-	#package : 'HeuristicCompletion-History'
+	#category : 'ExtendedHeuristicCompletion-History',
+	#package : 'ExtendedHeuristicCompletion-History'
 }
 
 { #category : 'class initialization' }

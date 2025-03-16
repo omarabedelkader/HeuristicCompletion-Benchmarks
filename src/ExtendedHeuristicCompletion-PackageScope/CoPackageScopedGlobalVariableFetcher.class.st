@@ -8,8 +8,8 @@ Class {
 		'packages',
 		'completionClass'
 	],
-	#category : 'HeuristicCompletion-Cocot-PackageScope',
-	#package : 'HeuristicCompletion-Cocot',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-PackageScope',
+	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'PackageScope'
 }
 
@@ -49,7 +49,7 @@ CoPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 			ifTrue: [ aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ]] .
 	
 	"Package of the project e.g that starts with the same tag bfore the - 
-	HeuristicCompletion-Cocot -> HeuristicCompletion"
+	ExtendedHeuristicCompletion-PackageScope -> HeuristicCompletion"
 	
 	packageNamePart := completionClass package name copyUpTo: $-.
 	friendClassNames := OrderedCollection new. 

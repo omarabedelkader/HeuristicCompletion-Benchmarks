@@ -13,8 +13,8 @@ comparison := benchA diff: benchB.
 Class {
 	#name : 'MyCoStaticBenchmarks',
 	#superclass : 'CooStaticBenchmarks',
-	#category : 'HeuristicCompletion-Cocot-Benchmark',
-	#package : 'HeuristicCompletion-Cocot',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Benchmark',
+	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'Benchmark'
 }
 

@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'package'
 	],
-	#category : 'HeuristicCompletion-Cocot-TestsForPharo',
-	#package : 'HeuristicCompletion-Cocot',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-TestsForPharo',
+	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'TestsForPharo'
 }
 

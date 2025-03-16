@@ -1,1 +1,1 @@
-Package { #name : 'HeuristicCompletion-OBenchmarks-Tests' }
+Package { #name : 'ExtendedHeuristicCompletion-Benchmarks-Tests' }

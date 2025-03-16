@@ -6,8 +6,8 @@ Class {
 		'package2',
 		'package3'
 	],
-	#category : 'HeuristicCompletion-Cocot-PackageScope',
-	#package : 'HeuristicCompletion-Cocot',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-PackageScope',
+	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'PackageScope'
 }
 

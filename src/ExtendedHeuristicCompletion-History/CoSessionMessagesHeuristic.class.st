@@ -7,8 +7,8 @@ Class {
 	#instVars : [
 		'session'
 	],
-	#category : 'HeuristicCompletion-History',
-	#package : 'HeuristicCompletion-History'
+	#category : 'ExtendedHeuristicCompletion-History',
+	#package : 'ExtendedHeuristicCompletion-History'
 }
 
 { #category : 'requests' }
