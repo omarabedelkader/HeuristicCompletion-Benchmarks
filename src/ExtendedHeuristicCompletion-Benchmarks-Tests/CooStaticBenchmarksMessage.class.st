@@ -86,8 +86,8 @@ comparison := benchA diff: benchB.
 Class {
 	#name : 'CooStaticBenchmarksMessage',
 	#superclass : 'CooStaticBenchmarks',
-	#category : 'HeuristicCompletion-OBenchmarks-Tests',
-	#package : 'HeuristicCompletion-OBenchmarks-Tests'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Tests',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks-Tests'
 }
 
 { #category : 'benchmarks' }

@@ -52,8 +52,8 @@ Class {
 		'completionTimes',
 		'memoryUsages'
 	],
-	#category : 'HeuristicCompletion-OBenchmarks-Tests',
-	#package : 'HeuristicCompletion-OBenchmarks-Tests'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Tests',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks-Tests'
 }
 
 { #category : 'running' }
