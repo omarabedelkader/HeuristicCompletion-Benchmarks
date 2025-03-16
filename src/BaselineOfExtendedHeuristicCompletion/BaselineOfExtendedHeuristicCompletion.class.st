@@ -23,7 +23,5 @@ BaselineOfExtendedHeuristicCompletion >> baseline: spec [
 			 with: [ spec requires: #( 
 						'ExtendedHeuristicCompletion-Analyser-Data' 
 					 	'ExtendedHeuristicCompletion-Analyser-Data2') ].
-		
-		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Data'
-			 with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ]]
+		]
 ]
