@@ -13,8 +13,8 @@ Class {
 		'definedClassNames',
 		'referencesByClass'
 	],
-	#category : 'HeuristicCompletion-Benchmarks-Analyser',
-	#package : 'HeuristicCompletion-Benchmarks-Analyser'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Analyser',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks-Analyser'
 }
 
 { #category : 'initialization' }
