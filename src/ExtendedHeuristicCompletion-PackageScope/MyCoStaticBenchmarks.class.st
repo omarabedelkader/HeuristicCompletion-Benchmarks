@@ -96,55 +96,39 @@ MyCoStaticBenchmarks class >> runForPackage: aPackage [
 ]
 
 { #category : 'benchmarks' }
-MyCoStaticBenchmarks >> benchCallsite: aMessageNode atPosition: aPosition [
+MyCoStaticBenchmarks >> benchCallsite: aVariable atPosition: aPosition [
 
-	| receiver |
-	receiver := aMessageNode receiver.
+	| oldName |
+	oldName := aVariable name.
+	2 to: (self maxPrefixSizeFor: aVariable) do: [ :index |
+		| prefix startTime startMemory completion candidates completionIndex |
+		startTime := self startTimeMeasurement.
+		startMemory := self startMemoryMeasurement.
 
-	2 to: (aMessageNode receiver name size min: 8) do: [ :index |
-		| prefix startTime endTime executionTime completion candidates completionIndex previousResultsPerIndexPerPrefixSize |
-		"Start timing"
-		startTime := Time millisecondClockValue.
+		prefix := self extractPrefixFrom: aVariable at: index.
+		aVariable name: prefix.
 
-		prefix := receiver name copyFrom: 1 to: index.
-		aMessageNode receiver: (OCVariableNode named: prefix).
+		completion := self
+			              buildCompletionFor: aVariable
+			              atPosition: aPosition.
 
+		candidates := self
+			              fetchTopCandidatesFrom: completion
+			              usingPrefix: prefix.
+		completionIndex := self
+			                   findCompletionIndexFor: aVariable
+			                   inCandidates: candidates.
+
+		self
+			trackCompletionResultsFor: aVariable
+			atIndex: completionIndex
+			withPrefix: prefix.
+
+		self logMemoryUsageSince: startMemory forPrefixSize: prefix size.
+		self logExecutionTimeSince: startTime forPrefixSize: prefix size ].
 	
-		completion := builder
-			              node: aMessageNode receiver;
-			              completionContext: (CoBenchmarkContext new
-					               callsite: aMessageNode;
-					               position: aPosition;
-					               yourself);
-			              buildCompletion.
+		aVariable name: oldName 
 
-		completion replaceFilterWith:
-			(CoCaseSensitiveBeginsWithFilter filterString: prefix).
-		candidates := completion first: 10.
-
-		completionIndex := (candidates collect: [ :each | each contents ])
-			                   indexOf: receiver name.
-
-		"Existing logic: update completionBenchs dictionary"
-		previousResultsPerIndexPerPrefixSize := completionBenchs
-			                                        at: completionIndex
-			                                        at: prefix size
-			                                        ifAbsent: [
-				                                        {
-					                                        0.
-					                                        Set new } ].
-		previousResultsPerIndexPerPrefixSize second add: receiver.
-		completionBenchs at: completionIndex at: prefix size put: {
-				(previousResultsPerIndexPerPrefixSize first + 1).
-				previousResultsPerIndexPerPrefixSize second }.
-
-		"Stop timing and record it"
-		endTime := Time millisecondClockValue.
-		executionTime := endTime - startTime.
-		self logTime: executionTime forPrefix: prefix size ].
-
-	"Restore the original selector"
-	aMessageNode receiver: receiver
 ]
 
 { #category : 'benchmarking' }
