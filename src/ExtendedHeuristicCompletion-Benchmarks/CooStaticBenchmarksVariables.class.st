@@ -88,31 +88,6 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
-{ #category : 'running' }
-CooStaticBenchmarksVariables class >> customHeuristics: aBuilder [
-
-" For now `CoPackageScopedGlobalVariableFetcher` is NOT implemented, there will be another PR where `CoPackageScopedGlobalVariableFetcher` is implement, then you can use this template.
-	aBuilder variablesHeuristic: (aBuilder newHeuristicBuilder
-			 add: CoLocalScopeVariablesHeuristic new;
-			 add: CoWorkspaceVariablesHeuristic new;
-			 add: CoInstanceAccessibleVariablesHeuristic new;
-			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoPackageScopedGlobalVariableFetcher);
-			 build)
-"
-]
-
-{ #category : 'running' }
-CooStaticBenchmarksVariables class >> defaultHeuristics: aBuilder [
-
-	aBuilder variablesHeuristic: (aBuilder newHeuristicBuilder
-			 add: CoLocalScopeVariablesHeuristic new;
-			 add: CoWorkspaceVariablesHeuristic new;
-			 add: CoInstanceAccessibleVariablesHeuristic new;
-			 add: CoGlobalVariablesHeuristic new;
-			 build)
-]
-
 { #category : 'benchmarks' }
 CooStaticBenchmarksVariables >> benchCallsite: aVariable atPosition: aPosition [
 
@@ -123,9 +98,9 @@ CooStaticBenchmarksVariables >> benchCallsite: aVariable atPosition: aPosition [
 		startTime := self startTimeMeasurement.
 		startMemory := self startMemoryMeasurement.
 
-		prefix := self extractPrefixFrom: aVariable at: index.
+		prefix := self extractPrefixFrom: oldName at: index.
 		aVariable name: prefix.
-
+		
 		completion := self
 			              buildCompletionFor: aVariable
 			              atPosition: aPosition.
@@ -134,11 +109,11 @@ CooStaticBenchmarksVariables >> benchCallsite: aVariable atPosition: aPosition [
 			              fetchTopCandidatesFrom: completion
 			              usingPrefix: prefix.
 		completionIndex := self
-			                   findCompletionIndexFor: aVariable
+			                   findCompletionIndexFor: oldName
 			                   inCandidates: candidates.
 
 		self
-			trackCompletionResultsFor: aVariable
+			trackCompletionResultsFor: oldName
 			atIndex: completionIndex
 			withPrefix: prefix.
 
@@ -154,7 +129,7 @@ CooStaticBenchmarksVariables >> buildCompletionFor: aVariableNode atPosition: aP
 
 	^ builder
 		  node: aVariableNode;
-		  completionContext: (CoBenchmarkContext new
+		  completionContext: (CoBenchmarkVariableContext new
 				   callsite: aVariableNode;
 				   position: aPosition;
 				   yourself);
@@ -162,9 +137,9 @@ CooStaticBenchmarksVariables >> buildCompletionFor: aVariableNode atPosition: aP
 ]
 
 { #category : 'benchmarks' }
-CooStaticBenchmarksVariables >> extractPrefixFrom: receiver at: index [
+CooStaticBenchmarksVariables >> extractPrefixFrom: variable at: index [
 
-	^ receiver name copyFrom: 1 to: index
+	^ variable copyFrom: 1 to: index
 ]
 
 { #category : 'benchmarks' }
@@ -176,10 +151,9 @@ CooStaticBenchmarksVariables >> fetchTopCandidatesFrom: completion usingPrefix: 
 ]
 
 { #category : 'benchmarks' }
-CooStaticBenchmarksVariables >> findCompletionIndexFor: receiver inCandidates: candidates [
-
-	^ (candidates collect: [ :each | each contents ]) indexOf:
-		  receiver name
+CooStaticBenchmarksVariables >> findCompletionIndexFor: variableName inCandidates: candidates [
+	^ (candidates collect: [ :each | each contents ]) 
+			indexOf: variableName
 ]
 
 { #category : 'benchmarks' }
@@ -209,10 +183,8 @@ CooStaticBenchmarksVariables >> run [
 
 	scope methodsDo: [ :method |
 		method parseTree nodesDo: [ :node |
-			(node isVariable and: [
-					 node name first isUppercase ]) 
-					ifTrue: [
-			self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
+			(node isVariable and: [ node name first isUppercase ]) 
+					ifTrue: [ self benchCallsite: node atPosition: node start ] ] ]
 ]
 
 { #category : 'benchmarks' }

@@ -5,25 +5,13 @@
 ## Typical Usage:
 
 
-
-
-### First way (We recommand to use this one :):
-
-
+Here we run all the sorters so it can take some time. 
 ```smalltalk
-global := CoStaticBenchmarksMessage runAllOnClass: CompletionSorter package.
 
-global := CoStaticBenchmarksMessage runAllOnPackage: 'NECompletion'.
-
-""To add the which templates of heurisitcs you want to use""
-
-global := CoStaticBenchmarksMessage runAllOnPackage: 'NECompletion' heuristics: [ :b | CoStaticBenchmarksMessage defaultHeuristics: b ].
-
-global := CoStaticBenchmarksMessage runAllOnPackage: 'NECompletion' heuristics: [ :b | CoStaticBenchmarksMessage customHeuristics: b ].
+global := CoStaticBenchmarksMessage runAllSortersOnPackage: NECEntry package.
 
 ```
 
-### Second way:
 
 
 ```smalltalk
@@ -40,9 +28,7 @@ global := CoStaticBenchmarksMessage new
 ""To see how well completions do on 5-character selectors""
 
 global := accuracyPerSelectorLength: 5
-
 ```
-### Second way:
 
 ```smalltalk
 staticHeuristics := CoStaticBenchmarksMessage new
@@ -53,6 +39,14 @@ staticHeuristics := CoStaticBenchmarksMessage new
 ""Get the total accuracy of finding the right result among the first 3 when typing 2 characters.""
 (staticHeuristics accuracyForCompletionIndex: (1 to: 3) withPrefixSize: 2) asFloat.
 ```
+
+
+
+
+
+
+
+
 
 
 ## Extracting the tables into Latex:
@@ -73,9 +67,9 @@ benchA := CoStaticBenchmarksMessage new
 
 
 benchB := CoStaticBenchmarksMessage new
-    scope: (CoBenchmarkPackage on: SpAbstractValidation package);
+    scope: (CoBenchmarkPackage on: CompletionSorter package);
     builder: (CoGlobalSorterResultSetBuilder new
-        sorterClass: AlphabeticSorter;
+        sorterClass: SizeSorter;
         yourself);
     run.
 
@@ -146,7 +140,7 @@ CooStaticBenchmarksMessage >> extractPrefixFrom: selector at: index [
 
 { #category : 'benchmarks' }
 CooStaticBenchmarksMessage >> fetchTopCandidatesFrom: completion usingPrefix: prefix [
-
+	
 	completion replaceFilterWith:
 		(CoCaseSensitiveBeginsWithFilter filterString: prefix).
 	^ completion first: 10

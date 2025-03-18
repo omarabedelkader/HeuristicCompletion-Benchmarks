@@ -78,21 +78,13 @@ MyCoStaticBenchmarks class >> runCustomForPackage: aPackage [
 { #category : 'benchmarking' }
 MyCoStaticBenchmarks class >> runForPackage: aPackage [
 
-	| benchmark builder |
-	builder := CoASTHeuristicsResultSetBuilder new.
-	builder variablesHeuristic: (builder newHeuristicBuilder
-			 add: CoLocalScopeVariablesHeuristic new;
-			 add: CoWorkspaceVariablesHeuristic new;
-			 add: CoInstanceAccessibleVariablesHeuristic new;
-			 add: CoGlobalVariablesHeuristic new;
-			 build).
+	^ self new runForPackage: aPackage
+]
 
-	benchmark := self new
-		             scope: (CoBenchmarkPackage on: aPackage);
-		             builder: builder;
-		             yourself.
-	benchmark run.
-	^ benchmark
+{ #category : 'benchmarking' }
+MyCoStaticBenchmarks class >> runForPackage: aPackage withBuilder: aBuilder [
+
+	^ self new runForPackage: aPackage
 ]
 
 { #category : 'benchmarks' }
@@ -201,9 +193,30 @@ MyCoStaticBenchmarks >> diff: anotherBenchmark [
 
 { #category : 'benchmarking' }
 MyCoStaticBenchmarks >> run [
-
+	"self new run"
+	
 	scope methodsDo: [ :method |
 		method parseTree nodesDo: [ :node |
 			(node isMessage and: [ node isVariable and: [ node name first isUppercase ]])
 				ifTrue: [ self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
+]
+
+{ #category : 'benchmarking' }
+MyCoStaticBenchmarks >> runForPackage: aPackage [
+
+	| benchmark b |
+	b := CoASTHeuristicsResultSetBuilder new.
+	b variablesHeuristic: (b newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: CoGlobalVariablesHeuristic new;
+			 build).
+
+	benchmark := self
+		             scope: (CoBenchmarkPackage on: aPackage);
+		             builder: b;
+		             yourself.
+	benchmark run.
+	^ benchmark
 ]
