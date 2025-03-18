@@ -14,16 +14,13 @@ Class {
 { #category : 'one local one global' }
 CoAutononousPackageScopedGlobalVariableFetcherTest >> setUpThreePackages [
 	" we have
-	
 		2 packages 
 			P1A : Ai12 Ai13 A11 AA1 CoInP1
 			P2A : Ai2 Ai23 AA2
 			P2A : Ai3 A33 Blop
 	
-	and two globals
-			
+	and two globals		
 		"
-	
 	
 	| ai12 ai13 a11 aa1 ai2 ai23 aa2 ai3 a33 blop classesInP1 classesInP2 classesInP3 organizer dict |
 	completionClass := CoMockClass new name: 'CoInP1'. 

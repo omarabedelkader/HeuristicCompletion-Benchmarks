@@ -220,6 +220,6 @@ MyCoStaticBenchmarks >> run [
 
 	scope methodsDo: [ :method |
 		method parseTree nodesDo: [ :node |
-			(node isMessage and: [ node receiver isVariable and: [ node receiver name first isUppercase ]])
+			(node isMessage and: [ node isVariable and: [ node name first isUppercase ]])
 				ifTrue: [ self benchCallsite: node atPosition: node keywordsIntervals first ] ] ]
 ]

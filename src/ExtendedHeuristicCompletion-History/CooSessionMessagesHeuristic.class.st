@@ -18,12 +18,16 @@ CooSessionMessagesHeuristic class >> installSessionInSystem [
 	
 	| engine builder heuBuilder  newElement |
 	engine := CoCompletionEngine new.
+	
 	builder := CoASTHeuristicsResultSetBuilder new. 
 	heuBuilder := CoHeuristicBuilder new. 
 	newElement := heuBuilder add: CooSessionMessagesHeuristic new; build.
 	newElement next: builder messageHeuristic.
+	"we place the session in front of the Semantics approach."
+	
+	"then we set a chain of builder for the message part."
 	engine completionBuilder: ( builder messageHeuristic: newElement ).  
-
+	
 	RubSmalltalkEditor completionEngineInstance: engine
 ]
 
