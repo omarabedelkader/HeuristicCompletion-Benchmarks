@@ -1,6 +1,9 @@
 Class {
 	#name : 'CooBenchRunner',
 	#superclass : 'Object',
+	#instVars : [
+		'package'
+	],
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
@@ -25,7 +28,9 @@ CooBenchRunner class >> runVariableOnNeCompletionPackage [
 
 { #category : 'accessing' }
 CooBenchRunner >> classNamesWithPackageScope [
-	"self new classNamesWithPackageScope"
+	"self new 
+		package: AnalyserData1 package;
+		classNamesWithPackageScope"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -39,7 +44,7 @@ CooBenchRunner >> classNamesWithPackageScope [
 						                         CoPackageScopedGlobalVariableFetcher);
 			                build).
 	benchmark := (CooStaticBenchmarksVariables new
-		scope: (CoBenchmarkPackage on: CompletionSorter package);
+		scope: (CoBenchmarkPackage on: package);
 		builder: builder;
 		run).
 	benchmark inspect.
@@ -49,7 +54,9 @@ CooBenchRunner >> classNamesWithPackageScope [
 
 { #category : 'accessing' }
 CooBenchRunner >> classNamesWithoutPackageScope [
-	"self new classNamesWithoutPackageScope"
+	"self new 
+		package: AnalyserData1 package;
+		classNamesWithoutPackageScope"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -61,10 +68,16 @@ CooBenchRunner >> classNamesWithoutPackageScope [
 			                add: CoGlobalVariablesHeuristic new;
 			                build).
 	benchmark := (CooStaticBenchmarksVariables new
-		scope: (CoBenchmarkPackage on: CompletionSorter package);
+		scope: (CoBenchmarkPackage on: package);
 		builder: builder;
 		run).
 	benchmark inspect.
 	^ benchmark
 
+]
+
+{ #category : 'accessing' }
+CooBenchRunner >> package: aPackage [
+
+	package := aPackage
 ]
