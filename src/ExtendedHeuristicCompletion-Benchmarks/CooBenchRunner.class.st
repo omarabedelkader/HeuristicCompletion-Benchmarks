@@ -2,7 +2,10 @@ Class {
 	#name : 'CooBenchRunner',
 	#superclass : 'Object',
 	#instVars : [
-		'package'
+		'package',
+		'baseline',
+		'others',
+		'results'
 	],
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
@@ -27,6 +30,12 @@ CooBenchRunner class >> runVariableOnNeCompletionPackage [
 ]
 
 { #category : 'accessing' }
+CooBenchRunner >> baseline: aSymbol [
+
+	baseline := aSymbol 
+]
+
+{ #category : 'accessing' }
 CooBenchRunner >> classNamesWithPackageScope [
 	"self new 
 		package: AnalyserData1 package;
@@ -44,6 +53,7 @@ CooBenchRunner >> classNamesWithPackageScope [
 						                         CoPackageScopedGlobalVariableFetcher);
 			                build).
 	benchmark := (CooStaticBenchmarksVariables new
+		name: 'Scoped Global';
 		scope: (CoBenchmarkPackage on: package);
 		builder: builder;
 		run).
@@ -68,6 +78,7 @@ CooBenchRunner >> classNamesWithoutPackageScope [
 			                add: CoGlobalVariablesHeuristic new;
 			                build).
 	benchmark := (CooStaticBenchmarksVariables new
+		name: 'Flat global variable';
 		scope: (CoBenchmarkPackage on: package);
 		builder: builder;
 		run).
@@ -77,7 +88,23 @@ CooBenchRunner >> classNamesWithoutPackageScope [
 ]
 
 { #category : 'accessing' }
+CooBenchRunner >> others: aSymbolCollect [
+
+	others := aSymbolCollect 
+]
+
+{ #category : 'accessing' }
 CooBenchRunner >> package: aPackage [
 
 	package := aPackage
+]
+
+{ #category : 'accessing' }
+CooBenchRunner >> run [ 
+
+	results := Dictionary new.
+	{baseline} , others
+		do: [ :s | results at: s  put: (self perform: s)].
+	^ results
+
 ]

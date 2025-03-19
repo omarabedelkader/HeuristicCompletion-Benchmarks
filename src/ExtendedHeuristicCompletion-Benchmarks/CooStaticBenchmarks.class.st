@@ -50,7 +50,8 @@ Class {
 		'completionBenchs',
 		'builder',
 		'completionTimes',
-		'memoryUsages'
+		'memoryUsages',
+		'name'
 	],
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
@@ -409,6 +410,7 @@ CooStaticBenchmarks >> initialize [
 	builder := CoASTHeuristicsResultSetBuilder new.
 	completionTimes := Dictionary new. 
 	memoryUsages := Dictionary new.
+	name := 'Baseline'
 ]
 
 { #category : 'printing' }
@@ -902,6 +904,12 @@ CooStaticBenchmarks >> mmrInspectionResults [
 	^ table
 ]
 
+{ #category : 'accessing' }
+CooStaticBenchmarks >> name: aString [
+
+	name := aString
+]
+
 { #category : 'metrics' }
 CooStaticBenchmarks >> ndcgForPrefixSize: prefixSize [
 
@@ -972,6 +980,8 @@ CooStaticBenchmarks >> prefixSizes [
 CooStaticBenchmarks >> printOn: aStream [
 
 	aStream
+		nextPutAll: name;
+		space;
 		print: builder;
 		nextPutAll: '(';
 		print: scope;
