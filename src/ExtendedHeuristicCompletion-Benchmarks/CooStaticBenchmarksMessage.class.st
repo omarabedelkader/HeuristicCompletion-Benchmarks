@@ -41,14 +41,6 @@ staticHeuristics := CoStaticBenchmarksMessage new
 ```
 
 
-
-
-
-
-
-
-
-
 ## Extracting the tables into Latex:
 
 ```smalltalk
@@ -76,6 +68,23 @@ benchB := CoStaticBenchmarksMessage new
 
 comparison := benchA diff: benchB.
 ```
+
+### Logger 
+
+```
+StObjectTranscriptLogger reset.
+
+StObjectTranscriptLogger new
+		runDuring: [ 
+	CooStaticBenchmarksMessage  new
+    scope: (CoBenchmarkPackage on: CompletionSorter package);
+    builder: CoASTHeuristicsResultSetBuilder new;
+    run.
+]
+```
+
+
+
 "
 Class {
 	#name : 'CooStaticBenchmarksMessage',
@@ -200,6 +209,12 @@ CooStaticBenchmarksMessage >> startTimeMeasurement [
 CooStaticBenchmarksMessage >> trackCompletionResultsFor: originalSelector atIndex: completionIndex withPrefix: prefix [
 
 	| previousResultsPerIndexPerPrefixSize |
+	
+	(CooProbe new 
+		originalSelector: originalSelector;
+		prefix: prefix;
+		yourself) emit.
+	
 	previousResultsPerIndexPerPrefixSize := completionBenchs
 		                                        at: completionIndex
 		                                        at: prefix size
