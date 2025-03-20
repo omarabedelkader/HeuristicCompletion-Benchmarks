@@ -1,3 +1,14 @@
+"
+```
+
+CooBenchRunner new
+	package: SpPresenter package;
+	baseline: #classNamesWithoutPackageScope;
+	others: { #classNamesWithPackageScope };
+	run.
+	
+```
+"
 Class {
 	#name : 'CooBenchRunner',
 	#superclass : 'Object',
@@ -104,7 +115,6 @@ CooBenchRunner >> run [
 
 	results := Dictionary new.
 	{baseline} , others
-		do: [ :s | results at: s  put: (self perform: s)].
-	^ results
+		do: [ :s | results at: s  put: (self perform: s)]
 
 ]

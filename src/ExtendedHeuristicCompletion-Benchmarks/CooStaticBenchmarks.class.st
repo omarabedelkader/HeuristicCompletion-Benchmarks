@@ -156,6 +156,7 @@ CooStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPref
 	"Computes the accuracy for a given completion index range and prefix size."
 
 	| totalEntries |
+	self haltOnce.
 	totalEntries := self totalEntriesPerPrefixSize: prefixSize.
 	totalEntries = 0 ifTrue: [ ^ 0 ].
 	^ (completionIndexRange sum: [ :index |
@@ -406,7 +407,7 @@ CooStaticBenchmarks >> gradeForPrefixSize: prefixSize [
 CooStaticBenchmarks >> initialize [
 
 	super initialize.
-	completionBenchs := Dictionary new.
+	completionBenchs := CooBenchResult new.
 	builder := CoASTHeuristicsResultSetBuilder new.
 	completionTimes := Dictionary new. 
 	memoryUsages := Dictionary new.
@@ -1126,7 +1127,7 @@ CooStaticBenchmarks >> timeInspectionResults [
 { #category : 'benchmarks' }
 CooStaticBenchmarks >> totalEntriesPerPrefixSize: aPrefixSize [
 
-	^ completionBenchs sum: [ :benchsPerPrefix | (benchsPerPrefix at: aPrefixSize ifAbsent: [ {0} ]) first ]
+	^ completionBenchs sum: [ :benchsPerPrefix |  (benchsPerPrefix at: aPrefixSize ifAbsent: [ {0} ]) first ]
 ]
 
 { #category : 'metrics' }
