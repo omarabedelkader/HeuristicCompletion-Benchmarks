@@ -156,7 +156,6 @@ CooStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPref
 	"Computes the accuracy for a given completion index range and prefix size."
 
 	| totalEntries |
-	self haltOnce.
 	totalEntries := self totalEntriesPerPrefixSize: prefixSize.
 	totalEntries = 0 ifTrue: [ ^ 0 ].
 	^ (completionIndexRange sum: [ :index |
@@ -903,6 +902,12 @@ CooStaticBenchmarks >> mmrInspectionResults [
 		         yourself.
 
 	^ table
+]
+
+{ #category : 'accessing' }
+CooStaticBenchmarks >> name [
+
+	^ name
 ]
 
 { #category : 'accessing' }
