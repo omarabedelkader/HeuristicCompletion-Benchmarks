@@ -13,7 +13,7 @@ PackageAnalyserTest >> testDefineClassesOfData [
 	pa runAnalysisForPackage: (PackageOrganizer default packageNamed: 'ExtendedHeuristicCompletion-Analyser-Data').
 	self 
 		assert: pa definedClassNames asOrderedCollection 
-		equals: #(#AnalyserData1 #AnalyserData2 #OtherAnalyserData1 #AnalyserData3 #OtherAnalyserData2) asOrderedCollection 
+		equals: #(#AnalyserData1 #OtherAnalyserData1 #AnalyserData2 #AnalyserData3 #OtherAnalyserData2) asOrderedCollection 
 ]
 
 { #category : 'tests' }
