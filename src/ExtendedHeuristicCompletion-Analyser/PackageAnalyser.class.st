@@ -150,7 +150,7 @@ PackageAnalyser >> referencesForClass: aClassName [
 		ifAbsent: [ #() ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'widget API' }
 PackageAnalyser >> referencesGroupedByDefiningPackage [
 
     | dict |
