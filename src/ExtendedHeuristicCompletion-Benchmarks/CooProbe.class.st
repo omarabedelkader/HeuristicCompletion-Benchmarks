@@ -17,7 +17,7 @@ StObjectTranscriptPresenter openWithLogger: StObjectTranscriptLogger instance.
 "
 Class {
 	#name : 'CooProbe',
-	#superclass : 'BeaconSignal',
+	#superclass : 'Object',
 	#instVars : [
 		'originalSelector',
 		'prefix'
