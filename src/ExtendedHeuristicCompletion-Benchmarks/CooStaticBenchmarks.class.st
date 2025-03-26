@@ -222,6 +222,29 @@ CooStaticBenchmarks >> accuracyPerSelectorLength: selectorLength [
 	^ correctCount asFloat / relevantCallsites
 ]
 
+{ #category : 'accessing' }
+CooStaticBenchmarks >> accuracyResults [
+	"Generates a BenchResult"
+
+	| table |
+	table := CooBenchResult new. 
+	table name: self name.
+	
+	self prefixSizes do: [ :prefixSize |
+		| col colElements |
+		col := CooResultColumn new.
+		col title: prefixSize asString.
+		table addColumn: col.
+		colElements := self completionIndexes collect: [ :completionIndexRange |
+					 | float |
+					 float := self
+						          accuracyForCompletionIndex: completionIndexRange
+						          withPrefixSize: prefixSize.
+					 (float * 100 asFloat round: 2) ].
+		col elements: colElements].
+	^ table
+]
+
 { #category : 'metrics' }
 CooStaticBenchmarks >> averageMemoryForPrefix: prefixSize [
 	"Computes the average memory usage for a given prefix size."
@@ -406,7 +429,7 @@ CooStaticBenchmarks >> gradeForPrefixSize: prefixSize [
 CooStaticBenchmarks >> initialize [
 
 	super initialize.
-	completionBenchs := CooBenchResult new.
+	completionBenchs := Dictionary new.
 	builder := CoASTHeuristicsResultSetBuilder new.
 	completionTimes := Dictionary new. 
 	memoryUsages := Dictionary new.

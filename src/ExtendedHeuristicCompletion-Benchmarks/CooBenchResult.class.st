@@ -5,7 +5,80 @@ I'm like a dictionary but I'm handy for defining treaments on the result such as
 "
 Class {
 	#name : 'CooBenchResult',
-	#superclass : 'Dictionary',
+	#superclass : 'Object',
+	#instVars : [
+		'name',
+		'columns'
+	],
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
+
+{ #category : 'inspector' }
+CooBenchResult >> accuracyInspectionResults [
+	"Generates a table displaying completion accuracy."
+
+	"<inspectorPresentationOrder: 0 title: 'Accuracy'>"
+	"does not work."
+	
+	| table |
+	table := SpTablePresenter new.
+ 	table items: columns. 
+
+	columns do: [ :column |
+		table addColumn: (SpStringTableColumn
+				 title: column title
+				 evaluated: [ :c | c elements ])].
+	^ table
+]
+
+{ #category : 'adding' }
+CooBenchResult >> addColumn: aCooResultColumn [ 
+	columns add: aCooResultColumn 
+]
+
+{ #category : 'accessing' }
+CooBenchResult >> completionIndexes [
+	"I copied this but it should not it should be part of the structure."
+	
+	^ { 1 to: 1.
+	  2 to: 2.
+	  3 to: 3.
+	  4 to: 10.
+	  0 to: 0.
+	}
+]
+
+{ #category : 'initialization' }
+CooBenchResult >> initialize [
+
+	super initialize.
+	columns := OrderedCollection new.
+	name := ''
+]
+
+{ #category : 'accessing' }
+CooBenchResult >> name [
+
+	^ name
+]
+
+{ #category : 'accessing' }
+CooBenchResult >> name: anObject [
+
+	name := anObject
+]
+
+{ #category : 'initialization' }
+CooBenchResult >> printOn: aStream [
+
+	columns do: [:c | aStream nextPutAll: (c title padRightTo: 6); space ].
+	
+	1 to: columns first elements size do: [ :i |  
+		aStream cr. 
+		columns do: [ :c |
+				aStream nextPutAll: ((c elements at: i) asString padRightTo: 6). 
+				aStream space
+			 ]
+		]
+]
