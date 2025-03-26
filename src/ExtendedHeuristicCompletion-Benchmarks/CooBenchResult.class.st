@@ -38,6 +38,11 @@ CooBenchResult >> addColumn: aCooResultColumn [
 ]
 
 { #category : 'accessing' }
+CooBenchResult >> columns [
+	^ columns
+]
+
+{ #category : 'accessing' }
 CooBenchResult >> completionIndexes [
 	"I copied this but it should not it should be part of the structure."
 	
@@ -47,6 +52,25 @@ CooBenchResult >> completionIndexes [
 	  4 to: 10.
 	  0 to: 0.
 	}
+]
+
+{ #category : 'operations' }
+CooBenchResult >> computeRatioWithReceiverAsBaselineComparedTo: anotherResult [
+
+	| table |
+	table := CooBenchResult new. 
+	table name: self name, '/', anotherResult name.
+	
+	self prefixSizes do: [ :prefixSize |
+		| col |
+		col := CooResultColumn new.
+		col title: prefixSize asString.
+		table addColumn: col.
+		
+		(columns at: (prefixSize -1)) elements 
+			with: (anotherResult columns at: (prefixSize -1)) elements 
+			do: [ :a :b | col addElement: ((b/a) asFloat round: 2)] ].
+	^ table
 ]
 
 { #category : 'initialization' }
@@ -67,6 +91,11 @@ CooBenchResult >> name [
 CooBenchResult >> name: anObject [
 
 	name := anObject
+]
+
+{ #category : 'accessing' }
+CooBenchResult >> prefixSizes [ 
+	^ 2 to: 8
 ]
 
 { #category : 'initialization' }

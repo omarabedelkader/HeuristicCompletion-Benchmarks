@@ -10,6 +10,12 @@ Class {
 }
 
 { #category : 'accessing' }
+CooResultColumn >> addElement: anElement [
+
+	elements add: anElement
+]
+
+{ #category : 'accessing' }
 CooResultColumn >> elements [
 
 	^ elements
@@ -19,6 +25,12 @@ CooResultColumn >> elements [
 CooResultColumn >> elements: anObject [
 
 	elements := anObject
+]
+
+{ #category : 'accessing' }
+CooResultColumn >> initialize [ 
+	super initialize.
+	elements := OrderedCollection new 
 ]
 
 { #category : 'printing' }

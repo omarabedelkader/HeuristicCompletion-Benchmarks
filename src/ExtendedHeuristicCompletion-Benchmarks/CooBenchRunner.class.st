@@ -22,7 +22,20 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
-{ #category : 'examples' }
+{ #category : 'examples ' }
+CooBenchRunner class >> comparing [
+
+	<script> 
+
+	CooBenchRunner new
+		package: SpPresenter package;
+		baseline: #classNamesWithoutPackageScope;
+		others: { #classNamesWithPackageScope };
+		inspect; 
+		run.
+]
+
+{ #category : 'examples to debug single run' }
 CooBenchRunner class >> runMessageOnNeCompletionPackage [
 	<script>
 	
@@ -31,7 +44,7 @@ CooBenchRunner class >> runMessageOnNeCompletionPackage [
 			heuristics: [:b | b]) inspect. 
 ]
 
-{ #category : 'examples' }
+{ #category : 'examples to debug single run' }
 CooBenchRunner class >> runVariableOnNeCompletionPackage [
 	<script>
 	
@@ -68,7 +81,6 @@ CooBenchRunner >> classNamesWithPackageScope [
 		scope: (CoBenchmarkPackage on: package);
 		builder: builder;
 		run).
-	benchmark inspect.
 	^ benchmark
 
 ]
@@ -96,6 +108,13 @@ CooBenchRunner >> classNamesWithoutPackageScope [
 	benchmark inspect.
 	^ benchmark
 
+]
+
+{ #category : 'accessing' }
+CooBenchRunner >> computeRatio [
+
+	^ (results at: baseline) accuracyResults
+		computeRatioWithReceiverAsBaselineComparedTo: (results at: others first) accuracyResults
 ]
 
 { #category : 'accessing' }
