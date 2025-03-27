@@ -16,7 +16,7 @@ VocabularyMetricer >> externalDefinitions: aCollection [
 	externalDefinitions := aCollection
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'use' }
 VocabularyMetricer >> externalUses: aCollection [ 
 	externalUses := aCollection 
 ]
@@ -26,12 +26,12 @@ VocabularyMetricer >> localDefinitions: aCollection [
 	localDefinitions := aCollection
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'use' }
 VocabularyMetricer >> localUses: aCollection [ 
 	localUses := aCollection 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'definitions' }
 VocabularyMetricer >> localityDefUseRatio [
 	
 	^ self percent: localUses size / localDefinitions size
@@ -43,7 +43,7 @@ VocabularyMetricer >> localityDefinitionRatio [
 	^ self percent: localDefinitions size / (localDefinitions size + externalDefinitions size) 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'use' }
 VocabularyMetricer >> localityUseRatio [
 	^ self percent: (localUses size / (localUses size + externalUses size)) 
 ]
@@ -63,5 +63,25 @@ VocabularyMetricer >> printOn: aStream [
 	aStream << '/'.
 	(externalDefinitions size + localDefinitions size) printOn: aStream.
 	aStream << ')'.
+	aStream cr.
+	
+	aStream << 'locality use ratio: '.
+	self localityDefinitionRatio printOn: aStream.
+	aStream << ' ('.
+	localUses size printOn: aStream.
+	aStream << '/'.
+	(localUses size + externalUses size) printOn: aStream.
+	aStream << ')'.
+	aStream cr. 
+	
+	aStream << 'local def/use ratio: '.
+	self localityDefUseRatio printOn: aStream.
+	aStream << ' ('.
+	localUses size printOn: aStream.
+	aStream << '/'.
+	localDefinitions size printOn: aStream.
+	aStream << ')'.
+	
+	
 	
 ]

@@ -38,6 +38,26 @@ VocabularyMetricTest >> testDefinitionRatio [
 ]
 
 { #category : 'tests' }
+VocabularyMetricTest >> testPrinting [
+
+	| vm |
+	vm := VocabularyMetricer new.
+	vm localDefinitions: #(A B C D E F).
+	vm externalDefinitions: #(EA EB EC ED EF EG EH EI EJ EK).
+	
+	"here we have only A B C that are used"
+	vm localUses: #(A B C).
+	vm externalUses: #(EA EB EC ED EF). 
+	
+	self 
+		assert: vm printString 
+		equals: 
+'locality definition ratio: 0.38 (6/16)
+locality use ratio: 0.38 (3/8)
+local def/use ratio: 0.5 (3/6)'
+]
+
+{ #category : 'tests' }
 VocabularyMetricTest >> testUsesRatio [
 
 	| vm |
