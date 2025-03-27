@@ -3,7 +3,9 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'localDefinitions',
-		'externalDefinitions'
+		'externalDefinitions',
+		'localUses',
+		'externalUses'
 	],
 	#category : 'ExtendedHeuristicCompletion-Analyser',
 	#package : 'ExtendedHeuristicCompletion-Analyser'
@@ -14,15 +16,36 @@ VocabularyMetricer >> externalDefinitions: aCollection [
 	externalDefinitions := aCollection
 ]
 
+{ #category : 'as yet unclassified' }
+VocabularyMetricer >> externalUses: aCollection [ 
+	externalUses := aCollection 
+]
+
 { #category : 'definitions' }
 VocabularyMetricer >> localDefinitions: aCollection [ 
 	localDefinitions := aCollection
+]
+
+{ #category : 'as yet unclassified' }
+VocabularyMetricer >> localUses: aCollection [ 
+	localUses := aCollection 
+]
+
+{ #category : 'as yet unclassified' }
+VocabularyMetricer >> localityDefUseRatio [
+	
+	^ self percent: localUses size / localDefinitions size
 ]
 
 { #category : 'definitions' }
 VocabularyMetricer >> localityDefinitionRatio [
 
 	^ self percent: localDefinitions size / (localDefinitions size + externalDefinitions size) 
+]
+
+{ #category : 'as yet unclassified' }
+VocabularyMetricer >> localityUseRatio [
+	^ self percent: (localUses size / (localUses size + externalUses size)) 
 ]
 
 { #category : 'tests' }
