@@ -9,17 +9,17 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Analyser'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'definitions' }
 VocabularyMetricer >> externalDefinitions: aCollection [ 
 	externalDefinitions := aCollection
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'definitions' }
 VocabularyMetricer >> localDefinitions: aCollection [ 
 	localDefinitions := aCollection
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'definitions' }
 VocabularyMetricer >> localityDefinitionRatio [
 
 	^ self percent: localDefinitions size / (localDefinitions size + externalDefinitions size) 
@@ -35,5 +35,10 @@ VocabularyMetricer >> printOn: aStream [
 
 	aStream << 'locality definition ratio: '.
 	self localityDefinitionRatio printOn: aStream.
+	aStream << ' ('.
+	localDefinitions size printOn: aStream.
+	aStream << '/'.
+	(externalDefinitions size + localDefinitions size) printOn: aStream.
+	aStream << ')'.
 	
 ]
