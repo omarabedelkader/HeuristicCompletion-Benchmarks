@@ -927,6 +927,23 @@ CooStaticBenchmarks >> mmrInspectionResults [
 	^ table
 ]
 
+{ #category : 'inspector' }
+CooStaticBenchmarks >> mmrString [
+
+	^ String streamContents: [ :s |
+		s << 'mmr: '.
+		self mmr printOn: s. 
+		s cr.
+		self prefixSizes 
+			do: [ :prefixSize |
+				prefixSize printOn: s. 
+				s space. 
+				((self mmrForPrefixSize: prefixSize) asFloat round: 2) printOn: s ]
+			separatedBy: [ s cr ] 
+			]
+
+]
+
 { #category : 'accessing' }
 CooStaticBenchmarks >> name [
 

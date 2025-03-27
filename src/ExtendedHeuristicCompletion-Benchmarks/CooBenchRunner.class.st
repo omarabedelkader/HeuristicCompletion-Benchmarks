@@ -59,7 +59,25 @@ CooBenchRunner >> baseline: aSymbol [
 	baseline := aSymbol 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'experience' }
+CooBenchRunner >> classNamesGlobalSorterScope [
+	"self new 
+		package: AnalyserData1 package;
+		classNamesWithoutPackageScope"
+
+	| builder benchmark |
+	builder := CoGlobalSorterResultSetBuilder new.
+	benchmark := (CooStaticBenchmarksVariables new
+		name: 'Flat global sorter variable';
+		scope: (CoBenchmarkPackage on: package);
+		builder: builder;
+		run).
+	benchmark inspect.
+	^ benchmark
+
+]
+
+{ #category : 'experience' }
 CooBenchRunner >> classNamesWithPackageScope [
 	"self new 
 		package: AnalyserData1 package;
@@ -101,7 +119,7 @@ CooBenchRunner >> classNamesWithoutPackageScope [
 			                add: CoGlobalVariablesHeuristic new;
 			                build).
 	benchmark := (CooStaticBenchmarksVariables new
-		name: 'Flat global variable';
+		name: 'Flat semantic global variable';
 		scope: (CoBenchmarkPackage on: package);
 		builder: builder;
 		run).
