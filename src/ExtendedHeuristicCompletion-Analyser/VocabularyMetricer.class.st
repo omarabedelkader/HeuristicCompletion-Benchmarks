@@ -29,3 +29,11 @@ VocabularyMetricer >> localityDefinitionRatio [
 VocabularyMetricer >> percent: aNumber [ 
 	^ aNumber asFloat round: 2
 ]
+
+{ #category : 'printing' }
+VocabularyMetricer >> printOn: aStream [
+
+	aStream << 'locality definition ratio: '.
+	self localityDefinitionRatio printOn: aStream.
+	
+]
