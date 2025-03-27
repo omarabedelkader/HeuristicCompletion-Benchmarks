@@ -27,6 +27,22 @@ VocabularyMetricTest >> testDefUsesRatio [
 ]
 
 { #category : 'tests' }
+VocabularyMetricTest >> testDefUsesRatioPrefix [
+
+	| vm |
+	self skip.
+	vm := VocabularyMetricer new.
+	vm localDefinitions: #(Ane Announce Analphabet Addition Adouber France).
+	vm externalDefinitions: #(Anneau Adapter Anhydrique Goulu Pharo Framacon Franc).
+	
+	"here we have only A B C that are used"
+	vm localUses: #(A B C).
+	vm externalUses: #(EA EB EC ED EF). 
+	
+	self assert: (vm localityDefUseRatioFor: 2) equals: (self percent: 3 / 6)
+]
+
+{ #category : 'tests' }
 VocabularyMetricTest >> testDefinitionRatio [
 
 	| vm |

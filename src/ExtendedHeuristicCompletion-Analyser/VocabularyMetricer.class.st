@@ -5,7 +5,11 @@ Class {
 		'localDefinitions',
 		'externalDefinitions',
 		'localUses',
-		'externalUses'
+		'externalUses',
+		'originalLocalDefinitions',
+		'originalExternalDefinitions',
+		'originalLocalUses',
+		'originalExternalUses'
 	],
 	#category : 'ExtendedHeuristicCompletion-Analyser',
 	#package : 'ExtendedHeuristicCompletion-Analyser'
