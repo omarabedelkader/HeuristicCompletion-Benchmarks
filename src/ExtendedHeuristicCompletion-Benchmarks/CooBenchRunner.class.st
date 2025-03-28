@@ -35,6 +35,45 @@ CooBenchRunner class >> comparing [
 		run.
 ]
 
+{ #category : 'examples ' }
+CooBenchRunner class >> comparingRBTests [
+
+	<script> 
+
+	CooBenchRunner new
+		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
+		baseline: #classNamesWithoutPackageScope;
+		others: { #classNamesWithPackageScope };
+		inspect; 
+		run.
+]
+
+{ #category : 'examples ' }
+CooBenchRunner class >> comparingRBTrans [
+
+	<script> 
+
+	CooBenchRunner new
+		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
+		baseline: #classNamesWithoutPackageScope;
+		others: { #classNamesWithPackageScope };
+		inspect; 
+		run.
+]
+
+{ #category : 'examples ' }
+CooBenchRunner class >> comparingSpecTest [
+
+	<script> 
+
+	CooBenchRunner new
+		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
+		baseline: #classNamesWithoutPackageScope;
+		others: { #classNamesWithPackageScope };
+		inspect; 
+		run.
+]
+
 { #category : 'examples to debug single run' }
 CooBenchRunner class >> runMessageOnNeCompletionPackage [
 	<script>
