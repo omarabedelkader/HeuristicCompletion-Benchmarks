@@ -86,11 +86,9 @@ CooBenchRunner class >> comparingSpecTest [
 
 { #category : 'iwst' }
 CooBenchRunner class >> iwst1 [
-
-	^ self allResultsFor: { 'Refactoring-Transformations-Tests'. 
-		 'Refactoring-Transformations'. 	
-	  'NECCompletion'. 
-	 'NECCompletion-Tests'}
+	<script>
+	^ (self allResultsFor: { 'Refactoring-Transformations-Tests'.
+		  'Refactoring-Transformations'. 'NECCompletion'. 'NECCompletion-Tests' }) inspect
 ]
 
 { #category : 'utils' }
