@@ -22,6 +22,16 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
+{ #category : 'api' }
+CooBenchRunner class >> allResultsFor: aColOfPackageNames [
+	
+	| packages runs string |
+	packages := aColOfPackageNames collect: [ :p |  PackageOrganizer default packageNamed: p ].
+	runs := self runComparisonForPackages: packages. 
+	string := self stringResultForABenchCollection: runs. 
+	^ {  runs . string }
+]
+
 { #category : 'examples ' }
 CooBenchRunner class >> comparing [
 
@@ -74,6 +84,27 @@ CooBenchRunner class >> comparingSpecTest [
 		run.
 ]
 
+{ #category : 'iwst' }
+CooBenchRunner class >> iwst1 [
+
+	^ self allResultsFor: { 'Refactoring-Transformations-Tests'. 
+		 'Refactoring-Transformations'. 	
+	  'NECCompletion'. 
+	 'NECCompletion-Tests'}
+]
+
+{ #category : 'utils' }
+CooBenchRunner class >> runComparisonForPackages: aCol [ 
+
+	^ aCol collect: [ :pack |
+			self  new
+				package: pack;
+				baseline: #classNamesWithoutPackageScope;
+				others: { #classNamesWithPackageScope };
+		 		run.
+				]
+]
+
 { #category : 'examples to debug single run' }
 CooBenchRunner class >> runMessageOnNeCompletionPackage [
 	<script>
@@ -90,6 +121,27 @@ CooBenchRunner class >> runVariableOnNeCompletionPackage [
 	^ (CooStaticBenchmarksVariables 
 			runOnPackage: (PackageOrganizer default packageNamed: 'NECompletion')
 			heuristics: [:b | b]) inspect. 
+]
+
+{ #category : 'utils' }
+CooBenchRunner class >> stringResultForABenchCollection: aCol [ 
+	
+	"(self stringResultForABecnhCollection:
+		(self runComparisionForPackages: 
+		{ PackageOrganizer default packageNamed:  'Refactoring-Transformations-Tests'. 
+		PackageOrganizer default packageNamed:  'Refactoring-Transformations'. 	
+		PackageOrganizer default packageNamed:  'NECCompletion'. 
+		PackageOrganizer default packageNamed:  'NECCompletion-Tests'. 
+		}))
+	
+	"
+	^ String streamContents: [ :s |
+			s nextPutAll: aCol package name.
+			s cr.
+			aCol results keysAndValuesDo: [ :k :v |
+				s << v mmrString
+				s cr. ]
+			]
 ]
 
 { #category : 'accessing' }
