@@ -122,24 +122,16 @@ CooBenchRunner class >> runVariableOnNeCompletionPackage [
 ]
 
 { #category : 'utils' }
-CooBenchRunner class >> stringResultForABenchCollection: aCol [ 
-	
-	"(self stringResultForABecnhCollection:
-		(self runComparisionForPackages: 
-		{ PackageOrganizer default packageNamed:  'Refactoring-Transformations-Tests'. 
-		PackageOrganizer default packageNamed:  'Refactoring-Transformations'. 	
-		PackageOrganizer default packageNamed:  'NECCompletion'. 
-		PackageOrganizer default packageNamed:  'NECCompletion-Tests'. 
-		}))
-	
-	"
+CooBenchRunner class >> stringResultForABenchCollection: aCol [
+
 	^ String streamContents: [ :s |
-			s nextPutAll: aCol package name.
-			s cr.
-			aCol results keysAndValuesDo: [ :k :v |
-				s << v mmrString
-				s cr. ]
-			]
+		  aCol do: [ :p |
+			  s << p package name.
+			  s cr.
+			  p results keysAndValuesDo: [ :k :v |
+				  s << v mmrString.
+				  s cr ].
+			  s cr ] ]
 ]
 
 { #category : 'accessing' }
@@ -231,9 +223,19 @@ CooBenchRunner >> others: aSymbolCollect [
 ]
 
 { #category : 'accessing' }
+CooBenchRunner >> package [
+	^ package
+]
+
+{ #category : 'accessing' }
 CooBenchRunner >> package: aPackage [
 
 	package := aPackage
+]
+
+{ #category : 'accessing' }
+CooBenchRunner >> results [
+	^ results
 ]
 
 { #category : 'accessing' }
