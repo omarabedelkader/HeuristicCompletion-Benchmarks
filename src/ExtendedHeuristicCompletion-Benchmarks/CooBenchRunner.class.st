@@ -129,7 +129,9 @@ CooBenchRunner class >> stringResultForABenchCollection: aCol [
 			  s << p package name.
 			  s cr.
 			  p results keysAndValuesDo: [ :k :v |
-				  s << v mmrString.
+				 	s << k asString. 
+					s cr.  
+					s << v mmrString.
 				  s cr ].
 			  s cr ] ]
 ]
