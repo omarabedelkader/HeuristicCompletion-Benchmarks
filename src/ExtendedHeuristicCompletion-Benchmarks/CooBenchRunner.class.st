@@ -40,7 +40,7 @@ CooBenchRunner class >> comparing [
 	CooBenchRunner new
 		package: SpPresenter package;
 		baseline: #classNamesWithoutPackageScope;
-		others: { #classNamesWithPackageScope };
+		others: { #classNamesWithRepositoryPackageScope };
 		inspect; 
 		run.
 ]
@@ -53,7 +53,7 @@ CooBenchRunner class >> comparingRBTests [
 	CooBenchRunner new
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
 		baseline: #classNamesWithoutPackageScope;
-		others: { #classNamesWithPackageScope };
+		others: { #classNamesWithRepositoryPackageScope };
 		inspect; 
 		run.
 ]
@@ -66,7 +66,7 @@ CooBenchRunner class >> comparingRBTrans [
 	CooBenchRunner new
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
 		baseline: #classNamesWithoutPackageScope;
-		others: { #classNamesWithPackageScope };
+		others: { #classNamesWithRepositoryPackageScope };
 		inspect; 
 		run.
 ]
@@ -79,7 +79,7 @@ CooBenchRunner class >> comparingSpecTest [
 	CooBenchRunner new
 		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
 		baseline: #classNamesWithoutPackageScope;
-		others: { #classNamesWithPackageScope };
+		others: { #classNamesWithRepositoryPackageScope };
 		inspect; 
 		run.
 ]
@@ -91,16 +91,31 @@ CooBenchRunner class >> iwst1 [
 		  'Refactoring-Transformations'. 'NECompletion'. 'NECompletion-Tests' }) inspect
 ]
 
+{ #category : 'iwst' }
+CooBenchRunner class >> iwst1test [
+
+	<script>
+	^ (self allResultsFor: { 'Refactoring-Transformations-Tests' })
+		  inspect
+]
+
+{ #category : 'iwst' }
+CooBenchRunner class >> iwst1test2 [
+
+	<script>
+	^ (self allResultsFor: { 'ExtendedHeuristicCompletion-Analyser' })
+		  inspect 
+]
+
 { #category : 'utils' }
-CooBenchRunner class >> runComparisonForPackages: aCol [ 
+CooBenchRunner class >> runComparisonForPackages: aCol [
 
 	^ aCol collect: [ :pack |
-			self  new
-				package: pack;
-				baseline: #classNamesWithoutPackageScope;
-				others: { #classNamesWithPackageScope };
-		 		run.
-				]
+		  self new
+			  package: pack;
+			  baseline: #classNamesWithoutPackageScope;
+			  others: { #classNamesWithRepositoryPackageScope . #classNamesWithDependencyPackageScope };
+			  run ]
 ]
 
 { #category : 'examples to debug single run' }
@@ -129,7 +144,9 @@ CooBenchRunner class >> stringResultForABenchCollection: aCol [
 			  s << p package name.
 			  s cr.
 			  p results keysAndValuesDo: [ :k :v |
-				  s << v mmrString.
+				 	s << k asString. 
+					s cr.  
+					s << v mmrString.
 				  s cr ].
 			  s cr ] ]
 ]
@@ -159,7 +176,30 @@ CooBenchRunner >> classNamesGlobalSorterScope [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> classNamesWithPackageScope [
+CooBenchRunner >> classNamesWithDependencyPackageScope [
+	"self new 
+		package: AnalyserData1 package;
+		classNamesWithDependencyPackageScope"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoDependencyPackageScopedGlobalVariableFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Scoped Global';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunner >> classNamesWithRepositoryPackageScope [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithPackageScope"
@@ -173,7 +213,7 @@ CooBenchRunner >> classNamesWithPackageScope [
 			                add: CoInstanceAccessibleVariablesHeuristic new;
 			                add: (CoGlobalVariablesHeuristic new
 					                         globalVariableFetcherClass:
-						                         CoPackageScopedGlobalVariableFetcher);
+						                         CoRepositoryPackageScopedGlobalVariableFetcher);
 			                build).
 	benchmark := (CooStaticBenchmarksVariables new
 		name: 'Scoped Global';

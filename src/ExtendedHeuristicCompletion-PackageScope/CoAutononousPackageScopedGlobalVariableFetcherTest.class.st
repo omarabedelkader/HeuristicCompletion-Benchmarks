@@ -70,7 +70,7 @@ CoAutononousPackageScopedGlobalVariableFetcherTest >> setUpThreePackages [
 		globals: dict;
 		yourself.
 
-	fetcher := CoPackageScopedGlobalVariableFetcher new. 
+	fetcher := CoRepositoryPackageScopedGlobalVariableFetcher new. 
 	fetcher packages: { package1 . package2 . package3 }.
 	fetcher completionClass: completionClass.
 	fetcher systemNavigation: systemNavigation.
@@ -148,7 +148,7 @@ CoAutononousPackageScopedGlobalVariableFetcherTest >> testNoClassesInPackage [
 		                         globals: { 'AiGlobal1'. 'AiGlobal2' };
 		                         yourself.
 
-	localFetcher := CoPackageScopedGlobalVariableFetcher new.
+	localFetcher := CoRepositoryPackageScopedGlobalVariableFetcher new.
 	localFetcher
 		packages: { localPackage };
 		completionClass: nil;
