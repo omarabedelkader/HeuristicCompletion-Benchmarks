@@ -2,7 +2,7 @@
 I am a fetcher looking for globals in an environment.
 "
 Class {
-	#name : 'CoPackageScopedGlobalVariableFetcher',
+	#name : 'CoRepositoryPackageScopedGlobalVariableFetcher',
 	#superclass : 'CoGlobalFetcher',
 	#instVars : [
 		'packages',
@@ -14,19 +14,19 @@ Class {
 }
 
 { #category : 'accessing' }
-CoPackageScopedGlobalVariableFetcher >> completionClass [
+CoRepositoryPackageScopedGlobalVariableFetcher >> completionClass [
 
 	^ completionClass
 ]
 
 { #category : 'accessing' }
-CoPackageScopedGlobalVariableFetcher >> completionClass: anObject [
+CoRepositoryPackageScopedGlobalVariableFetcher >> completionClass: anObject [
 
 	completionClass := anObject
 ]
 
 { #category : 'enumerating' }
-CoPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
+CoRepositoryPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
 	| string case closeClassNames keys organizer packageNamePart friendClassNames friendPackageNames | 
 	completionClass isNil
@@ -85,7 +85,7 @@ CoPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 ]
 
 { #category : 'enumerating' }
-CoPackageScopedGlobalVariableFetcher >> packages: aCollection [
+CoRepositoryPackageScopedGlobalVariableFetcher >> packages: aCollection [
 
 	packages := aCollection
 ]

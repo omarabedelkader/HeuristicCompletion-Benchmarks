@@ -64,7 +64,7 @@ MyCoStaticBenchmarks class >> runCustomForPackage: aPackage [
 			                        add:
 				                        (CoGlobalVariablesHeuristic new
 					                         globalVariableFetcherClass:
-						                         CoPackageScopedGlobalVariableFetcher);
+						                         CoRepositoryPackageScopedGlobalVariableFetcher);
 			                        build).
 	
 	benchmark := self new
