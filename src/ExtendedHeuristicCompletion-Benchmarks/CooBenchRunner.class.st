@@ -23,6 +23,18 @@ Class {
 }
 
 { #category : 'api' }
+CooBenchRunner class >> allLatexResultsFor: aColOfPackageNames [
+    "Run the comparison for each package named in aColOfPackageNames
+    and return a LaTeX table with the results."
+
+    | packages runs latex |
+    packages := aColOfPackageNames collect: [ :p | PackageOrganizer default packageNamed: p ].
+    runs := self runComparisonForPackages: packages.
+    latex := self latexTableResultForABenchCollection: runs.
+    ^ latex
+]
+
+{ #category : 'api' }
 CooBenchRunner class >> allResultsFor: aColOfPackageNames [
 	
 	| packages runs string |
@@ -105,6 +117,32 @@ CooBenchRunner class >> iwst1test2 [
 	<script>
 	^ (self allResultsFor: { 'ExtendedHeuristicCompletion-Analyser' })
 		  inspect 
+]
+
+{ #category : 'api' }
+CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
+    "Produce a LaTeX table showing the results from each benchmark in aCol."
+
+    ^ String streamContents: [ :s |
+        s nextPutAll: '\begin{tabular}{lll}'; cr.
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: 'Package & Metric & MMR \\'; cr.
+        s nextPutAll: '\hline'; cr.
+
+        aCol do: [ :bench |
+            | packageName |
+            packageName := bench package name.
+            bench results keysAndValuesDo: [ :metric :result |
+                s
+                    nextPutAll: packageName; nextPutAll: ' & ';
+                    nextPutAll: metric asString; nextPutAll: ' & ';
+                    nextPutAll: result mmrString; nextPutAll: ' \\'; cr
+            ].
+        ].
+
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: '\end{tabular}'; cr.
+    ]
 ]
 
 { #category : 'utils' }
