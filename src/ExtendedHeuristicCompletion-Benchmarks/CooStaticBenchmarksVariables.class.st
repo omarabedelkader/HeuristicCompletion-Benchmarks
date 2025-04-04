@@ -215,3 +215,8 @@ CooStaticBenchmarksVariables >> trackCompletionResultsFor: receiver atIndex: com
 			(previousResultsPerIndexPerPrefixSize first + 1).
 			previousResultsPerIndexPerPrefixSize second }
 ]
+
+{ #category : 'enumerating' }
+CooStaticBenchmarksVariables >> valuesDo: aFullBlockClosure [ 
+	self shouldBeImplemented.
+]

@@ -30,7 +30,7 @@ CooBenchRunner class >> allLatexResultsFor: aColOfPackageNames [
     | packages runs latex |
     packages := aColOfPackageNames collect: [ :p | PackageOrganizer default packageNamed: p ].
     runs := self runComparisonForPackages: packages.
-    latex := self latexTableResultForABenchCollection2: runs.
+    latex := self latexTableResultForABenchCollection: runs.
     ^ latex
 ]
 
@@ -99,8 +99,7 @@ CooBenchRunner class >> comparingSpecTest [
 { #category : 'iwst' }
 CooBenchRunner class >> iwst1 [
 	<script>
-	^ (self allResultsFor: { 'Refactoring-Transformations-Tests'.
-		  'Refactoring-Transformations'. 'NECompletion'. 'NECompletion-Tests' }) inspect
+	^ (self allResultsFor: { 'NECompletion-Tests' }) inspect
 ]
 
 { #category : 'iwst' }
@@ -120,75 +119,7 @@ CooBenchRunner class >> iwst1test2 [
 ]
 
 { #category : 'api' }
-CooBenchRunner class >> latexTableResultForABenchCollection2: aCol [
-    "Produce a LaTeX table, splitting each benchmark's MMR string by newline,
-     so that each line becomes something you can parse into columns."
-
-    ^ String streamContents: [ :s |
-
-        "Adjust the tabular spec ({l l r r r ...}) depending on how many columns you have."
-        s nextPutAll: '\begin{tabular}{l l r r r r r r r r}'; cr.
-        s nextPutAll: '\hline'; cr.
-        s nextPutAll: 'Packages & Scope & MMR & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\'; cr.
-        s nextPutAll: '\hline'; cr.
-
-        aCol do: [ :bench |
-            | packageName |
-            packageName := bench package name.
-
-            bench results keysAndValuesDo: [ :metric :result |
-                | lines scopeLine mmrLine val2 val3 val4 val5 val6 val7 val8 |
-                
-                "Split the entire MMR string by newline."
-                lines := result mmrString findTokens: String lf.
-                
-                "Assuming 'lines' now has something like:
-                  #( 'without'
-                     'mmr: 0.3955'
-                     '2 0.08'
-                     '3 0.22'
-                     '4 0.39'
-                     '5 0.44'
-                     '6 0.49'
-                     '7 0.54'
-                     '8 0.66' )."
-
-                scopeLine := lines first. "e.g. 'without' or 'with'."
-                
-                "Parse out the MMR from e.g. 'mmr: 0.3955'"
-                mmrLine := (lines second findTokens: Character space) last. 
-                
-                "Then parse out each subsequent value, e.g. '2 0.08' => #('2' '0.08'), etc."
-                val2 := (lines third  findTokens: Character space) last.
-                val3 := (lines fourth findTokens: Character space) last.
-                val4 := (lines fifth  findTokens: Character space) last.
-                val5 := (lines sixth  findTokens: Character space) last.
-                val6 := (lines seventh findTokens: Character space) last.
-                val7 := (lines eighth  findTokens: Character space) last.
-                val8 := (lines ninth   findTokens: Character space) last.
-
-                "Now write out one row in the table."
-                s
-                    nextPutAll: packageName; nextPutAll: ' & ';
-                    nextPutAll: scopeLine;  nextPutAll: ' & ';
-                    nextPutAll: mmrLine;   nextPutAll: ' & ';
-                    nextPutAll: val2;      nextPutAll: ' & ';
-                    nextPutAll: val3;      nextPutAll: ' & ';
-                    nextPutAll: val4;      nextPutAll: ' & ';
-                    nextPutAll: val5;      nextPutAll: ' & ';
-                    nextPutAll: val6;      nextPutAll: ' & ';
-                    nextPutAll: val7;      nextPutAll: ' & ';
-                    nextPutAll: val8;      nextPutAll: ' \\'; cr.
-            ].
-        ].
-
-        s nextPutAll: '\hline'; cr.
-        s nextPutAll: '\end{tabular}'; cr.
-    ]
-]
-
-{ #category : 'api' }
-CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
+CooBenchRunner class >> latexTableResultForABenchCollection1: aCol [
     "Produce a LaTeX table showing the results from each benchmark in aCol."
 
     ^ String streamContents: [ :s |
@@ -211,6 +142,287 @@ CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
         s nextPutAll: '\hline'; cr.
         s nextPutAll: '\end{tabular}'; cr.
     ]
+
+
+]
+
+{ #category : 'api' }
+CooBenchRunner class >> latexTableResultForABenchCollection22: aCol [
+    "Produce a LaTeX table showing the results from each benchmark in aCol."
+    | header body mmrColumns |
+    
+    mmrColumns := { }.
+    
+    body := String streamContents: [ :s |
+        aCol do: [ :bench |
+            | packageName mmrStr mmrLines overallMMR details temp finalMMR |
+            packageName := bench package name.
+            bench results keysAndValuesDo: [ :metric :result |
+                    mmrStr := result mmrString.
+                    "Split the mmr string on newlines."
+                    mmrLines := mmrStr splitOn: Character cr.
+                    "Assume the first line is the overall MMR value"
+                    overallMMR := mmrLines first.
+                    "The rest of the lines (if any) are detailed key/value pairs"
+                    details := mmrLines allButFirst.
+                    
+                    details isEmpty
+                        ifTrue: [ finalMMR := overallMMR ]
+                        ifFalse: [
+                            "If we have details, update mmrColumns when needed"
+                            ( details size > mmrColumns size ) ifTrue: [
+                                temp := details collect: [ :c | 
+                                    | parts |
+                                    parts := c findTokens: ' '.
+                                    Association key: parts first value: parts second.
+                                ] as: Dictionary.
+                                mmrColumns := temp keys.
+                                details := temp values.
+                            ].
+                            "Join overall and detailed values with & separators"
+                            finalMMR := overallMMR , ' & ' , (details joinUsing: ' & ').
+                        ].
+                    
+                    s
+                        nextPutAll: packageName; nextPutAll: ' & ';
+                        nextPutAll: metric asString; nextPutAll: ' & ';
+                        nextPutAll: finalMMR; nextPutAll: ' \\'; cr.
+            ].
+        ].
+    ].
+    
+    header := String streamContents: [ :s |
+        s nextPutAll: '\begin{tabular}{lll'.
+        1 to: mmrColumns size do: [ :i |
+            s nextPutAll: 'l'.
+        ].
+        s nextPutAll: '}'; cr.
+        s nextPutAll: '\hline'; cr.
+        "The header now shows 'MMR' for the overall value plus extra columns if available"
+        s nextPutAll: 'Package & Metric & MMR'.
+        mmrColumns ifNotEmpty: [ :columns |
+            s nextPutAll: ' & '.
+            s nextPutAll: (columns joinUsing: ' & ').
+        ].
+        s nextPutAll: '\\'; cr.
+        s nextPutAll: '\hline'; cr.
+    ].
+    
+    ^ header, body, String streamContents: [ :s |
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: '\end{tabular}'; cr.
+    ].
+
+]
+
+{ #category : 'api' }
+CooBenchRunner class >> latexTableResultForABenchCollection2: aCol [
+    "Produce a LaTeX table showing the results from each benchmark in aCol."
+	| header body mmrColumns footer |
+	
+	mmrColumns := { }.
+	
+	body := String streamContents: [ :s |
+        aCol do: [ :bench |
+            | packageName |
+            packageName := bench package name.
+            bench results keysAndValuesDo: [ :metric :result |
+					| mmr |
+					mmr := result mmrString.
+					mmr := mmr splitOn: Character cr.
+					
+					( mmr size > mmrColumns size) ifTrue: [
+					
+						| temp |
+						temp := mmr collect: [ :c | 
+							| assoc  mmrAssoc|							
+							mmrAssoc := c splitOn: Character space.
+							Association key: mmrAssoc first value: mmrAssoc second.
+						] as: Dictionary .
+						mmr := temp values.
+						mmrColumns := temp keys.
+					].
+					mmr := mmr joinUsing: ' & '.	
+                s
+                    nextPutAll: packageName; nextPutAll: ' & ';
+                    nextPutAll: metric asString; nextPutAll: ' & ';
+                    nextPutAll: mmr; nextPutAll: ' \\'; cr
+            ].
+        ].
+	].
+
+	header := String streamContents: [ :s |
+        s nextPutAll: '\begin{tabular}{lll'.
+		  1 to: mmrColumns size do: [ :i |
+				s nextPutAll: 'l'.
+		  ].
+		  s nextPutAll: '}'; cr.
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: 'Package & Metric & MMR '.
+		
+		  mmrColumns ifNotEmpty: [ :columns | 
+				s nextPutAll: ' & '.
+				s nextPutAll: (columns joinUsing: ' & ').
+		  ].
+		  s nextPutAll: '\\'; cr.
+        s nextPutAll: '\hline'; cr.
+	].
+
+	footer := String streamContents: [ :s |
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: '\end{tabular}'; cr.
+   ].
+
+	^ header, body, footer
+]
+
+{ #category : 'api' }
+CooBenchRunner class >> latexTableResultForABenchCollection3: aCol [
+    "Produce a LaTeX table showing the results from each benchmark in aCol."
+    | header body mmrColumns footer |
+
+    mmrColumns := #().
+
+    body := String streamContents: [:s |
+        aCol do: [:bench |
+            | packageName |
+            packageName := bench package name.
+            bench results keysAndValuesDo: [:metric :result |
+                | mmrList mmrDict row |
+                mmrList := result lines.
+
+                mmrDict := Dictionary new.
+                mmrList do: [:line |
+                    | parts |
+                    parts := line substrings: { ' ' }.
+                    (parts size >= 2) ifTrue: [
+                        mmrDict at: parts first put: parts second.
+                    ].
+                ].
+
+                (mmrDict keys size > mmrColumns size) ifTrue: [
+                    mmrColumns := mmrDict keys.
+                ].
+
+                row := mmrColumns collect: [:key |
+                    (mmrDict at: key ifAbsent: ['-'])
+                ].
+
+                s
+                    nextPutAll: packageName; nextPutAll: ' & ';
+                    nextPutAll: metric asString; nextPutAll: ' & ';
+                    nextPutAll: (row joinUsing: ' & ');
+                    nextPutAll: ' \\'; cr
+            ].
+        ].
+    ].
+
+    header := String streamContents: [:s |
+        s nextPutAll: '\begin{tabular}{lll'.
+        mmrColumns do: [:each | s nextPutAll: 'l'].
+        s nextPutAll: '}'; cr.
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: 'Package & Metric'.
+        mmrColumns ifNotEmpty: [
+            s nextPutAll: ' & '; nextPutAll: (mmrColumns joinUsing: ' & ').
+        ].
+        s nextPutAll: ' \\'; cr.
+        s nextPutAll: '\hline'; cr.
+    ].
+
+    footer := String streamContents: [:s |
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: '\end{tabular}'; cr.
+    ].
+
+    ^ header, body, footer
+
+]
+
+{ #category : 'api' }
+CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
+    "Produce a LaTeX table showing the results from each benchmark in aCol."
+    | header body mmrKeys footer rows |
+
+    mmrKeys := OrderedCollection new.
+    rows := OrderedCollection new.
+
+    "First pass: collect all keys for MMR columns"
+    aCol do: [ :bench |
+        bench results do: [ :result |
+            | mmrLines mmrDict |
+            mmrLines := result mmrString splitOn: Character cr.
+            mmrDict := Dictionary new.
+
+            mmrLines do: [ :line |
+                | parts |
+                parts := line splitOn: Character space.
+                (parts size = 2 and: [ parts first isAllDigits ]) ifTrue: [
+                    mmrDict at: parts first put: parts second.
+                    (mmrKeys includes: parts first) ifFalse: [ mmrKeys add: parts first ].
+                ].
+            ].
+        ].
+    ].
+
+    "Second pass: build rows"
+    aCol do: [ :bench |
+        | packageName |
+        packageName := bench package name.
+
+        bench results keysAndValuesDo: [ :metric :result |
+            | mmrLines mmrValue mmrDict row |
+            mmrLines := result mmrString splitOn: Character cr.
+            mmrValue := 'N/A'.
+            mmrDict := Dictionary new.
+
+            mmrLines do: [ :line |
+                | parts |
+                parts := line splitOn: Character space.
+                (parts size = 2 and: [ parts first isAllDigits ]) ifTrue: [
+                    mmrDict at: parts first put: parts second.
+                ] ifFalse: [
+                    (line beginsWith: 'mmr:') ifTrue: [
+                        mmrValue := (line copyAfter: ':') trimmed.
+                    ].
+                ].
+            ].
+
+            row := OrderedCollection with: packageName with: metric asString with: mmrValue.
+            mmrKeys do: [ :key |
+                row add: (mmrDict at: key ifAbsent: ['']).
+            ].
+            rows add: row.
+        ].
+    ].
+
+    "Build header"
+    header := String streamContents: [ :s |
+        s nextPutAll: '\begin{tabular}{lll'.
+        mmrKeys do: [ :k | s nextPutAll: 'l' ].
+        s nextPutAll: '}'; cr.
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: 'Package & Metric & MMR'.
+        mmrKeys do: [ :k | s nextPutAll: ' & ', k ].
+        s nextPutAll: ' \\'; cr.
+        s nextPutAll: '\hline'; cr.
+    ].
+
+    "Build body"
+    body := String streamContents: [ :s |
+        rows do: [ :row |
+            s nextPutAll: (row joinUsing: ' & '); nextPutAll: ' \\'; cr.
+        ].
+    ].
+
+    "Footer"
+    footer := String streamContents: [ :s |
+        s nextPutAll: '\hline'; cr.
+        s nextPutAll: '\end{tabular}'; cr.
+    ].
+
+    ^ header, body, footer
+
 ]
 
 { #category : 'utils' }
