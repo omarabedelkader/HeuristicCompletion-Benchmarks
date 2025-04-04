@@ -19,9 +19,7 @@ Class {
 { #category : 'accessing' }
 CoDependencyPackageScopedGlobalVariableFetcher class >> computeDependenciesOf: aPackageName [
 	
-	Transcript show: '.';cr. 
-	^ StDependencyChecker new computeImageDependencies dependenciesOf:
-		  aPackageName
+	^ StDependencyChecker new dependenciesOf: aPackageName
 ]
 
 { #category : 'accessing' }
