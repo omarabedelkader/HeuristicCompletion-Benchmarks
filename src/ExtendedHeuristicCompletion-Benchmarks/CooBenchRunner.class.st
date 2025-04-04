@@ -104,6 +104,15 @@ CooBenchRunner class >> iwst1 [
 ]
 
 { #category : 'iwst' }
+CooBenchRunner class >> iwst1asLatex [
+	<script>
+	^ CooBenchRunner allLatexResultsFor: {
+    'Refactoring-Transformations-Tests'. 
+}
+
+]
+
+{ #category : 'iwst' }
 CooBenchRunner class >> iwst1test [
 
 	<script>
