@@ -47,6 +47,20 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Analyser'
 }
 
+{ #category : 'analyze' }
+PackageAnalyser class >> analyse: aPackageName [
+    "Convenience method that:
+      1) Finds the package by name,
+      2) Creates a new analyser,
+      3) Runs analysis,
+      4) Presents or returns the results in some convenient format."
+    
+    | analyser targetPackage |
+    targetPackage := PackageOrganizer default packageNamed: aPackageName.
+    analyser := self new runAnalysisForPackage: targetPackage.
+    ^ analyser presentResults
+]
+
 { #category : 'initialization' }
 PackageAnalyser >> allReferencedClasses [
 	"Returns a collection of all classes referenced within the package, regardless of whether they are defined in the package."
@@ -140,6 +154,21 @@ PackageAnalyser >> noteReferenceIn: aCompiledMethod forClass: aClassName [
 	(referencesByClass
 		at: aClassName
 		ifAbsentPut: [ OrderedCollection new ]) add: aCompiledMethod
+]
+
+{ #category : 'widget API' }
+PackageAnalyser >> presentResults [
+    "Return a dictionary of the main findings. 
+     You could also write to Transcript, generate a report, etc."
+    
+    ^ Dictionary newFromPairs: {
+        #internalRatio            -> self internalUserRatio.
+        #referencesForSorter      -> (self referencesForClass: #CompletionSorter).
+        #definedClassNames        -> self definedClassNames asSortedCollection.
+        #externalReferences       -> self externalReferences asSortedCollection.
+        #allReferencedClasses     -> self allReferencedClasses asSortedCollection.
+        #internalReferencedClasses-> self internalClassReferences asSortedCollection.
+    }
 ]
 
 { #category : 'initialization' }
