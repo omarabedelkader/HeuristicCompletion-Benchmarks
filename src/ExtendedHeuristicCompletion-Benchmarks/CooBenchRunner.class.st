@@ -24,8 +24,6 @@ Class {
 
 { #category : 'api' }
 CooBenchRunner class >> allLatexResultsFor: aColOfPackageNames [
-    "Run the comparison for each package named in aColOfPackageNames
-    and return a LaTeX table with the results."
 
     | packages runs latex |
     packages := aColOfPackageNames collect: [ :p | PackageOrganizer default packageNamed: p ].
@@ -51,8 +49,8 @@ CooBenchRunner class >> comparing [
 
 	CooBenchRunner new
 		package: SpPresenter package;
-		baseline: #classNamesWithoutPackageScope;
-		others: { #classNamesWithRepositoryPackageScope };
+		baseline: #WithoutPackageScope;
+		others: { #WithPackageScope };
 		run.
 ]
 
@@ -63,8 +61,8 @@ CooBenchRunner class >> comparingRBTests [
 
 	CooBenchRunner new
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
-		baseline: #classNamesWithoutPackageScope;
-		others: { #classNamesWithRepositoryPackageScope };
+		baseline: #WithoutPackageScope;
+		others: { #WithPackageScope };
 		run.
 ]
 
@@ -75,8 +73,8 @@ CooBenchRunner class >> comparingRBTrans [
 
 	CooBenchRunner new
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
-		baseline: #classNamesWithoutPackageScope;
-		others: { #classNamesWithRepositoryPackageScope };
+		baseline: #WithoutPackageScope;
+		others: { #WithPackageScope };
 		run.
 ]
 
@@ -87,8 +85,8 @@ CooBenchRunner class >> comparingSpecTest [
 
 	CooBenchRunner new
 		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
-		baseline: #classNamesWithoutPackageScope;
-		others: { #classNamesWithRepositoryPackageScope };
+		baseline: #WithoutPackageScope;
+		others: { #WithPackageScope };
 		run.
 ]
 
@@ -427,8 +425,8 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 	^ aCol collect: [ :pack |
 		  self new
 			  package: pack;
-			  baseline: #classNamesWithoutPackageScope;
-			  others: { #classNamesWithRepositoryPackageScope . #classNamesWithDependencyPackageScope };
+			  baseline: #WithoutPackageScope;
+			  others: { #WithPackageScope . #WithDependency };
 			  run ]
 ]
 
@@ -465,32 +463,8 @@ CooBenchRunner class >> stringResultForABenchCollection: aCol [
 			  s cr ] ]
 ]
 
-{ #category : 'accessing' }
-CooBenchRunner >> baseline: aSymbol [
-
-	baseline := aSymbol 
-]
-
 { #category : 'experience' }
-CooBenchRunner >> classNamesGlobalSorterScope [
-	"self new 
-		package: AnalyserData1 package;
-		classNamesWithoutPackageScope"
-
-	| builder benchmark |
-	builder := CoGlobalSorterResultSetBuilder new.
-	benchmark := (CooStaticBenchmarksVariables new
-		name: 'Flat global sorter variable';
-		scope: (CoBenchmarkPackage on: package);
-		builder: builder;
-		run).
-	benchmark inspect.
-	^ benchmark
-
-]
-
-{ #category : 'experience' }
-CooBenchRunner >> classNamesWithDependencyPackageScope [
+CooBenchRunner >> WithDependency [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithDependencyPackageScope"
@@ -513,7 +487,7 @@ CooBenchRunner >> classNamesWithDependencyPackageScope [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> classNamesWithRepositoryPackageScope [
+CooBenchRunner >> WithPackageScope [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithPackageScope"
@@ -539,7 +513,7 @@ CooBenchRunner >> classNamesWithRepositoryPackageScope [
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> classNamesWithoutPackageScope [
+CooBenchRunner >> WithoutPackageScope [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithoutPackageScope"
@@ -555,6 +529,30 @@ CooBenchRunner >> classNamesWithoutPackageScope [
 			                build).
 	benchmark := (CooStaticBenchmarksVariables new
 		name: 'Flat semantic global variable';
+		scope: (CoBenchmarkPackage on: package);
+		builder: builder;
+		run).
+	benchmark inspect.
+	^ benchmark
+
+]
+
+{ #category : 'accessing' }
+CooBenchRunner >> baseline: aSymbol [
+
+	baseline := aSymbol 
+]
+
+{ #category : 'experience' }
+CooBenchRunner >> classNamesGlobalSorterScope [
+	"self new 
+		package: AnalyserData1 package;
+		classNamesWithoutPackageScope"
+
+	| builder benchmark |
+	builder := CoGlobalSorterResultSetBuilder new.
+	benchmark := (CooStaticBenchmarksVariables new
+		name: 'Flat global sorter variable';
 		scope: (CoBenchmarkPackage on: package);
 		builder: builder;
 		run).
