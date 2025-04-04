@@ -532,7 +532,6 @@ CooBenchRunner >> WithoutPackageScope [
 		scope: (CoBenchmarkPackage on: package);
 		builder: builder;
 		run).
-	benchmark inspect.
 	^ benchmark
 
 ]
