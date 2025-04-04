@@ -53,7 +53,6 @@ CooBenchRunner class >> comparing [
 		package: SpPresenter package;
 		baseline: #classNamesWithoutPackageScope;
 		others: { #classNamesWithRepositoryPackageScope };
-		inspect; 
 		run.
 ]
 
@@ -66,7 +65,6 @@ CooBenchRunner class >> comparingRBTests [
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
 		baseline: #classNamesWithoutPackageScope;
 		others: { #classNamesWithRepositoryPackageScope };
-		inspect; 
 		run.
 ]
 
@@ -79,7 +77,6 @@ CooBenchRunner class >> comparingRBTrans [
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
 		baseline: #classNamesWithoutPackageScope;
 		others: { #classNamesWithRepositoryPackageScope };
-		inspect; 
 		run.
 ]
 
@@ -92,7 +89,6 @@ CooBenchRunner class >> comparingSpecTest [
 		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
 		baseline: #classNamesWithoutPackageScope;
 		others: { #classNamesWithRepositoryPackageScope };
-		inspect; 
 		run.
 ]
 
