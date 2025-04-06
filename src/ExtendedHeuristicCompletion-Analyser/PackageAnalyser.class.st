@@ -143,6 +143,75 @@ PackageAnalyser >> noteReferenceIn: aCompiledMethod forClass: aClassName [
 ]
 
 { #category : 'initialization' }
+PackageAnalyser >> presentAnalysisResultsForPackage1: aPackage [
+
+	| resultString |
+	self runAnalysisForPackage: aPackage.
+
+	resultString := String streamContents: [ :stream |
+			                stream
+				                nextPutAll: 'Package Analyser Results';
+				                cr;
+				                cr.
+			                stream
+				                nextPutAll: 'Defined Classes: ';
+				                nextPutAll: self definedClassNames size asString;
+				                cr.
+			                stream
+				                nextPutAll: 'Internal Class References Count: ';
+				                nextPutAll: self internalUserCount asString;
+				                cr.
+			                stream
+				                nextPutAll: 'Internal Usage Ratio: ';
+				                nextPutAll: self internalUserRatio asString;
+				                cr.
+			                stream
+				                nextPutAll: 'External References: ';
+				                nextPutAll: self externalReferences size asString;
+				                cr ].
+
+	^ resultString
+]
+
+{ #category : 'initialization' }
+PackageAnalyser >> presentAnalysisResultsForPackage: aPackage [
+
+	| resultString targetPackage |
+	self runAnalysisForPackage: aPackage.
+		self halt.
+	
+	targetPackage := PackageOrganizer default packageNamed: aPackage .
+	
+	resultString := String streamContents: [ :stream |
+			                stream
+				                nextPutAll: 'Package Analyser Results';
+				                cr;
+				                cr.
+							   	stream
+				                nextPutAll: 'Totale Defined Classes: ';
+				                nextPutAll: targetPackage classes size ;
+				                cr. 
+			                stream
+				                nextPutAll: 'Defined Classes: ';
+				                nextPutAll: self definedClassNames size asString;
+				                cr.
+			                stream
+				                nextPutAll: 'Internal Class References Count: ';
+				                nextPutAll: self internalUserCount asString;
+				                cr.
+			                stream
+				                nextPutAll: 'Internal Usage Ratio: ';
+				                nextPutAll: self internalUserRatio asString;
+				                cr.
+			                stream
+				                nextPutAll: 'External References: ';
+				                nextPutAll: self externalReferences size asString;
+				                cr ].
+
+	^ resultString
+]
+
+{ #category : 'initialization' }
 PackageAnalyser >> referencesForClass: aClassName [
 	"Returns an OrderedCollection of methods that reference the specified class name, or an empty collection if none found."
 	^ referencesByClass
