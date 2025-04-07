@@ -178,7 +178,6 @@ PackageAnalyser >> presentAnalysisResultsForPackage: aPackage [
 
 	| resultString targetPackage |
 	self runAnalysisForPackage: aPackage.
-		self halt.
 	
 	targetPackage := PackageOrganizer default packageNamed: aPackage .
 	
