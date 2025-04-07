@@ -7,27 +7,13 @@ I am an Analyser, responsible for analyzing how classes are defined
 
 
 ```smalltalk
-""""1. Create analyzer instance""""
 analyser := BenchAnalyser new.
-
-""""2. Get target package (replace with actual package name)""""
 targetPackage := PackageOrganizer default packageNamed: 'NECompletion'.
-
-""""3. Execute analysis""""
 analyser runAnalysisForPackage: targetPackage.
-
-""""4. Access results""""
 internalRatio := analyser internalUserRatio.
 references := analyser referencesForClass: #CompletionSorter.
-
-
-""""Total defined classes""""
 analyser definedClassNames.
-
-""""Internal usage ratio""""
 analyser internalUserRatio.
-
-""""External references""""
 analyser allReferencedClasses difference: analyser definedClassNames.
 
 
