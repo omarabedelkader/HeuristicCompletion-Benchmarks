@@ -7,7 +7,7 @@ I am an Analyser, responsible for analyzing how classes are defined
 
 
 ```smalltalk
-analyser := BenchAnalyser new.
+analyser := PackageAnalyser new.
 targetPackage := PackageOrganizer default packageNamed: 'NECompletion'.
 analyser runAnalysisForPackage: targetPackage.
 internalRatio := analyser internalUserRatio.
