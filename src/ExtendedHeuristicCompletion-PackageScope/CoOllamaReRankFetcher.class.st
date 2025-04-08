@@ -2,12 +2,20 @@ Class {
 	#name : 'CoOllamaReRankFetcher',
 	#superclass : 'CoFetcherDecorator',
 	#instVars : [
-		'completionContext'
+		'completionContext',
+		'completionClass',
+		'astNode'
 	],
 	#category : 'ExtendedHeuristicCompletion-PackageScope-PackageScope',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'PackageScope'
 }
+
+{ #category : 'enumerating' }
+CoOllamaReRankFetcher >> astNode: anASTNode [
+    "Forward this to the wrapped fetcher (the decoree)."
+    decoree astNode: anASTNode
+]
 
 { #category : 'enumerating' }
 CoOllamaReRankFetcher >> buildReRankPayloadWith1: candidateStrings context: textSoFar [
@@ -33,8 +41,27 @@ CoOllamaReRankFetcher >> buildReRankPayloadWith: candidateStrings context: textS
 ]
 
 { #category : 'accessing' }
-CoOllamaReRankFetcher >> completionClass: aClass [ 
-	self shouldBeImplemented.
+CoOllamaReRankFetcher >> completionClass [
+
+	^ completionClass
+]
+
+{ #category : 'accessing' }
+CoOllamaReRankFetcher >> completionClass: anObject [
+
+	completionClass := anObject
+]
+
+{ #category : 'accessing' }
+CoOllamaReRankFetcher >> completionContext [
+
+	^ completionContext
+]
+
+{ #category : 'accessing' }
+CoOllamaReRankFetcher >> completionContext: anObject [
+
+	completionContext := anObject
 ]
 
 { #category : 'enumerating' }
@@ -84,4 +111,11 @@ CoOllamaReRankFetcher >> ollamaReRank: candidateEntries [
                     allStrings: candidateStrings.
 
    ^ newOrder
+]
+
+{ #category : 'enumerating' }
+CoOllamaReRankFetcher >> parseReRankResponse: response forEntries: candidateEntries allStrings: candidateStrings [
+   "Implement how you parse the response to reorder candidateEntries. 
+    This must return an OrderedCollection of the same entries in the new rank order."
+   ^ self error: 'Not yet implemented.'
 ]
