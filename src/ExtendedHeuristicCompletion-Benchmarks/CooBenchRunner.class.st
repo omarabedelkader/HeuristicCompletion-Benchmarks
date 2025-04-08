@@ -8,6 +8,17 @@ CooBenchRunner new
 	run.
 	
 ```
+
+
+
+```
+CooBenchRunner new
+   package: CompletionContextTest package;
+   baseline: #WithoutPackageScope;
+   others: { #WithOllamaReRank };
+   run.
+
+```
 "
 Class {
 	#name : 'CooBenchRunner',
