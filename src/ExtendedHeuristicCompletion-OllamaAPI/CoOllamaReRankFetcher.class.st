@@ -6,9 +6,8 @@ Class {
 		'completionClass',
 		'astNode'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-PackageScope',
-	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'PackageScope'
+	#category : 'ExtendedHeuristicCompletion-OllamaAPI',
+	#package : 'ExtendedHeuristicCompletion-OllamaAPI'
 }
 
 { #category : 'enumerating' }
