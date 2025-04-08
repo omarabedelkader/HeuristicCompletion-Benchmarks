@@ -7,8 +7,9 @@ Base class and specific implementations for different models used in API interac
 Class {
 	#name : 'ODeepseekerCodeModel',
 	#superclass : 'OModel',
-	#category : 'ExtendedHeuristicCompletion-OllamaAPI',
-	#package : 'ExtendedHeuristicCompletion-OllamaAPI'
+	#category : 'ExtendedHeuristicCompletion-OllamaAPI-OllamaAPI',
+	#package : 'ExtendedHeuristicCompletion-OllamaAPI',
+	#tag : 'OllamaAPI'
 }
 
 { #category : 'as yet unclassified' }

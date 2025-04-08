@@ -11,8 +11,9 @@ Class {
 	#instVars : [
 		'tag'
 	],
-	#category : 'ExtendedHeuristicCompletion-OllamaAPI',
-	#package : 'ExtendedHeuristicCompletion-OllamaAPI'
+	#category : 'ExtendedHeuristicCompletion-OllamaAPI-OllamaAPI',
+	#package : 'ExtendedHeuristicCompletion-OllamaAPI',
+	#tag : 'OllamaAPI'
 }
 
 { #category : 'accessing' }

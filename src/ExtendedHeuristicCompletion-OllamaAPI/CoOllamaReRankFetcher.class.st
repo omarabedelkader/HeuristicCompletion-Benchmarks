@@ -6,8 +6,9 @@ Class {
 		'completionClass',
 		'astNode'
 	],
-	#category : 'ExtendedHeuristicCompletion-OllamaAPI',
-	#package : 'ExtendedHeuristicCompletion-OllamaAPI'
+	#category : 'ExtendedHeuristicCompletion-OllamaAPI-Fetcher',
+	#package : 'ExtendedHeuristicCompletion-OllamaAPI',
+	#tag : 'Fetcher'
 }
 
 { #category : 'enumerating' }
