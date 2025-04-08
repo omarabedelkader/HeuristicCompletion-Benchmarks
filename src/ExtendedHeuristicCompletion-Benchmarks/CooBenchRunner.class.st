@@ -245,6 +245,37 @@ CooBenchRunner >> WithDependency [
 ]
 
 { #category : 'experience' }
+CooBenchRunner >> WithOllamaReRank [
+   "Use a re-ranked global fetcher based on Ollama."
+
+   | builder benchmark |
+   builder := CoASTHeuristicsResultSetBuilder new.
+
+   "Add local/workspace/instance fetchers as normal"
+   builder variablesHeuristic: (builder newHeuristicBuilder
+       add: CoLocalScopeVariablesHeuristic new;
+       add: CoWorkspaceVariablesHeuristic new;
+       add: CoInstanceAccessibleVariablesHeuristic new;
+
+       "Now we add a CoGlobalVariablesHeuristic that uses CoOllamaReRankFetcher"
+       add: (
+          CoGlobalVariablesHeuristic new
+             globalVariableFetcherClass: CoOllamaReRankFetcher
+       );
+
+       build).
+
+   "Finally build and run the benchmark"
+   benchmark := CooStaticBenchmarksVariables new
+       name: 'Ollama Re-rank Global';
+       scope: (CoBenchmarkPackage on: package);
+       builder: builder;
+       run.
+
+   ^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunner >> WithPackageScope [
 	"self new 
 		package: AnalyserData1 package;
