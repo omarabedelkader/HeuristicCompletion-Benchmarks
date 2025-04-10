@@ -17,7 +17,7 @@ BaselineOfExtendedHeuristicCompletion >> baseline: spec [
 							'ExtendedHeuristicCompletion-Benchmarks'].
 		spec package: 'ExtendedHeuristicCompletion-History'.
 		spec package: 'ExtendedHeuristicCompletion-OllamaAPI'
-			with: [ spec requires: #( 'NeoJSON' ) ].
+			with: [ spec requires: #( 'github://svenvc/NeoJSON/repository' ) ].
 	
 		"analyser"
 		spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.
