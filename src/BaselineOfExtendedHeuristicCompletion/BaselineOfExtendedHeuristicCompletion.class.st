@@ -25,7 +25,7 @@ BaselineOfExtendedHeuristicCompletion >> defineDependencies: spec [
 
 { #category : 'baselines' }
 BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
-	spec 
+
 		spec package: 'ExtendedHeuristicCompletion-Benchmarks'.
 		spec package: 'ExtendedHeuristicCompletion-PackageScope' 
 			with: [spec requires:
