@@ -7,10 +7,25 @@ Class {
 
 { #category : 'baselines' }
 BaselineOfExtendedHeuristicCompletion >> baseline: spec [
+
 	<baseline>
-	
-	spec for: #common do: [ 
-		
+	spec for: #common do: [
+		self defineDependencies: spec.
+		self definePackages: spec.
+		]
+]
+
+{ #category : 'baselines' }
+BaselineOfExtendedHeuristicCompletion >> defineDependencies: spec [
+
+	spec
+		baseline: 'NeoJSON'
+		with: [ spec repository: 'github://svenvc/NeoJSON/repository' ]
+]
+
+{ #category : 'baselines' }
+BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
+	spec 
 		spec package: 'ExtendedHeuristicCompletion-Benchmarks'.
 		spec package: 'ExtendedHeuristicCompletion-PackageScope' 
 			with: [spec requires:
@@ -25,13 +40,5 @@ BaselineOfExtendedHeuristicCompletion >> baseline: spec [
 			 with: [ spec requires: #( 
 						'ExtendedHeuristicCompletion-Analyser-Data' 
 					 	'ExtendedHeuristicCompletion-Analyser-Data2') ].
-		]
-]
 
-{ #category : 'baselines' }
-BaselineOfExtendedHeuristicCompletion >> defineDependencies: spec [ 
-
-	spec
-		baseline: 'NeoJSON'
-		with: [ spec repository: 'github://svenvc/NeoJSON/repository' ]
 ]
