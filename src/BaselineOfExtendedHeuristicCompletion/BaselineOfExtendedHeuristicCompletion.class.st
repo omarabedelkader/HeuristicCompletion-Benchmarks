@@ -13,10 +13,10 @@ BaselineOfExtendedHeuristicCompletion >> baseline: spec [
 		
 		spec package: 'ExtendedHeuristicCompletion-Benchmarks'.
 		spec package: 'ExtendedHeuristicCompletion-PackageScope' 
-			with: [spec requires: #(
-							'ExtendedHeuristicCompletion-Benchmarks'
-							'ExtendedHeuristicCompletion-OllamaAPI' ) ].
+			with: [spec requires:
+							'ExtendedHeuristicCompletion-Benchmarks'].
 		spec package: 'ExtendedHeuristicCompletion-History'.
+		spec package: 'ExtendedHeuristicCompletion-OllamaAPI'.
 	
 		"analyser"
 		spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.
