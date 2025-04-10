@@ -16,7 +16,8 @@ BaselineOfExtendedHeuristicCompletion >> baseline: spec [
 			with: [spec requires:
 							'ExtendedHeuristicCompletion-Benchmarks'].
 		spec package: 'ExtendedHeuristicCompletion-History'.
-		spec package: 'ExtendedHeuristicCompletion-OllamaAPI'.
+		spec package: 'ExtendedHeuristicCompletion-OllamaAPI'
+			with: [ spec requires: #( 'NeoJSON' ) ].
 	
 		"analyser"
 		spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.
@@ -26,4 +27,12 @@ BaselineOfExtendedHeuristicCompletion >> baseline: spec [
 						'ExtendedHeuristicCompletion-Analyser-Data' 
 					 	'ExtendedHeuristicCompletion-Analyser-Data2') ].
 		]
+]
+
+{ #category : 'baselines' }
+BaselineOfExtendedHeuristicCompletion >> defineDependencies: spec [ 
+
+	spec
+		baseline: 'NeoJSON'
+		with: [ spec repository: 'github://svenvc/NeoJSON/repository' ]
 ]
