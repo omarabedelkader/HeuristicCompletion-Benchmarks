@@ -262,13 +262,10 @@ CooBenchRunner >> WithOllamaReRank [
    | builder benchmark |
    builder := CoASTHeuristicsResultSetBuilder new.
 
-   "Add local/workspace/instance fetchers as normal"
    builder variablesHeuristic: (builder newHeuristicBuilder
        add: CoLocalScopeVariablesHeuristic new;
        add: CoWorkspaceVariablesHeuristic new;
        add: CoInstanceAccessibleVariablesHeuristic new;
-
-       "Now we add a CoGlobalVariablesHeuristic that uses CoOllamaReRankFetcher"
        add: (
           CoGlobalVariablesHeuristic new
              globalVariableFetcherClass: CoOllamaReRankFetcher

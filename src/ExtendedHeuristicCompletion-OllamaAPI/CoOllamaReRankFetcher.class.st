@@ -26,7 +26,7 @@ CoOllamaReRankFetcher >> buildReRankPayloadWith1: candidateStrings context: text
 
 { #category : 'enumerating' }
 CoOllamaReRankFetcher >> buildReRankPayloadWith: candidateStrings context: textSoFar [
-    "Return the string/payload you want to send to Ollama, 
+    "Return the string/payload sent to Ollama, 
      containing the typed user context and the candidate completions."
 
     ^ String streamContents: [ :s |
@@ -67,24 +67,18 @@ CoOllamaReRankFetcher >> completionContext: anObject [
 { #category : 'enumerating' }
 CoOllamaReRankFetcher >> entriesDo: aBlock [
    "Decorate the underlying fetcher. Collect all of its candidate entries,
-    pass them to Ollama, then yield them in the new (re-ranked) order."
+    pass them to Ollama, yield them in the new (re-ranked) order."
    | allResults reRanked |
    allResults := OrderedCollection new.
-
-   "Ask the wrapped fetcher (the decoree) for all results."
    decoree entriesDo: [ :entry | allResults add: entry ].
-
-   "Now let Ollama reorder them."
    reRanked := self ollamaReRank: allResults.
-
-   "Yield them in the new order."
-   reRanked do: [ :each | aBlock value: each ]
+	reRanked do: [ :each | aBlock value: each ]
 
 ]
 
 { #category : 'enumerating' }
 CoOllamaReRankFetcher >> initialize [
-   "Whenever a new instance is created, let's set up the decoree to a default fetcher."
+
    super initialize.
    decoree := CoRepositoryPackageScopedGlobalVariableFetcher new.
 ]
@@ -96,10 +90,10 @@ CoOllamaReRankFetcher >> ollamaReRank: candidateEntries [
       copyFrom: 1
       to: completionContext position.
 
-   "Convert each entry to the string form you want to pass to Ollama."
+   "Convert each entry to the string to pass to Ollama."
    candidateStrings := candidateEntries collect: [ :entry | entry asString ].
 
-   "Now build some text or JSON for the Ollama API call."
+   "build JSON for the Ollama API call."
    payload := self buildReRankPayloadWith: candidateStrings context: textUpToCaret.
 
    api := OllamaAPI new.
@@ -115,7 +109,7 @@ CoOllamaReRankFetcher >> ollamaReRank: candidateEntries [
 
 { #category : 'enumerating' }
 CoOllamaReRankFetcher >> parseReRankResponse: response forEntries: candidateEntries allStrings: candidateStrings [
-   "Implement how you parse the response to reorder candidateEntries. 
+   "parsing the response to reorder candidateEntries. 
     This must return an OrderedCollection of the same entries in the new rank order."
    ^ self error: 'Not yet implemented.'
 ]
