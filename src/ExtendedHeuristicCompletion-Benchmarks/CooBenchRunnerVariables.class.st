@@ -107,8 +107,8 @@ CooBenchRunnerVariables class >> comparingdependcyandreverse [
 	<script>
 	CooBenchRunnerVariables new
 		package: CompletionContextTest package;
-		baseline: #withDependency;
-		others: { #withReverseDependency };
+		baseline: #withoutPackageScope ;
+		others: { #withWeightedMetaFetcher };
 		run
 ]
 
@@ -207,7 +207,9 @@ CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 			  self new
 				  package: pack;
 				  baseline: #withoutPackageScope;
-				  others: { #withPackageScope. #withDependency . #withReverseDependency };
+				  others:
+					  { #withPackageScope. #withDependency. #withReverseDependency.
+					  #withTransitiveDependency . #withWeightedMetaFetcher };
 				  run ]
 ]
 
@@ -397,6 +399,52 @@ CooBenchRunnerVariables >> withReverseDependency [
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
 		             name: 'Reverse Dependency';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerVariables >> withTransitiveDependency [
+	"self new 
+		package: AnalyserData1 package;
+		classNamesWithDependencyPackageScope"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoTransitiveDependencyPackageScopedGlobalVariableFetcher );
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Transitive Dependency';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerVariables >> withWeightedMetaFetcher [
+	"self new 
+		package: AnalyserData1 package;
+		classNamesWithDependencyPackageScope"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoWeightedMetaGlobalVariableFetcher );
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Transitive Dependency';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.

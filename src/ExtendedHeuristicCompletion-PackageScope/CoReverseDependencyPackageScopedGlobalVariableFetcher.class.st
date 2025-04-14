@@ -1,5 +1,25 @@
 "
 I am a fetcher looking for globals in an environment.
+
+
+```st
+| targetPackageName reverseDependencies allPackages dependencyChecker |
+
+targetPackageName := 'NECompletion'.
+
+dependencyChecker := CoDependencyPackageScopedGlobalVariableFetcher new.
+allPackages := PackageOrganizer default packages.
+
+reverseDependencies := allPackages select: [:package |
+    | dependencies |
+    dependencies := dependencyChecker dependenciesOf: package name.
+    dependencies includes: targetPackageName
+].
+
+reverseDependencies do: [:package |
+    Transcript show: 'Package ', package name, ' depends on ', targetPackageName; cr.
+].
+```
 "
 Class {
 	#name : 'CoReverseDependencyPackageScopedGlobalVariableFetcher',
