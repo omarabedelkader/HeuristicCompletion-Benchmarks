@@ -11,9 +11,9 @@ Class {
 	#classInstVars : [
 		'dependencies'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-PackageScope',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Dependency',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'PackageScope'
+	#tag : 'Dependency'
 }
 
 { #category : 'accessing' }

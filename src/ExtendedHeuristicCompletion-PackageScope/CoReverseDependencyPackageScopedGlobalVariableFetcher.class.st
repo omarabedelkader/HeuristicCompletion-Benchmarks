@@ -9,39 +9,10 @@ Class {
 		'completionClass',
 		'reverseDependencies'
 	],
-	#classInstVars : [
-		'dependencies',
-		'reverseDependencies'
-	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-PackageScope',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Dependency',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'PackageScope'
+	#tag : 'Dependency'
 }
-
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> computeReverseDependenciesOf: aPackageName [
-
-	| allPackages |
-	allPackages := PackageOrganizer default packages.
-	^ (allPackages 
-      select: [:pkg | (self dependenciesOf: pkg name) includes: aPackageName ])
-    collect: [:pkg | pkg name]
-
-]
-
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> initialize [
-
-	dependencies := Dictionary new.
-	reverseDependencies := Dictionary new 
-]
-
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> reverseDependenciesOf: aPackageName [ 
-    ^ reverseDependencies at: aPackageName ifAbsentPut: [ 
-        self computeReverseDependenciesOf: aPackageName 
-    ]
-]
 
 { #category : 'accessing' }
 CoReverseDependencyPackageScopedGlobalVariableFetcher >> completionClass [
@@ -55,64 +26,72 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> completionClass: anObje
 	completionClass := anObject
 ]
 
-{ #category : 'enumerating' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> dependenciesOf: aString [
+{ #category : 'accessing' }
+CoReverseDependencyPackageScopedGlobalVariableFetcher >> computeReverseDependenciesOf: aPackageName [
 
-	^ self class dependenciesOf: aString
+	| allPackages |
+	allPackages := PackageOrganizer default packages.
+	^ (allPackages select: [ :pkg |
+		   (self reverseDependenciesOf: pkg name) includes: aPackageName ])
+		  collect: [ :pkg | pkg name ]
 ]
 
 { #category : 'enumerating' }
 CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
-    | string case closeClassNames keys organizer dependentClassNames dependentPackages |
-    completionClass isNil ifTrue: [
-        ^ self systemNavigation
-            allGlobalNamesStartingWith: filter completionString
-            do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
-            caseSensitive: NECPreferences caseSensitive
-    ].
 
-    string := filter completionString.
-    case := NECPreferences caseSensitive.
-    organizer := completionClass package organizer.
+	| string case closeClassNames keys organizer dependentClassNames dependentPackages |
+	completionClass isNil ifTrue: [
+			^ self systemNavigation
+				  allGlobalNamesStartingWith: filter completionString
+				  do: [ :e |
+				  aBlock value: (NECGlobalEntry contents: e node: astNode) ]
+				  caseSensitive: NECPreferences caseSensitive ].
 
-    "First, include classes from the current package"
-    closeClassNames := completionClass package definedClasses collect: [ :each | each name ].
-    closeClassNames do: [ :closeClassName |
-        (closeClassName beginsWith: string caseSensitive: case) ifTrue: [
-            aBlock value: (NECGlobalEntry contents: closeClassName node: nil)
-        ]
-    ].
+	string := filter completionString.
+	case := NECPreferences caseSensitive.
+	organizer := completionClass package organizer.
 
-    "Then include dependent classes from reverse dependencies"
-    dependentClassNames := OrderedCollection new.
-    dependentPackages := self dependenciesOf: completionClass package name.
-    dependentPackages do: [ :packageName |
-        dependentClassNames addAll: 
-            ((organizer packageNamed: packageName ifAbsent: [ nil ]) 
-                ifNotNil: [ :pkg | pkg definedClasses collect: [ :each | each name ] ] 
-                ifNil: [ #() ])
-    ].
+	"First, include classes from the current package"
+	closeClassNames := completionClass package definedClasses collect: [
+		                   :each | each name ].
+	closeClassNames do: [ :closeClassName |
+			(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
+				aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
 
-    dependentClassNames do: [ :closeClassName |
-        (closeClassName beginsWith: string caseSensitive: case) ifTrue: [
-            aBlock value: (NECGlobalEntry contents: closeClassName node: nil)
-        ]
-    ].
+	"Then include dependent classes from reverse dependencies"
+	dependentClassNames := OrderedCollection new.
+	dependentPackages := self reverseDependenciesOf:
+		                     completionClass package name.
+	dependentPackages do: [ :packageName |
+			dependentClassNames addAll:
+				((organizer packageNamed: packageName ifAbsent: [ nil ])
+					 ifNotNil: [ :pkg |
+					 pkg definedClasses collect: [ :each | each name ] ]
+					 ifNil: [ #(  ) ]) ].
 
-    "Avoid duplicates from systemNavigation environment"
-    keys := self systemNavigation environment keys asOrderedCollection.
-    closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
-    dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
+	dependentClassNames do: [ :closeClassName |
+			(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
+				aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
 
-    keys do: [ :globalName |
-        (globalName beginsWith: string caseSensitive: case) ifTrue: [
-            aBlock value: (NECGlobalEntry contents: globalName node: astNode)
-        ]
-    ].
+	"Avoid duplicates from systemNavigation environment"
+	keys := self systemNavigation environment keys asOrderedCollection.
+	closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
+	dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
+
+	keys do: [ :globalName |
+			(globalName beginsWith: string caseSensitive: case) ifTrue: [
+				aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
 ]
 
 { #category : 'enumerating' }
 CoReverseDependencyPackageScopedGlobalVariableFetcher >> packages: aCollection [
 
 	packages := aCollection
+]
+
+{ #category : 'accessing' }
+CoReverseDependencyPackageScopedGlobalVariableFetcher >> reverseDependenciesOf: aPackageName [ 
+    ^ reverseDependencies at: aPackageName ifAbsentPut: [ 
+        self computeReverseDependenciesOf: aPackageName 
+    ]
 ]
