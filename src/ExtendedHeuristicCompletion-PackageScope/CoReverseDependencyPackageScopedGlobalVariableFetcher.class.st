@@ -19,25 +19,14 @@ Class {
 }
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> computeDependenciesOf: aPackageName [
-	
-	^ StDependencyChecker new dependenciesOf: aPackageName
-]
+CoReverseDependencyPackageScopedGlobalVariableFetcher class >> computeReverseDependenciesOf: aPackageName [
 
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> computeReverseDependenciesOf: aPackageName [ 
-    | allPackages |
-    allPackages := PackageOrganizer default packages.
-    ^ allPackages select: [ :pkg |
-        (self dependenciesOf: pkg name) includes: aPackageName
-    ] collect: [ :pkg | pkg name ].
+	| allPackages |
+	allPackages := PackageOrganizer default packages.
+	^ (allPackages 
+      select: [:pkg | (self dependenciesOf: pkg name) includes: aPackageName ])
+    collect: [:pkg | pkg name]
 
-]
-
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> dependenciesOf: aPackageName [
-
-	^ dependencies at: aPackageName ifAbsentPut: [ self computeDependenciesOf: aPackageName ]
 ]
 
 { #category : 'accessing' }

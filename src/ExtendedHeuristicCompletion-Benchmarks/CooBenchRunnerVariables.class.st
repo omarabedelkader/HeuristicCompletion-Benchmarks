@@ -101,6 +101,17 @@ CooBenchRunnerVariables class >> comparingSpecTest [
 		run.
 ]
 
+{ #category : 'examples ' }
+CooBenchRunnerVariables class >> comparingdependcyandreverse [
+
+	<script>
+	CooBenchRunnerVariables new
+		package: CompletionSorter package;
+		baseline: #withDependency;
+		others: { #withReverseDependency };
+		run
+]
+
 { #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1 [
 	<script>
@@ -384,7 +395,7 @@ CooBenchRunnerVariables >> withReverseDependency [
 			 add: CoWorkspaceVariablesHeuristic new;
 			 add: CoInstanceAccessibleVariablesHeuristic new;
 			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoDependencyPackageScopedGlobalVariableFetcher);
+						  CoReverseDependencyPackageScopedGlobalVariableFetcher );
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
 		             name: 'Scoped Global';
