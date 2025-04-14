@@ -74,53 +74,52 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> dependenciesOf: aString
 
 { #category : 'enumerating' }
 CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
+    | string case closeClassNames keys organizer dependentClassNames dependentPackages |
+    completionClass isNil ifTrue: [
+        ^ self systemNavigation
+            allGlobalNamesStartingWith: filter completionString
+            do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
+            caseSensitive: NECPreferences caseSensitive
+    ].
 
-	| string case closeClassNames keys organizer dependentClassNames dependentPackages |
-	completionClass isNil ifTrue: [ "can we call another fetcher?"
-		^ self systemNavigation
-			  allGlobalNamesStartingWith: filter completionString
-			  do: [ :e |
-			  aBlock value: (NECGlobalEntry contents: e node: astNode) ]
-			  caseSensitive: NECPreferences caseSensitive ].
+    string := filter completionString.
+    case := NECPreferences caseSensitive.
+    organizer := completionClass package organizer.
 
-	string := filter completionString.
-	case := NECPreferences caseSensitive.
-	organizer := completionClass package organizer.
+    "First, include classes from the current package"
+    closeClassNames := completionClass package definedClasses collect: [ :each | each name ].
+    closeClassNames do: [ :closeClassName |
+        (closeClassName beginsWith: string caseSensitive: case) ifTrue: [
+            aBlock value: (NECGlobalEntry contents: closeClassName node: nil)
+        ]
+    ].
 
-	"First package level "
-	closeClassNames := completionClass package definedClasses collect: [
-		                   :each | each name ].
-	closeClassNames do: [ :closeClassName |
-		(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
-			aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
+    "Then include dependent classes from reverse dependencies"
+    dependentClassNames := OrderedCollection new.
+    dependentPackages := self dependenciesOf: completionClass package name.
+    dependentPackages do: [ :packageName |
+        dependentClassNames addAll: 
+            ((organizer packageNamed: packageName ifAbsent: [ nil ]) 
+                ifNotNil: [ :pkg | pkg definedClasses collect: [ :each | each name ] ] 
+                ifNil: [ #() ])
+    ].
 
-	"Package of the project e.g that starts with the same tag bfore the - 
-	ExtendedHeuristicCompletion-PackageScope -> HeuristicCompletion"
+    dependentClassNames do: [ :closeClassName |
+        (closeClassName beginsWith: string caseSensitive: case) ifTrue: [
+            aBlock value: (NECGlobalEntry contents: closeClassName node: nil)
+        ]
+    ].
 
-	dependentClassNames := OrderedCollection new.
-	dependentPackages := self dependenciesOf: completionClass package name. 
+    "Avoid duplicates from systemNavigation environment"
+    keys := self systemNavigation environment keys asOrderedCollection.
+    closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
+    dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
 
-	dependentPackages do: [ :packageName |
-		dependentClassNames addAll:
-			((organizer packageNamed: packageName ifAbsent: [  ])
-				 definedClasses collect: [ :each | each name ]) ].
-
-	dependentClassNames do: [ :closeClassName |
-		(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
-			aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
-
-	keys := self systemNavigation environment keys asOrderedCollection.
-	closeClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
-	dependentClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
-	"we could not use remove: ifAbsent: but this would hide something. 
-	Because I do not get why the navigation should not contain the same objects than before."
-
-	"Same as above this is the not the job of the fetcher to filter.
-	This is a pity because we cannot reuse the logic of systemNavigation because we should not 
-	modify the global environment."
-	keys do: [ :globalName |
-		(globalName beginsWith: string caseSensitive: case) ifTrue: [
-			aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
+    keys do: [ :globalName |
+        (globalName beginsWith: string caseSensitive: case) ifTrue: [
+            aBlock value: (NECGlobalEntry contents: globalName node: astNode)
+        ]
+    ].
 ]
 
 { #category : 'enumerating' }
