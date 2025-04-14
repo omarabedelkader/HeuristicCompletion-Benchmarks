@@ -21,7 +21,7 @@ CooBenchRunner new
 ```
 "
 Class {
-	#name : 'CooBenchRunner',
+	#name : 'CooBenchRunnerMessage',
 	#superclass : 'Object',
 	#instVars : [
 		'package',
@@ -34,7 +34,7 @@ Class {
 }
 
 { #category : 'api' }
-CooBenchRunner class >> allLatexResultsFor: aColOfPackageNames [
+CooBenchRunnerMessage class >> allLatexResultsFor: aColOfPackageNames [
 
     | packages runs latex |
     packages := aColOfPackageNames collect: [ :p | PackageOrganizer default packageNamed: p ].
@@ -44,7 +44,7 @@ CooBenchRunner class >> allLatexResultsFor: aColOfPackageNames [
 ]
 
 { #category : 'api' }
-CooBenchRunner class >> allResultsFor: aColOfPackageNames [
+CooBenchRunnerMessage class >> allResultsFor: aColOfPackageNames [
 	
 	| packages runs string |
 	packages := aColOfPackageNames collect: [ :p |  PackageOrganizer default packageNamed: p ].
@@ -54,19 +54,18 @@ CooBenchRunner class >> allResultsFor: aColOfPackageNames [
 ]
 
 { #category : 'examples ' }
-CooBenchRunner class >> comparing [
+CooBenchRunnerMessage class >> comparing [
 
-	<script> 
-
+	<script>
 	CooBenchRunner new
-		package: SpPresenter package;
+		package: CompletionSorter package;
 		baseline: #withoutPackageScope;
 		others: { #withPackageScope };
-		run.
+		run
 ]
 
 { #category : 'examples ' }
-CooBenchRunner class >> comparingRBTests [
+CooBenchRunnerMessage class >> comparingRBTests [
 
 	<script> 
 
@@ -78,7 +77,7 @@ CooBenchRunner class >> comparingRBTests [
 ]
 
 { #category : 'examples ' }
-CooBenchRunner class >> comparingRBTrans [
+CooBenchRunnerMessage class >> comparingRBTrans [
 
 	<script> 
 
@@ -90,7 +89,7 @@ CooBenchRunner class >> comparingRBTrans [
 ]
 
 { #category : 'examples ' }
-CooBenchRunner class >> comparingSpecTest [
+CooBenchRunnerMessage class >> comparingSpecTest [
 
 	<script> 
 
@@ -102,13 +101,13 @@ CooBenchRunner class >> comparingSpecTest [
 ]
 
 { #category : 'iwst' }
-CooBenchRunner class >> iwst1 [
+CooBenchRunnerMessage class >> iwst1 [
 	<script>
 	^ (self allResultsFor: { 'NECompletion-Tests' }) inspect
 ]
 
 { #category : 'iwst' }
-CooBenchRunner class >> iwst1test [
+CooBenchRunnerMessage class >> iwst1test [
 
 	<script>
 	^ (self allResultsFor: { 'Refactoring-Transformations-Tests' })
@@ -116,7 +115,7 @@ CooBenchRunner class >> iwst1test [
 ]
 
 { #category : 'iwst' }
-CooBenchRunner class >> iwst1test2 [
+CooBenchRunnerMessage class >> iwst1test2 [
 
 	<script>
 	^ (self allResultsFor: { 'ExtendedHeuristicCompletion-Analyser' })
@@ -124,7 +123,7 @@ CooBenchRunner class >> iwst1test2 [
 ]
 
 { #category : 'api' }
-CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
+CooBenchRunnerMessage class >> latexTableResultForABenchCollection: aCol [
     "Produce a LaTeX table showing the results from each benchmark in aCol."
     | header body mmrKeys footer rows |
 
@@ -189,7 +188,7 @@ CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
 ]
 
 { #category : 'utils' }
-CooBenchRunner class >> runComparisonForPackages: aCol [
+CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 
 	^ aCol collect: [ :pack |
 		  self new
@@ -200,7 +199,7 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 ]
 
 { #category : 'examples to debug single run' }
-CooBenchRunner class >> runMessageOnNeCompletionPackage [
+CooBenchRunnerMessage class >> runMessageOnNeCompletionPackage [
 	<script>
 	
 	^ (CooStaticBenchmarksMessage 
@@ -209,7 +208,7 @@ CooBenchRunner class >> runMessageOnNeCompletionPackage [
 ]
 
 { #category : 'examples to debug single run' }
-CooBenchRunner class >> runVariableOnNeCompletionPackage [
+CooBenchRunnerMessage class >> runVariableOnNeCompletionPackage [
 	<script>
 	
 	^ (CooStaticBenchmarksVariables 
@@ -218,7 +217,7 @@ CooBenchRunner class >> runVariableOnNeCompletionPackage [
 ]
 
 { #category : 'utils' }
-CooBenchRunner class >> stringResultForABenchCollection: aCol [
+CooBenchRunnerMessage class >> stringResultForABenchCollection: aCol [
 
 	^ String streamContents: [ :s |
 		  aCol do: [ :p |
@@ -233,60 +232,59 @@ CooBenchRunner class >> stringResultForABenchCollection: aCol [
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> baseline: aSymbol [
+CooBenchRunnerMessage >> baseline: aSymbol [
 
 	baseline := aSymbol 
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> classNamesGlobalSorterScope [
+CooBenchRunnerMessage >> classNamesGlobalSorterScope [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithoutPackageScope"
 
 	| builder benchmark |
 	builder := CoGlobalSorterResultSetBuilder new.
-	benchmark := (CooStaticBenchmarksVariables new
-		name: 'Flat global sorter variable';
-		scope: (CoBenchmarkPackage on: package);
-		builder: builder;
-		run).
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Flat global sorter variable';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
 	benchmark inspect.
 	^ benchmark
-
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> computeRatio [
+CooBenchRunnerMessage >> computeRatio [
 
 	^ (results at: baseline) accuracyResults
 		computeRatioWithReceiverAsBaselineComparedTo: (results at: others first) accuracyResults
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> others: aSymbolCollect [
+CooBenchRunnerMessage >> others: aSymbolCollect [
 
 	others := aSymbolCollect 
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> package [
+CooBenchRunnerMessage >> package [
 	^ package
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> package: aPackage [
+CooBenchRunnerMessage >> package: aPackage [
 
 	package := aPackage
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> results [
+CooBenchRunnerMessage >> results [
 	^ results
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> run [ 
+CooBenchRunnerMessage >> run [ 
 
 	results := Dictionary new.
 	{baseline} , others
@@ -295,7 +293,7 @@ CooBenchRunner >> run [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withDependency [
+CooBenchRunnerMessage >> withDependency [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithDependencyPackageScope"
@@ -303,13 +301,17 @@ CooBenchRunner >> withDependency [
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
 	builder variablesHeuristic: (builder newHeuristicBuilder
-			 add: CoLocalScopeVariablesHeuristic new;
-			 add: CoWorkspaceVariablesHeuristic new;
-			 add: CoInstanceAccessibleVariablesHeuristic new;
-			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoDependencyPackageScopedGlobalVariableFetcher);
+			 add: CoSelfMessageHeuristic new;
+			 add: CoSuperMessageHeuristic new;
+			 add: CoTypedReceiverMessageHeuristic new;
+			 add: CoInitializeInferencedMessageHeuristic new;
+			 add: CoLiteralMessageHeuristic new;
+			 add: CoGlobalVariableMessageHeuristic new;
+			 add: CoVariableWithTypeNameMessageHeuristic new;
+			 "add: CoVariableValueMessageHeuristic new;"add:
+				 CoUnknownMessageHeuristic new;
 			 build).
-	benchmark := CooStaticBenchmarksVariables new
+	benchmark := CooStaticBenchmarksMessage new
 		             name: 'Scoped Global';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
@@ -318,7 +320,7 @@ CooBenchRunner >> withDependency [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withOllamaReRank [
+CooBenchRunnerMessage >> withOllamaReRank [
    "Use a re-ranked global fetcher based on Ollama."
 
    | builder benchmark |
@@ -346,51 +348,51 @@ CooBenchRunner >> withOllamaReRank [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withPackageScope [
+CooBenchRunnerMessage >> withPackageScope [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithPackageScope"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
-	builder variablesHeuristic:
-						(builder newHeuristicBuilder
-			      				add: CoLocalScopeVariablesHeuristic new;
-			                add: CoWorkspaceVariablesHeuristic new;
-			                add: CoInstanceAccessibleVariablesHeuristic new;
-			                add: (CoGlobalVariablesHeuristic new
-					                         globalVariableFetcherClass:
-						                         CoRepositoryPackageScopedGlobalVariableFetcher);
-			                build).
-	benchmark := (CooStaticBenchmarksVariables new
-		name: 'Scoped Global';
-		scope: (CoBenchmarkPackage on: package);
-		builder: builder;
-		run).
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoRepositoryPackageScopedGlobalVariableFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Scoped Global';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
 	^ benchmark
-
 ]
 
-{ #category : 'accessing' }
-CooBenchRunner >> withoutPackageScope [
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withoutPackageScope [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithoutPackageScope"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
-	builder variablesHeuristic:
-						(builder newHeuristicBuilder
-			      				add: CoLocalScopeVariablesHeuristic new;
-			                add: CoWorkspaceVariablesHeuristic new;
-			                add: CoInstanceAccessibleVariablesHeuristic new;
-			                add: CoGlobalVariablesHeuristic new;
-			                build).
-	benchmark := (CooStaticBenchmarksVariables new
-		name: 'Flat semantic global variable';
-		scope: (CoBenchmarkPackage on: package);
-		builder: builder;
-		run).
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoSelfMessageHeuristic new;
+			 add: CoSuperMessageHeuristic new;
+			 add: CoTypedReceiverMessageHeuristic new;
+			 add: CoInitializeInferencedMessageHeuristic new;
+			 add: CoLiteralMessageHeuristic new;
+			 add: CoGlobalVariableMessageHeuristic new;
+			 add: CoVariableWithTypeNameMessageHeuristic new;
+			 "add: CoVariableValueMessageHeuristic new;"add:
+				 CoUnknownMessageHeuristic new;
+			 build).
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Flat semantic global variable';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
 	^ benchmark
-
 ]
