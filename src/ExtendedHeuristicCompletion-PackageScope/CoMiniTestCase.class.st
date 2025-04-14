@@ -8,9 +8,9 @@ Class {
 		'fetcher',
 		'expectedElements'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-PackageScope',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-TestsForPharo',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'PackageScope'
+	#tag : 'TestsForPharo'
 }
 
 { #category : 'assert' }

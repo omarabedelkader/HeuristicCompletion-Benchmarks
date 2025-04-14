@@ -191,11 +191,12 @@ CooBenchRunnerMessage class >> latexTableResultForABenchCollection: aCol [
 CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 
 	^ aCol collect: [ :pack |
-		  self new
-			  package: pack;
-			  baseline: #withoutPackageScope;
-			  others: { #withPackageScope . #withDependency };
-			  run ]
+			  self new
+				  package: pack;
+				  baseline: #withoutPackageScope;
+				  others:
+					  { #withPackageScope. #withReverseDependency. #withDependency.  };
+				  run ]
 ]
 
 { #category : 'examples to debug single run' }

@@ -9,10 +9,33 @@ Class {
 		'completionClass',
 		'reverseDependencies'
 	],
+	#classInstVars : [
+		'dependencies'
+	],
 	#category : 'ExtendedHeuristicCompletion-PackageScope-Dependency',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'Dependency'
 }
+
+{ #category : 'accessing' }
+CoReverseDependencyPackageScopedGlobalVariableFetcher class >> computeDependenciesOf: aPackageName [
+
+	^ StDependencyChecker new dependenciesOf: aPackageName
+]
+
+{ #category : 'accessing' }
+CoReverseDependencyPackageScopedGlobalVariableFetcher class >> dependenciesOf: aPackageName [
+
+	^ dependencies
+		  at: aPackageName
+		  ifAbsentPut: [ self computeDependenciesOf: aPackageName ]
+]
+
+{ #category : 'class initialization' }
+CoReverseDependencyPackageScopedGlobalVariableFetcher class >> initialize [
+
+	dependencies := Dictionary new
+]
 
 { #category : 'accessing' }
 CoReverseDependencyPackageScopedGlobalVariableFetcher >> completionClass [
@@ -27,13 +50,9 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> completionClass: anObje
 ]
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> computeReverseDependenciesOf: aPackageName [
+CoReverseDependencyPackageScopedGlobalVariableFetcher >> dependenciesOf: aString [
 
-	| allPackages |
-	allPackages := PackageOrganizer default packages.
-	^ (allPackages select: [ :pkg |
-		   (self reverseDependenciesOf: pkg name) includes: aPackageName ])
-		  collect: [ :pkg | pkg name ]
+	^ self class dependenciesOf: aString
 ]
 
 { #category : 'enumerating' }
@@ -90,8 +109,16 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> packages: aCollection [
 ]
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> reverseDependenciesOf: aPackageName [ 
-    ^ reverseDependencies at: aPackageName ifAbsentPut: [ 
-        self computeReverseDependenciesOf: aPackageName 
-    ]
+CoReverseDependencyPackageScopedGlobalVariableFetcher >> reverseDependenciesOf: aPackageName [
+
+	| allPackages dependentPackages |
+	allPackages := PackageOrganizer default packages. "self class packageOrganizer"
+
+	dependentPackages := allPackages select: [ :package |
+			                     | dependencies |
+			                     dependencies := self dependenciesOf:
+				                                     package name.
+			                     dependencies includes: aPackageName ].
+
+	^ dependentPackages collect: [ :pkg | pkg name ]
 ]
