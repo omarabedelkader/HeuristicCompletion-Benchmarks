@@ -57,7 +57,7 @@ CooBenchRunnerMessage class >> allResultsFor: aColOfPackageNames [
 CooBenchRunnerMessage class >> comparing [
 
 	<script>
-	CooBenchRunner new
+	CooBenchRunnerVariables new
 		package: CompletionSorter package;
 		baseline: #withoutPackageScope;
 		others: { #withPackageScope };
@@ -69,7 +69,7 @@ CooBenchRunnerMessage class >> comparingRBTests [
 
 	<script> 
 
-	CooBenchRunner new
+	CooBenchRunnerVariables new
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
 		baseline: #withoutPackageScope;
 		others: { #withPackageScope };
@@ -81,7 +81,7 @@ CooBenchRunnerMessage class >> comparingRBTrans [
 
 	<script> 
 
-	CooBenchRunner new
+	CooBenchRunnerVariables new
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
 		baseline: #withoutPackageScope;
 		others: { #withPackageScope };
@@ -93,7 +93,7 @@ CooBenchRunnerMessage class >> comparingSpecTest [
 
 	<script> 
 
-	CooBenchRunner new
+	CooBenchRunnerVariables new
 		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
 		baseline: #withoutPackageScope;
 		others: { #withPackageScope };

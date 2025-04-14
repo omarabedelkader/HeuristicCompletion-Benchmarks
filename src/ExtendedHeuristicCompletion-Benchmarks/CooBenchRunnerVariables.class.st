@@ -21,7 +21,7 @@ CooBenchRunner new
 ```
 "
 Class {
-	#name : 'CooBenchRunner',
+	#name : 'CooBenchRunnerVariables',
 	#superclass : 'Object',
 	#instVars : [
 		'package',
@@ -34,7 +34,7 @@ Class {
 }
 
 { #category : 'api' }
-CooBenchRunner class >> allLatexResultsFor: aColOfPackageNames [
+CooBenchRunnerVariables class >> allLatexResultsFor: aColOfPackageNames [
 
     | packages runs latex |
     packages := aColOfPackageNames collect: [ :p | PackageOrganizer default packageNamed: p ].
@@ -44,7 +44,7 @@ CooBenchRunner class >> allLatexResultsFor: aColOfPackageNames [
 ]
 
 { #category : 'api' }
-CooBenchRunner class >> allResultsFor: aColOfPackageNames [
+CooBenchRunnerVariables class >> allResultsFor: aColOfPackageNames [
 	
 	| packages runs string |
 	packages := aColOfPackageNames collect: [ :p |  PackageOrganizer default packageNamed: p ].
@@ -54,11 +54,11 @@ CooBenchRunner class >> allResultsFor: aColOfPackageNames [
 ]
 
 { #category : 'examples ' }
-CooBenchRunner class >> comparing [
+CooBenchRunnerVariables class >> comparing [
 
 	<script> 
 
-	CooBenchRunner new
+	CooBenchRunnerVariables new
 		package: SpPresenter package;
 		baseline: #withoutPackageScope;
 		others: { #withPackageScope };
@@ -66,11 +66,11 @@ CooBenchRunner class >> comparing [
 ]
 
 { #category : 'examples ' }
-CooBenchRunner class >> comparingRBTests [
+CooBenchRunnerVariables class >> comparingRBTests [
 
 	<script> 
 
-	CooBenchRunner new
+	CooBenchRunnerVariables new
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
 		baseline: #withoutPackageScope;
 		others: { #withPackageScope };
@@ -78,11 +78,11 @@ CooBenchRunner class >> comparingRBTests [
 ]
 
 { #category : 'examples ' }
-CooBenchRunner class >> comparingRBTrans [
+CooBenchRunnerVariables class >> comparingRBTrans [
 
 	<script> 
 
-	CooBenchRunner new
+	CooBenchRunnerVariables new
 		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
 		baseline: #withoutPackageScope;
 		others: { #withPackageScope };
@@ -90,11 +90,11 @@ CooBenchRunner class >> comparingRBTrans [
 ]
 
 { #category : 'examples ' }
-CooBenchRunner class >> comparingSpecTest [
+CooBenchRunnerVariables class >> comparingSpecTest [
 
 	<script> 
 
-	CooBenchRunner new
+	CooBenchRunnerVariables new
 		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
 		baseline: #withoutPackageScope;
 		others: { #withPackageScope };
@@ -102,13 +102,13 @@ CooBenchRunner class >> comparingSpecTest [
 ]
 
 { #category : 'iwst' }
-CooBenchRunner class >> iwst1 [
+CooBenchRunnerVariables class >> iwst1 [
 	<script>
 	^ (self allResultsFor: { 'NECompletion-Tests' }) inspect
 ]
 
 { #category : 'iwst' }
-CooBenchRunner class >> iwst1test [
+CooBenchRunnerVariables class >> iwst1test [
 
 	<script>
 	^ (self allResultsFor: { 'Refactoring-Transformations-Tests' })
@@ -116,7 +116,7 @@ CooBenchRunner class >> iwst1test [
 ]
 
 { #category : 'iwst' }
-CooBenchRunner class >> iwst1test2 [
+CooBenchRunnerVariables class >> iwst1test2 [
 
 	<script>
 	^ (self allResultsFor: { 'ExtendedHeuristicCompletion-Analyser' })
@@ -124,7 +124,7 @@ CooBenchRunner class >> iwst1test2 [
 ]
 
 { #category : 'api' }
-CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
+CooBenchRunnerVariables class >> latexTableResultForABenchCollection: aCol [
     "Produce a LaTeX table showing the results from each benchmark in aCol."
     | header body mmrKeys footer rows |
 
@@ -189,7 +189,7 @@ CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
 ]
 
 { #category : 'utils' }
-CooBenchRunner class >> runComparisonForPackages: aCol [
+CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 
 	^ aCol collect: [ :pack |
 		  self new
@@ -200,7 +200,7 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 ]
 
 { #category : 'examples to debug single run' }
-CooBenchRunner class >> runMessageOnNeCompletionPackage [
+CooBenchRunnerVariables class >> runMessageOnNeCompletionPackage [
 	<script>
 	
 	^ (CooStaticBenchmarksMessage 
@@ -209,7 +209,7 @@ CooBenchRunner class >> runMessageOnNeCompletionPackage [
 ]
 
 { #category : 'examples to debug single run' }
-CooBenchRunner class >> runVariableOnNeCompletionPackage [
+CooBenchRunnerVariables class >> runVariableOnNeCompletionPackage [
 	<script>
 	
 	^ (CooStaticBenchmarksVariables 
@@ -218,7 +218,7 @@ CooBenchRunner class >> runVariableOnNeCompletionPackage [
 ]
 
 { #category : 'utils' }
-CooBenchRunner class >> stringResultForABenchCollection: aCol [
+CooBenchRunnerVariables class >> stringResultForABenchCollection: aCol [
 
 	^ String streamContents: [ :s |
 		  aCol do: [ :p |
@@ -233,13 +233,13 @@ CooBenchRunner class >> stringResultForABenchCollection: aCol [
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> baseline: aSymbol [
+CooBenchRunnerVariables >> baseline: aSymbol [
 
 	baseline := aSymbol 
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> classNamesGlobalSorterScope [
+CooBenchRunnerVariables >> classNamesGlobalSorterScope [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithoutPackageScope"
@@ -257,36 +257,36 @@ CooBenchRunner >> classNamesGlobalSorterScope [
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> computeRatio [
+CooBenchRunnerVariables >> computeRatio [
 
 	^ (results at: baseline) accuracyResults
 		computeRatioWithReceiverAsBaselineComparedTo: (results at: others first) accuracyResults
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> others: aSymbolCollect [
+CooBenchRunnerVariables >> others: aSymbolCollect [
 
 	others := aSymbolCollect 
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> package [
+CooBenchRunnerVariables >> package [
 	^ package
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> package: aPackage [
+CooBenchRunnerVariables >> package: aPackage [
 
 	package := aPackage
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> results [
+CooBenchRunnerVariables >> results [
 	^ results
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> run [ 
+CooBenchRunnerVariables >> run [ 
 
 	results := Dictionary new.
 	{baseline} , others
@@ -295,7 +295,7 @@ CooBenchRunner >> run [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withDependency [
+CooBenchRunnerVariables >> withDependency [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithDependencyPackageScope"
@@ -318,7 +318,7 @@ CooBenchRunner >> withDependency [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withOllamaReRank [
+CooBenchRunnerVariables >> withOllamaReRank [
    "Use a re-ranked global fetcher based on Ollama."
 
    | builder benchmark |
@@ -346,7 +346,7 @@ CooBenchRunner >> withOllamaReRank [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withPackageScope [
+CooBenchRunnerVariables >> withPackageScope [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithPackageScope"
@@ -372,7 +372,7 @@ CooBenchRunner >> withPackageScope [
 ]
 
 { #category : 'accessing' }
-CooBenchRunner >> withoutPackageScope [
+CooBenchRunnerVariables >> withoutPackageScope [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithoutPackageScope"
