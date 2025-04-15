@@ -198,7 +198,7 @@ CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 				  baseline: #withoutPackageScope;
 				  others:
 					  { #withPackageScope. #withDependency. #withReverseDependency.
-					  #withTransitiveDependency . #withWeightedMetaFetcher };
+					  #withTransitiveDependency. #withWeightedMetaFetcher. #withAdaptiveWeightedMetaFetcher };
 				  run ]
 ]
 
@@ -306,6 +306,29 @@ CooBenchRunnerVariables >> run [
 	{baseline} , others
 		do: [ :s | results at: s  put: (self perform: s)]
 
+]
+
+{ #category : 'experience' }
+CooBenchRunnerVariables >> withAdaptiveWeightedMetaFetcher [
+	"self new 
+		package: AnalyserData1 package;
+		classNamesWithDependencyPackageScope"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoAdaptiveMetaGlobalVariableFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Adaptive Weighted Dependency';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
 ]
 
 { #category : 'experience' }
@@ -441,10 +464,10 @@ CooBenchRunnerVariables >> withWeightedMetaFetcher [
 			 add: CoWorkspaceVariablesHeuristic new;
 			 add: CoInstanceAccessibleVariablesHeuristic new;
 			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoWeightedMetaGlobalVariableFetcher );
+						  CoWeightedMetaGlobalVariableFetcher);
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
-		             name: 'Transitive Dependency';
+		             name: 'Weighted Dependency';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
