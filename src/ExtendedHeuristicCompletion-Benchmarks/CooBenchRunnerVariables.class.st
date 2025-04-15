@@ -101,17 +101,6 @@ CooBenchRunnerVariables class >> comparingSpecTest [
 		run.
 ]
 
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> comparingdependcyandreverse [
-
-	<script>
-	CooBenchRunnerVariables new
-		package: CompletionContextTest package;
-		baseline: #withoutPackageScope ;
-		others: { #withWeightedMetaFetcher };
-		run
-]
-
 { #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1 [
 
@@ -244,6 +233,17 @@ CooBenchRunnerVariables class >> stringResultForABenchCollection: aCol [
 					s << v mmrString.
 				  s cr ].
 			  s cr ] ]
+]
+
+{ #category : 'examples ' }
+CooBenchRunnerVariables class >> testcomparingdependcyandreverse [
+
+	<script>
+	CooBenchRunnerVariables new
+		package: CompletionContextTest package;
+		baseline: #withoutPackageScope;
+		others: { #withWeightedMetaFetcher };
+		run
 ]
 
 { #category : 'accessing' }

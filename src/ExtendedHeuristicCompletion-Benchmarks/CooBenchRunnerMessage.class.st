@@ -195,7 +195,8 @@ CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 				  package: pack;
 				  baseline: #withoutPackageScope;
 				  others:
-					  { #withPackageScope. #withReverseDependency. #withDependency.  };
+					  { #withPackageScope. #withReverseDependency.
+					  #withDependency. #withWeightedMetaFetcher };
 				  run ]
 ]
 

@@ -84,12 +84,14 @@ CoWeightedMetaGlobalVariableFetcher >> fetchersAndWeights: aCollection [
 ]
 
 { #category : 'accessing' }
-CoWeightedMetaGlobalVariableFetcher >> initialize [ 
+CoWeightedMetaGlobalVariableFetcher >> initialize [
 
 	super initialize.
 	fetchersAndWeights := {
-		(CoRepositoryPackageScopedGlobalVariableFetcher new) -> 0.5.
-		(CoDependencyPackageScopedGlobalVariableFetcher new) -> 0.3.
-		(CoGlobalFetcher new) -> 0.2. "Fallback to vanilla global"
-	} asOrderedCollection.
+		                      (CoRepositoryPackageScopedGlobalVariableFetcher
+			                       new -> 0.5).
+		                      (CoDependencyPackageScopedGlobalVariableFetcher
+			                       new -> 0.3).
+		                      (CoTransitiveDependencyPackageScopedGlobalVariableFetcher new -> 0.2) "Fallback to vanilla global" }
+		                      asOrderedCollection
 ]
