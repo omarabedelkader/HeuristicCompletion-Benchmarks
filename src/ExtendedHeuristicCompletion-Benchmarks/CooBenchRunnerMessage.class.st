@@ -22,13 +22,7 @@ CooBenchRunner new
 "
 Class {
 	#name : 'CooBenchRunnerMessage',
-	#superclass : 'Object',
-	#instVars : [
-		'package',
-		'baseline',
-		'others',
-		'results'
-	],
+	#superclass : 'CoBenchRunner',
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
@@ -231,50 +225,6 @@ CooBenchRunnerMessage class >> stringResultForABenchCollection: aCol [
 					s << v mmrString.
 				  s cr ].
 			  s cr ] ]
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> baseline: aSymbol [
-
-	baseline := aSymbol 
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> computeRatio [
-
-	^ (results at: baseline) accuracyResults
-		computeRatioWithReceiverAsBaselineComparedTo: (results at: others first) accuracyResults
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> others: aSymbolCollect [
-
-	others := aSymbolCollect 
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> package [
-	^ package
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> package: aPackage [
-
-	package := aPackage
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> results [
-	^ results
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> run [ 
-
-	results := Dictionary new.
-	{baseline} , others
-		do: [ :s | results at: s  put: (self perform: s)]
-
 ]
 
 { #category : 'experience' }

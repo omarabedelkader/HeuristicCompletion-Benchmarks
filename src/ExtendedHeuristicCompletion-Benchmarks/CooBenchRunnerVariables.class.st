@@ -22,13 +22,7 @@ CooBenchRunner new
 "
 Class {
 	#name : 'CooBenchRunnerVariables',
-	#superclass : 'Object',
-	#instVars : [
-		'package',
-		'baseline',
-		'others',
-		'results'
-	],
+	#superclass : 'CoBenchRunner',
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
@@ -113,7 +107,7 @@ CooBenchRunnerVariables class >> iwst1 [
 CooBenchRunnerVariables class >> iwst1test [
 
 	<script>
-	^ (self allResultsFor: { 'Refactoring-Transformations-Tests' })
+	^ (self allResultsFor: { 'NECompletion-Tests' })
 		  inspect
 ]
 
@@ -247,68 +241,6 @@ CooBenchRunnerVariables class >> testcomparingdependcyandreverse [
 		run
 ]
 
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> baseline: aSymbol [
-
-	baseline := aSymbol 
-]
-
-{ #category : 'experience' }
-CooBenchRunnerVariables >> classNamesGlobalSorterScope [
-	"self new 
-		package: AnalyserData1 package;
-		classNamesWithoutPackageScope"
-
-	| builder benchmark |
-	builder := CoGlobalSorterResultSetBuilder new.
-	benchmark := (CooStaticBenchmarksVariables new
-		name: 'Flat global sorter variable';
-		scope: (CoBenchmarkPackage on: package);
-		builder: builder;
-		run).
-	benchmark inspect.
-	^ benchmark
-
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> computeRatio [
-
-	^ (results at: baseline) accuracyResults
-		computeRatioWithReceiverAsBaselineComparedTo: (results at: others first) accuracyResults
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> others: aSymbolCollect [
-
-	others := aSymbolCollect 
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> package [
-	^ package
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> package: aPackage [
-
-	package := aPackage
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> results [
-	^ results
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> run [ 
-
-	results := Dictionary new.
-	{baseline} , others
-		do: [ :s | results at: s  put: (self perform: s)]
-
-]
-
 { #category : 'experience' }
 CooBenchRunnerVariables >> withAdaptiveWeightedMetaFetcher [
 	"self new 
@@ -353,6 +285,24 @@ CooBenchRunnerVariables >> withDependency [
 		             builder: builder;
 		             run.
 	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerVariables >> withGlobalSorterScope [
+	"self new 
+		package: AnalyserData1 package;
+		classNamesWithoutPackageScope"
+
+	| builder benchmark |
+	builder := CoGlobalSorterResultSetBuilder new.
+	benchmark := (CooStaticBenchmarksVariables new
+		name: 'Flat global sorter variable';
+		scope: (CoBenchmarkPackage on: package);
+		builder: builder;
+		run).
+	benchmark inspect.
+	^ benchmark
+
 ]
 
 { #category : 'experience' }
