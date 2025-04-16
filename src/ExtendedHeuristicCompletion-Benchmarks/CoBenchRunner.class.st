@@ -60,54 +60,54 @@ CoBenchRunner >> run [
 		results at: s put: (self perform: s) ]
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'experience' }
 CoBenchRunner >> withAdaptiveWeightedMetaFetcher [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'experience' }
 CoBenchRunner >> withDependency [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'experience' }
 CoBenchRunner >> withGlobalSorterScope [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'experience' }
 CoBenchRunner >> withOllamaReRank [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'experience' }
 CoBenchRunner >> withPackageScope [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'experience' }
 CoBenchRunner >> withReverseDependency [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'experience' }
 CoBenchRunner >> withTransitiveDependency [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'experience' }
 CoBenchRunner >> withWeightedMetaFetcher [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : 'benchmarks' }
+{ #category : 'experience' }
 CoBenchRunner >> withoutPackageScope [
 	^ self subclassResponsibility
 ]

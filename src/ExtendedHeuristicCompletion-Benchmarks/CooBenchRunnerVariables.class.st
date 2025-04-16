@@ -372,7 +372,7 @@ CooBenchRunnerVariables >> withWeightedMetaFetcher [
 	^ benchmark
 ]
 
-{ #category : 'accessing' }
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withoutPackageScope [
 	"self new 
 		package: AnalyserData1 package;
