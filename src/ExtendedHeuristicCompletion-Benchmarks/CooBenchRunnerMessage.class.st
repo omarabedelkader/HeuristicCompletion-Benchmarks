@@ -168,7 +168,7 @@ CooBenchRunnerMessage class >> stringResultForABenchCollection: aCol [
 CooBenchRunnerMessage >> withDependency [
 	"self new 
 		package: AnalyserData1 package;
-		classNamesWithDependencyPackageScope"
+		withDependency"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -183,7 +183,7 @@ CooBenchRunnerMessage >> withDependency [
 			 add: CoUnknownMessageHeuristic new;
 			 build).
 	benchmark := CooStaticBenchmarksMessage new
-		             name: 'Dependency';
+		             name: '';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
