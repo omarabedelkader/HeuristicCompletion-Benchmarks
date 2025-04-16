@@ -105,7 +105,8 @@ CooBenchRunnerVariables class >> comparingSpecTest [
 CooBenchRunnerVariables class >> iwst1 [
 
 	<script>
-	^ (self allLatexResultsFor: { 'NECompletion'.'NECompletion-Tests' }) inspect
+	^ (self allLatexResultsFor: {'Spec2-Core'.'Spec2-Tests'.'Refactoring-Transformations'.'Refactoring-Transformations-Tests'.'NECompletion'. 'NECompletion-Tests' })
+		  inspect
 ]
 
 { #category : 'iwst' }

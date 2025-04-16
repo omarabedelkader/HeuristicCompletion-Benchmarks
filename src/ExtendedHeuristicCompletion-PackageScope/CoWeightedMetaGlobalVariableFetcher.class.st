@@ -1,3 +1,13 @@
+"
+`CoWeightedMetaGlobalVariableFetcher` is a composite fetcher that combines results from multiple global variable fetchers using a weighted scoring system.
+
+- **Aggregates Multiple Fetchers**: It wraps several different global variable fetchers, each responsible for suggesting variables from a different scope (e.g., repository, dependency, or transitive dependency).
+- **Applies Weighted Heuristics**: Each fetcher contributes to the final result based on an assigned weight, which reflects its importance or reliability. Higher weights mean the fetcher's suggestions are more likely to appear at the top.
+- **Normalizes and Ranks Suggestions**: It collects suggestions from all fetchers, sums the weights for duplicate names, and sorts them in descending order by total weight before presenting them.
+- **Supports Configuration**: You can customize the fetchers and their weights or use the sensible defaults provided via `defaultFetcher` or `withDefaultFetchers`.
+
+
+"
 Class {
 	#name : 'CoWeightedMetaGlobalVariableFetcher',
 	#superclass : 'CoGlobalFetcher',
@@ -5,9 +15,9 @@ Class {
 		'fetchersAndWeights',
 		'completionClass'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Dependency',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Fetchers',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Dependency'
+	#tag : 'Fetchers'
 }
 
 { #category : 'as yet unclassified' }

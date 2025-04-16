@@ -1,8 +1,18 @@
 "
-I am a fetcher looking for globals in an environment.
+`CoReverseDependencyPackageScopedGlobalVariableFetcher` is a specialized global variable fetcher that focuses on **reverse dependencies**—that is, it suggests globals defined in packages that **depend on the current package**. This is useful in tooling scenarios where you want completions to reflect the usage context of a package, especially when reverse lookup is meaningful (e.g., plugin discovery, usage impact analysis).
 
+### Core Responsibilities
 
-```st
+- **Reverse Dependency Lookup**: It identifies all packages that list the current package as a dependency.
+- **Scoped Global Suggestions**: Completion suggestions include:
+  1. Classes from the current package,
+  2. Classes defined in reverse-dependent packages,
+  3. Remaining globals from the environment, de-duplicated.
+- **Cached Dependency Resolution**: Like its sibling fetchers, it caches dependency results for efficiency.
+
+### Real-World Example: Who Depends on This?
+
+```smalltalk
 | targetPackageName reverseDependencies allPackages dependencyChecker |
 
 targetPackageName := 'NECompletion'.
@@ -20,6 +30,26 @@ reverseDependencies do: [:package |
     Transcript show: 'Package ', package name, ' depends on ', targetPackageName; cr.
 ].
 ```
+
+This script finds and prints all packages that **depend on** `NECompletion`. It uses `CoDependencyPackageScopedGlobalVariableFetcher` to get each package's dependencies, then filters for the ones that include the target.
+
+### Completion Logic Overview
+
+When `entriesDo:` is triggered:
+1. **If `completionClass` is `nil`**, it falls back to suggesting all globals matching the input string.
+2. **Otherwise**, it:
+   - Collects classes from the current package.
+   - Resolves and collects classes from reverse-dependent packages.
+   - Avoids duplicate suggestions by removing already-suggested class names from the global environment.
+   - Finally, includes standard globals (minus duplicates).
+
+### Why Use This?
+
+This fetcher is valuable when:
+- You're building tools that operate from the perspective of the **package being depended on** (e.g., a shared library or service package).
+- You want completions that include usage-context-relevant classes, like clients or plugins.
+
+It complements forward-based fetchers (like transitive or direct dependency-based ones) by providing the **inverse view**—what depends on me?
 "
 Class {
 	#name : 'CoReverseDependencyPackageScopedGlobalVariableFetcher',
@@ -32,9 +62,9 @@ Class {
 	#classInstVars : [
 		'dependencies'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Dependency',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Fetchers',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Dependency'
+	#tag : 'Fetchers'
 }
 
 { #category : 'accessing' }
