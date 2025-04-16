@@ -14,7 +14,7 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
-{ #category : 'accessing' }
+{ #category : 'baselines' }
 CoBenchRunner >> baseline: aSymbol [
 
 	baseline := aSymbol
