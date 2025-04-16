@@ -1,5 +1,29 @@
 "
 ```
+comparingSpecTest
+
+	<script>
+	CooBenchRunnerVariables new
+		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
+		baseline: #withoutPackageScope;
+		others: { #withPackageScope };
+		run
+```
+
+
+
+```
+testcomparingdependcyandreverse
+
+	<script>
+	CooBenchRunnerVariables new
+		package: CompletionContextTest package;
+		baseline: #withoutPackageScope;
+		others: { #withWeightedMetaFetcher };
+		run
+```
+
+```
 
 CooBenchRunner new
 	package: SpPresenter package;
@@ -22,13 +46,7 @@ CooBenchRunner new
 "
 Class {
 	#name : 'CooBenchRunnerVariables',
-	#superclass : 'Object',
-	#instVars : [
-		'package',
-		'baseline',
-		'others',
-		'results'
-	],
+	#superclass : 'CoBenchRunner',
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
@@ -53,76 +71,12 @@ CooBenchRunnerVariables class >> allResultsFor: aColOfPackageNames [
 	^ {  runs . string }
 ]
 
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> comparing [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: SpPresenter package;
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> comparingRBTests [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> comparingRBTrans [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> comparingSpecTest [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
 { #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1 [
 
 	<script>
 	^ (self allLatexResultsFor: {'Spec2-Core'.'Spec2-Tests'.'Refactoring-Transformations'.'Refactoring-Transformations-Tests'.'NECompletion'. 'NECompletion-Tests' })
 		  inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1test [
-
-	<script>
-	^ (self allResultsFor: { 'Refactoring-Transformations-Tests' })
-		  inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1test2 [
-
-	<script>
-	^ (self allResultsFor: { 'ExtendedHeuristicCompletion-Analyser' })
-		  inspect 
 ]
 
 { #category : 'api' }
@@ -236,84 +190,11 @@ CooBenchRunnerVariables class >> stringResultForABenchCollection: aCol [
 			  s cr ] ]
 ]
 
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> testcomparingdependcyandreverse [
-
-	<script>
-	CooBenchRunnerVariables new
-		package: CompletionContextTest package;
-		baseline: #withoutPackageScope;
-		others: { #withWeightedMetaFetcher };
-		run
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> baseline: aSymbol [
-
-	baseline := aSymbol 
-]
-
-{ #category : 'experience' }
-CooBenchRunnerVariables >> classNamesGlobalSorterScope [
-	"self new 
-		package: AnalyserData1 package;
-		classNamesWithoutPackageScope"
-
-	| builder benchmark |
-	builder := CoGlobalSorterResultSetBuilder new.
-	benchmark := (CooStaticBenchmarksVariables new
-		name: 'Flat global sorter variable';
-		scope: (CoBenchmarkPackage on: package);
-		builder: builder;
-		run).
-	benchmark inspect.
-	^ benchmark
-
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> computeRatio [
-
-	^ (results at: baseline) accuracyResults
-		computeRatioWithReceiverAsBaselineComparedTo: (results at: others first) accuracyResults
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> others: aSymbolCollect [
-
-	others := aSymbolCollect 
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> package [
-	^ package
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> package: aPackage [
-
-	package := aPackage
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> results [
-	^ results
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerVariables >> run [ 
-
-	results := Dictionary new.
-	{baseline} , others
-		do: [ :s | results at: s  put: (self perform: s)]
-
-]
-
 { #category : 'experience' }
 CooBenchRunnerVariables >> withAdaptiveWeightedMetaFetcher [
 	"self new 
 		package: AnalyserData1 package;
-		classNamesWithDependencyPackageScope"
+		withAdaptiveWeightedMetaFetcher"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -336,7 +217,7 @@ CooBenchRunnerVariables >> withAdaptiveWeightedMetaFetcher [
 CooBenchRunnerVariables >> withDependency [
 	"self new 
 		package: AnalyserData1 package;
-		classNamesWithDependencyPackageScope"
+		withDependency"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -356,38 +237,54 @@ CooBenchRunnerVariables >> withDependency [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerVariables >> withGlobalSorterScope [
+	"self new 
+		package: AnalyserData1 package;
+		withGlobalSorterScope"
+
+	| builder benchmark |
+	builder := CoGlobalSorterResultSetBuilder new.
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Flat global sorter variable';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	benchmark inspect.
+	^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withOllamaReRank [
-   "Use a re-ranked global fetcher based on Ollama."
+	"self new 
+		package: AnalyserData1 package;
+		withOllamaReRank"
 
-   | builder benchmark |
-   builder := CoASTHeuristicsResultSetBuilder new.
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
 
-   builder variablesHeuristic: (builder newHeuristicBuilder
-       add: CoLocalScopeVariablesHeuristic new;
-       add: CoWorkspaceVariablesHeuristic new;
-       add: CoInstanceAccessibleVariablesHeuristic new;
-       add: (
-          CoGlobalVariablesHeuristic new
-             globalVariableFetcherClass: CoOllamaReRankFetcher
-       );
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoOllamaReRankFetcher);
+			 build).
 
-       build).
+	"Finally build and run the benchmark"
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Ollama Re-rank Global';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
 
-   "Finally build and run the benchmark"
-   benchmark := CooStaticBenchmarksVariables new
-       name: 'Ollama Re-rank Global';
-       scope: (CoBenchmarkPackage on: package);
-       builder: builder;
-       run.
-
-   ^ benchmark
+	^ benchmark
 ]
 
 { #category : 'experience' }
 CooBenchRunnerVariables >> withPackageScope [
 	"self new 
 		package: AnalyserData1 package;
-		classNamesWithPackageScope"
+		withPackageScope"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -410,7 +307,7 @@ CooBenchRunnerVariables >> withPackageScope [
 CooBenchRunnerVariables >> withReverseDependency [
 	"self new 
 		package: AnalyserData1 package;
-		classNamesWithDependencyPackageScope"
+		withReverseDependency"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -433,7 +330,7 @@ CooBenchRunnerVariables >> withReverseDependency [
 CooBenchRunnerVariables >> withTransitiveDependency [
 	"self new 
 		package: AnalyserData1 package;
-		classNamesWithDependencyPackageScope"
+		withTransitiveDependency"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -442,7 +339,7 @@ CooBenchRunnerVariables >> withTransitiveDependency [
 			 add: CoWorkspaceVariablesHeuristic new;
 			 add: CoInstanceAccessibleVariablesHeuristic new;
 			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoTransitiveDependencyPackageScopedGlobalVariableFetcher );
+						  CoTransitiveDependencyPackageScopedGlobalVariableFetcher);
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
 		             name: 'Transitive Dependency';
@@ -456,7 +353,7 @@ CooBenchRunnerVariables >> withTransitiveDependency [
 CooBenchRunnerVariables >> withWeightedMetaFetcher [
 	"self new 
 		package: AnalyserData1 package;
-		classNamesWithDependencyPackageScope"
+		withWeightedMetaFetcher"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -475,11 +372,11 @@ CooBenchRunnerVariables >> withWeightedMetaFetcher [
 	^ benchmark
 ]
 
-{ #category : 'accessing' }
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withoutPackageScope [
 	"self new 
 		package: AnalyserData1 package;
-		classNamesWithoutPackageScope"
+		withoutPackageScope"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.

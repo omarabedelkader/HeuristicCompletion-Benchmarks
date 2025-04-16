@@ -22,13 +22,7 @@ CooBenchRunner new
 "
 Class {
 	#name : 'CooBenchRunnerMessage',
-	#superclass : 'Object',
-	#instVars : [
-		'package',
-		'baseline',
-		'others',
-		'results'
-	],
+	#superclass : 'CoBenchRunner',
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
@@ -53,73 +47,10 @@ CooBenchRunnerMessage class >> allResultsFor: aColOfPackageNames [
 	^ {  runs . string }
 ]
 
-{ #category : 'examples ' }
-CooBenchRunnerMessage class >> comparing [
-
-	<script>
-	CooBenchRunnerVariables new
-		package: CompletionSorter package;
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerMessage class >> comparingRBTests [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerMessage class >> comparingRBTrans [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerMessage class >> comparingSpecTest [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
 { #category : 'iwst' }
 CooBenchRunnerMessage class >> iwst1 [
 	<script>
 	^ (self allResultsFor: { 'NECompletion-Tests' }) inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerMessage class >> iwst1test [
-
-	<script>
-	^ (self allResultsFor: { 'Refactoring-Transformations-Tests' })
-		  inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerMessage class >> iwst1test2 [
-
-	<script>
-	^ (self allResultsFor: { 'ExtendedHeuristicCompletion-Analyser' })
-		  inspect 
 ]
 
 { #category : 'api' }
@@ -233,55 +164,11 @@ CooBenchRunnerMessage class >> stringResultForABenchCollection: aCol [
 			  s cr ] ]
 ]
 
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> baseline: aSymbol [
-
-	baseline := aSymbol 
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> computeRatio [
-
-	^ (results at: baseline) accuracyResults
-		computeRatioWithReceiverAsBaselineComparedTo: (results at: others first) accuracyResults
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> others: aSymbolCollect [
-
-	others := aSymbolCollect 
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> package [
-	^ package
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> package: aPackage [
-
-	package := aPackage
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> results [
-	^ results
-]
-
-{ #category : 'accessing' }
-CooBenchRunnerMessage >> run [ 
-
-	results := Dictionary new.
-	{baseline} , others
-		do: [ :s | results at: s  put: (self perform: s)]
-
-]
-
 { #category : 'experience' }
 CooBenchRunnerMessage >> withDependency [
 	"self new 
 		package: AnalyserData1 package;
-		classNamesWithDependencyPackageScope"
+		withDependency"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
@@ -296,7 +183,7 @@ CooBenchRunnerMessage >> withDependency [
 			 add: CoUnknownMessageHeuristic new;
 			 build).
 	benchmark := CooStaticBenchmarksMessage new
-		             name: 'Dependency';
+		             name: '';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
