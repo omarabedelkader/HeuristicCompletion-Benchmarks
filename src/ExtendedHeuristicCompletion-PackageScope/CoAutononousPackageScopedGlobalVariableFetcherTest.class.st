@@ -6,9 +6,9 @@ Class {
 		'package2',
 		'package3'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-TestsForPharo',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Tests',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'TestsForPharo'
+	#tag : 'Tests'
 }
 
 { #category : 'one local one global' }

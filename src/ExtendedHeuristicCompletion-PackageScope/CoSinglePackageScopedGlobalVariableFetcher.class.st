@@ -7,9 +7,9 @@ Class {
 	#instVars : [
 		'packages'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Experiments',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Global-Fetchers',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Experiments'
+	#tag : 'Global-Fetchers'
 }
 
 { #category : 'enumerating' }

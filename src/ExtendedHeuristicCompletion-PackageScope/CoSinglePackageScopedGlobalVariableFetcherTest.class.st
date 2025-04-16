@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'package'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Experiments',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Tests',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Experiments'
+	#tag : 'Tests'
 }
 
 { #category : 'running' }
