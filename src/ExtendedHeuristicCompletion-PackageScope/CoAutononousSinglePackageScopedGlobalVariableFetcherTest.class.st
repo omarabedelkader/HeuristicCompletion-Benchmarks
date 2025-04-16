@@ -1,9 +1,9 @@
 Class {
 	#name : 'CoAutononousSinglePackageScopedGlobalVariableFetcherTest',
 	#superclass : 'CoMiniTestCase',
-	#category : 'ExtendedHeuristicCompletion-PackageScope-TestsForPharo',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Tests',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'TestsForPharo'
+	#tag : 'Tests'
 }
 
 { #category : 'one local one global' }

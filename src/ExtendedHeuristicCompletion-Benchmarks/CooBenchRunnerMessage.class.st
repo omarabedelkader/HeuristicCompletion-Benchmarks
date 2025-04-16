@@ -239,23 +239,6 @@ CooBenchRunnerMessage >> baseline: aSymbol [
 	baseline := aSymbol 
 ]
 
-{ #category : 'experience' }
-CooBenchRunnerMessage >> classNamesGlobalSorterScope [
-	"self new 
-		package: AnalyserData1 package;
-		classNamesWithoutPackageScope"
-
-	| builder benchmark |
-	builder := CoGlobalSorterResultSetBuilder new.
-	benchmark := CooStaticBenchmarksMessage new
-		             name: 'Flat global sorter variable';
-		             scope: (CoBenchmarkPackage on: package);
-		             builder: builder;
-		             run.
-	benchmark inspect.
-	^ benchmark
-]
-
 { #category : 'accessing' }
 CooBenchRunnerMessage >> computeRatio [
 
@@ -310,62 +293,10 @@ CooBenchRunnerMessage >> withDependency [
 			 add: CoLiteralMessageHeuristic new;
 			 add: CoGlobalVariableMessageHeuristic new;
 			 add: CoVariableWithTypeNameMessageHeuristic new;
-			 "add: CoVariableValueMessageHeuristic new;"add:
-				 CoUnknownMessageHeuristic new;
+			 add: CoUnknownMessageHeuristic new;
 			 build).
 	benchmark := CooStaticBenchmarksMessage new
-		             name: 'Scoped Global';
-		             scope: (CoBenchmarkPackage on: package);
-		             builder: builder;
-		             run.
-	^ benchmark
-]
-
-{ #category : 'experience' }
-CooBenchRunnerMessage >> withOllamaReRank [
-   "Use a re-ranked global fetcher based on Ollama."
-
-   | builder benchmark |
-   builder := CoASTHeuristicsResultSetBuilder new.
-
-   builder variablesHeuristic: (builder newHeuristicBuilder
-       add: CoLocalScopeVariablesHeuristic new;
-       add: CoWorkspaceVariablesHeuristic new;
-       add: CoInstanceAccessibleVariablesHeuristic new;
-       add: (
-          CoGlobalVariablesHeuristic new
-             globalVariableFetcherClass: CoOllamaReRankFetcher
-       );
-
-       build).
-
-   "Finally build and run the benchmark"
-   benchmark := CooStaticBenchmarksVariables new
-       name: 'Ollama Re-rank Global';
-       scope: (CoBenchmarkPackage on: package);
-       builder: builder;
-       run.
-
-   ^ benchmark
-]
-
-{ #category : 'experience' }
-CooBenchRunnerMessage >> withPackageScope [
-	"self new 
-		package: AnalyserData1 package;
-		classNamesWithPackageScope"
-
-	| builder benchmark |
-	builder := CoASTHeuristicsResultSetBuilder new.
-	builder variablesHeuristic: (builder newHeuristicBuilder
-			 add: CoLocalScopeVariablesHeuristic new;
-			 add: CoWorkspaceVariablesHeuristic new;
-			 add: CoInstanceAccessibleVariablesHeuristic new;
-			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoRepositoryPackageScopedGlobalVariableFetcher);
-			 build).
-	benchmark := CooStaticBenchmarksMessage new
-		             name: 'Scoped Global';
+		             name: 'Dependency';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
@@ -388,11 +319,10 @@ CooBenchRunnerMessage >> withoutPackageScope [
 			 add: CoLiteralMessageHeuristic new;
 			 add: CoGlobalVariableMessageHeuristic new;
 			 add: CoVariableWithTypeNameMessageHeuristic new;
-			 "add: CoVariableValueMessageHeuristic new;"add:
-				 CoUnknownMessageHeuristic new;
+			 add: CoUnknownMessageHeuristic new;
 			 build).
 	benchmark := CooStaticBenchmarksMessage new
-		             name: 'Flat semantic global variable';
+		             name: '';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.

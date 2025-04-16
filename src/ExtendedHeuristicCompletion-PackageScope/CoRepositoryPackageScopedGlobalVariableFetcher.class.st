@@ -8,9 +8,9 @@ Class {
 		'packages',
 		'completionClass'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-PackageScope',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Global-Fetchers',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'PackageScope'
+	#tag : 'Global-Fetchers'
 }
 
 { #category : 'accessing' }
