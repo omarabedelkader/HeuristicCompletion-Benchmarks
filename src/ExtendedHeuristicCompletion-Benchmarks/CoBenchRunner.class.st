@@ -1,3 +1,6 @@
+"
+a simple interface for managing the running of the benchs, look to my subclasses to know more
+"
 Class {
 	#name : 'CoBenchRunner',
 	#superclass : 'Object',
@@ -55,4 +58,56 @@ CoBenchRunner >> run [
 	results := Dictionary new.
 	{ baseline } , others do: [ :s |
 		results at: s put: (self perform: s) ]
+]
+
+{ #category : 'benchmarks' }
+CoBenchRunner >> withAdaptiveWeightedMetaFetcher [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoBenchRunner >> withDependency [
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoBenchRunner >> withGlobalSorterScope [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoBenchRunner >> withOllamaReRank [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoBenchRunner >> withPackageScope [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoBenchRunner >> withReverseDependency [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoBenchRunner >> withTransitiveDependency [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoBenchRunner >> withWeightedMetaFetcher [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
+CoBenchRunner >> withoutPackageScope [
+	^ self subclassResponsibility
 ]
