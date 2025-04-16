@@ -1,5 +1,29 @@
 "
 ```
+comparingSpecTest
+
+	<script>
+	CooBenchRunnerVariables new
+		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
+		baseline: #withoutPackageScope;
+		others: { #withPackageScope };
+		run
+```
+
+
+
+```
+testcomparingdependcyandreverse
+
+	<script>
+	CooBenchRunnerVariables new
+		package: CompletionContextTest package;
+		baseline: #withoutPackageScope;
+		others: { #withWeightedMetaFetcher };
+		run
+```
+
+```
 
 CooBenchRunner new
 	package: SpPresenter package;
@@ -47,76 +71,12 @@ CooBenchRunnerVariables class >> allResultsFor: aColOfPackageNames [
 	^ {  runs . string }
 ]
 
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> comparing [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: SpPresenter package;
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> comparingRBTests [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> comparingRBTrans [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> comparingSpecTest [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
 { #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1 [
 
 	<script>
 	^ (self allLatexResultsFor: {'Spec2-Core'.'Spec2-Tests'.'Refactoring-Transformations'.'Refactoring-Transformations-Tests'.'NECompletion'. 'NECompletion-Tests' })
 		  inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1test [
-
-	<script>
-	^ (self allResultsFor: { 'NECompletion-Tests' })
-		  inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1test2 [
-
-	<script>
-	^ (self allResultsFor: { 'ExtendedHeuristicCompletion-Analyser' })
-		  inspect 
 ]
 
 { #category : 'api' }
@@ -228,17 +188,6 @@ CooBenchRunnerVariables class >> stringResultForABenchCollection: aCol [
 					s << v mmrString.
 				  s cr ].
 			  s cr ] ]
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerVariables class >> testcomparingdependcyandreverse [
-
-	<script>
-	CooBenchRunnerVariables new
-		package: CompletionContextTest package;
-		baseline: #withoutPackageScope;
-		others: { #withWeightedMetaFetcher };
-		run
 ]
 
 { #category : 'experience' }

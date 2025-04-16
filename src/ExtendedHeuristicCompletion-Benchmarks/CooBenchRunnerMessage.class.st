@@ -47,73 +47,10 @@ CooBenchRunnerMessage class >> allResultsFor: aColOfPackageNames [
 	^ {  runs . string }
 ]
 
-{ #category : 'examples ' }
-CooBenchRunnerMessage class >> comparing [
-
-	<script>
-	CooBenchRunnerVariables new
-		package: CompletionSorter package;
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerMessage class >> comparingRBTests [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations-Tests');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerMessage class >> comparingRBTrans [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Refactoring-Transformations');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
-{ #category : 'examples ' }
-CooBenchRunnerMessage class >> comparingSpecTest [
-
-	<script> 
-
-	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
-		baseline: #withoutPackageScope;
-		others: { #withPackageScope };
-		run.
-]
-
 { #category : 'iwst' }
 CooBenchRunnerMessage class >> iwst1 [
 	<script>
 	^ (self allResultsFor: { 'NECompletion-Tests' }) inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerMessage class >> iwst1test [
-
-	<script>
-	^ (self allResultsFor: { 'Refactoring-Transformations-Tests' })
-		  inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerMessage class >> iwst1test2 [
-
-	<script>
-	^ (self allResultsFor: { 'ExtendedHeuristicCompletion-Analyser' })
-		  inspect 
 ]
 
 { #category : 'api' }
