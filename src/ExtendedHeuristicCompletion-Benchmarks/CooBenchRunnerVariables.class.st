@@ -71,6 +71,30 @@ CooBenchRunnerVariables class >> allResultsFor: aColOfPackageNames [
 	^ {  runs . string }
 ]
 
+{ #category : 'api' }
+CooBenchRunnerVariables class >> comparingNECompletionOllama [
+
+	<script>
+	CooBenchRunnerVariables new
+		package: (PackageOrganizer default packageNamed: 'NECompletion-Tests');
+		baseline: #withoutPackageScope;
+		others: { #withOllamaReRank };
+		run
+
+]
+
+{ #category : 'api' }
+CooBenchRunnerVariables class >> comparingSpecTest [
+
+	<script>
+	CooBenchRunnerVariables new
+		package: (PackageOrganizer default packageNamed: 'Spec2-Tests');
+		baseline: #withoutPackageScope;
+		others: { #withPackageScope };
+		run
+
+]
+
 { #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1 [
 
