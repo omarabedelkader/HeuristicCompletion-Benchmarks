@@ -1,3 +1,55 @@
+"
+```smalltalk
+visitMessageNode: aMessageNode
+
+	| normalFetcher reRankFetcher resultSet |
+	completionContext completionToken ifEmpty: [
+		^ super visitMessageNode: aMessageNode ].
+
+	normalFetcher := self messageHeuristic
+		                 fetcherFor: aMessageNode
+		                 inContext: completionContext.
+
+	reRankFetcher := CoOllamaReRankFetcher new
+		                 decoree: normalFetcher;
+		                 completionContext: completionContext;
+		                 yourself.
+
+	resultSet := CoResultSet fetcher:
+		             reRankFetcher withoutRepetition withNarrowHistory.
+
+	resultSet filter: (CoBeginsWithFilter
+			 caseSensitive: NECPreferences caseSensitive
+			 filterString: completionContext completionToken).
+
+	resultSet replaceFilterWith:
+		(CoCaseSensitiveBeginsWithFilter filterString:
+			 completionContext completionToken).
+
+	^ resultSet
+```
+
+
+```smalltalk
+visitVariableNode: aNode
+
+	| base reRanker resultSet |
+	base := super visitVariableNode: aNode. ""← builds the normal fetcher""
+	reRanker := CoOllamaReRankFetcher new
+		            decoree: base fetcher;
+		            ""wrap it""completionContext: completionContext;
+		            yourself.
+
+	resultSet := CoResultSet fetcher:
+		             reRanker withoutRepetition withNarrowHistory.
+
+	resultSet filter: (CoBeginsWithFilter
+			 caseSensitive: NECPreferences caseSensitive
+			 filterString: completionContext completionToken).
+
+	^ resultSet
+```
+"
 Class {
 	#name : 'CoOllamaReRankFetcher',
 	#superclass : 'CoFetcherDecorator',
