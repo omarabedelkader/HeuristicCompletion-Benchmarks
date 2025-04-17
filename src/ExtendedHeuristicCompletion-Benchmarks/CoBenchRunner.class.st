@@ -78,6 +78,12 @@ CoBenchRunner >> withGlobalSorterScope [
 ]
 
 { #category : 'experience' }
+CoBenchRunner >> withLateralDependency [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
 CoBenchRunner >> withOllamaReRank [
 
 	^ self subclassResponsibility

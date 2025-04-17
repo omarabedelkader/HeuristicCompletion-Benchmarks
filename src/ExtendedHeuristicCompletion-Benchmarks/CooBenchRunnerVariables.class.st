@@ -278,6 +278,29 @@ CooBenchRunnerVariables >> withGlobalSorterScope [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerVariables >> withLateralDependency [
+	"self new 
+		package: AnalyserData1 package;
+		withReverseDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoLateralPackageGlobalVariableFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Lateral Dependency';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withOllamaReRank [
 	"self new 
 		package: AnalyserData1 package;
