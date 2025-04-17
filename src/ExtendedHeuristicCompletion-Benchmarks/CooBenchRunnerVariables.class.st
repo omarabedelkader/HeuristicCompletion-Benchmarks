@@ -76,9 +76,9 @@ CooBenchRunnerVariables class >> comparingNECompletionOllama [
 
 	<script>
 	CooBenchRunnerVariables new
-		package: (PackageOrganizer default packageNamed: 'NECompletion-Tests');
+		package: (PackageOrganizer default packageNamed: 'NECompletion');
 		baseline: #withoutPackageScope;
-		others: { #withOllamaReRank };
+		others: { #withPackageScope. #withDependency. #withLateralDependency };
 		run
 
 ]
@@ -176,7 +176,7 @@ CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 				  package: pack;
 				  baseline: #withoutPackageScope;
 				  others:
-					  { #withPackageScope. #withDependency. #withReverseDependency.
+					  { #withPackageScope. #withDependency. #withLateralDependency .#withReverseDependency.
 					  #withTransitiveDependency. #withWeightedMetaFetcher. #withAdaptiveWeightedMetaFetcher };
 				  run ]
 ]
