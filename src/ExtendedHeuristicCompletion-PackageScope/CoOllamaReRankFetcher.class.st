@@ -58,9 +58,9 @@ Class {
 		'completionClass',
 		'astNode'
 	],
-	#category : 'ExtendedHeuristicCompletion-OllamaAPI-Fetcher',
-	#package : 'ExtendedHeuristicCompletion-OllamaAPI',
-	#tag : 'Fetcher'
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Global-Fetchers',
+	#package : 'ExtendedHeuristicCompletion-PackageScope',
+	#tag : 'Global-Fetchers'
 }
 
 { #category : 'enumerating' }

@@ -24,9 +24,8 @@ Class {
 	#classInstVars : [
 		'defaultModel'
 	],
-	#category : 'ExtendedHeuristicCompletion-OllamaAPI-OllamaAPI',
-	#package : 'ExtendedHeuristicCompletion-OllamaAPI',
-	#tag : 'OllamaAPI'
+	#category : 'ExtendedHeuristicCompletion-OllamaAPI',
+	#package : 'ExtendedHeuristicCompletion-OllamaAPI'
 }
 
 { #category : 'accessing' }
