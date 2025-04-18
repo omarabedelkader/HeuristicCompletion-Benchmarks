@@ -103,6 +103,56 @@ CooBenchRunnerVariables class >> iwst1 [
 		  inspect
 ]
 
+{ #category : 'iwst' }
+CooBenchRunnerVariables class >> iwst1final [
+
+	<script>
+	^ (self allLatexResultsFor: {'Spec2-Core'.'Spec2-Tests'})
+		  inspect
+]
+
+{ #category : 'iwst' }
+CooBenchRunnerVariables class >> iwst1finalspec [
+
+	<script>
+^ (self allLatexResultsFor: {
+    'Spec2-Adapters-Morphic'.
+    'Spec2-Adapters-Morphic-ListView'.
+    'Spec2-Adapters-Morphic-Tests'.
+    'Spec2-Adapters-Stub'.
+    'Spec2-Backend-Tests'.
+    'Spec2-Code'.
+    'Spec2-Code-Backend-Tests'.
+    'Spec2-Code-Commands'.
+    'Spec2-Code-Diff'.
+    'Spec2-Code-Diff-Morphic'.
+    'Spec2-Code-Diff-Tests'.
+    'Spec2-Code-Morphic'.
+    'Spec2-Code-Tests'.
+    'Spec2-CommandLine'.
+    'Spec2-Commander2'.
+    'Spec2-Commander2-Tests'.
+    'Spec2-Commands'.
+    'Spec2-CommonWidgets'.
+    'Spec2-Core'.
+    'Spec2-Dialogs'.
+    'Spec2-Dialogs-Tests'.
+    'Spec2-Examples'.
+    'Spec2-Interactions'.
+    'Spec2-Layout'.
+    'Spec2-ListView'.
+    'Spec2-ListView-Tests'.
+    'Spec2-Microdown'.
+    'Spec2-Morphic'.
+    'Spec2-Morphic-Backend-Tests'.
+    'Spec2-Morphic-Examples'.
+    'Spec2-Morphic-Tests'.
+    'Spec2-Tests'.
+    'Spec2-Transmission'
+}) inspect
+
+]
+
 { #category : 'api' }
 CooBenchRunnerVariables class >> latexTableResultForABenchCollection: aCol [
     "Produce a LaTeX table showing the results from each benchmark in aCol."
@@ -169,7 +219,7 @@ CooBenchRunnerVariables class >> latexTableResultForABenchCollection: aCol [
 ]
 
 { #category : 'utils' }
-CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
+CooBenchRunnerVariables class >> runComparisonForPackages1: aCol [
 
 	^ aCol collect: [ :pack |
 			  self new
@@ -178,6 +228,18 @@ CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 				  others:
 					  { #withPackageScope. #withDependency. #withLateralDependency .#withReverseDependency.
 					  #withTransitiveDependency. #withWeightedMetaFetcher. #withAdaptiveWeightedMetaFetcher };
+				  run ]
+]
+
+{ #category : 'utils' }
+CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
+
+	^ aCol collect: [ :pack |
+			  self new
+				  package: pack;
+				  baseline: #withoutPackageScope;
+				  others:
+					  { #withPackageScope};
 				  run ]
 ]
 
