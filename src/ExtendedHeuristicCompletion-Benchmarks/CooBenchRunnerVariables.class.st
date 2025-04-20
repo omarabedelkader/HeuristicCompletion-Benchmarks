@@ -55,35 +55,26 @@ Class {
 CooBenchRunnerVariables class >> iwst1 [
 
 	<script>
-	^ (self allResultsFor: { 'NECompletion-Tests' }) inspect
+	^ (self new allResultsFor: { 'NECompletion-Tests' }) inspect
 ]
 
 { #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1finalIceberg [
 
-<script>
-^ (self allResultsFor: {
-    'Iceberg'.
-    'Iceberg-Libgit'.
-    'Iceberg-Libgit-Filetree'.
-    'Iceberg-Libgit-Tonel'.
-    'Iceberg-Metacello-Integration'.
-    'Iceberg-Plugin'.
-    'Iceberg-Plugin-Github'.
-    'Iceberg-Plugin-Migration'.
-    'Iceberg-Plugin-Pharo'.
-    'Iceberg-TipUI'.
-    'Iceberg-TipUI-SnapShotBrowser'
-}) inspect
-
-
+	<script>
+	^ (self new allResultsFor:
+		   { 'Iceberg'. 'Iceberg-Libgit'. 'Iceberg-Libgit-Filetree'.
+		   'Iceberg-Libgit-Tonel'. 'Iceberg-Metacello-Integration'.
+		   'Iceberg-Plugin'. 'Iceberg-Plugin-Github'. 'Iceberg-Plugin-Migration'.
+		   'Iceberg-Plugin-Pharo'. 'Iceberg-TipUI'. 'Iceberg-TipUI-SnapShotBrowser' })
+		  inspect
 ]
 
 { #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1finalmoose [
 
 	<script>
-	^ (self allResultsFor: { 'Moose-Blueprint-Invocations-Models'.
+	^ (self new allResultsFor: { 'Moose-Blueprint-Invocations-Models'.
 		   'Moose-Blueprint-Models'. 'Moose-Blueprint-Models-Tests'.
 		   'Moose-Blueprint-Visualization-Models'.
 		   'Moose-Configuration'. 'Moose-Core'. 'Moose-Core-Generator'.
@@ -135,7 +126,7 @@ CooBenchRunnerVariables class >> iwst1finalmoose [
 CooBenchRunnerVariables class >> iwst1finalroassal [
 
 	<script>
-	^ (self allResultsFor:
+	^ (self new allResultsFor:
 		   { 'Roassal'. 'Roassal-Animation'. 'Roassal-Animation-Tests'.
 		   'Roassal-BaselineMap'. 'Roassal-BaselineMap-Tests'.
 		   'Roassal-Builders'. 'Roassal-Chart'. 'Roassal-Chart-Examples'.
@@ -162,7 +153,7 @@ CooBenchRunnerVariables class >> iwst1finalroassal [
 CooBenchRunnerVariables class >> iwst1finalseaside [
 
 	<script>
-	^ (self allResultsFor:
+	^ (self new allResultsFor:
 		   { 'Seaside-Ajaxifier-Core'. 'Seaside-Canvas'. 'Seaside-Component'.
 		   'Seaside-Continuation'. 'Seaside-Core'. 'Seaside-Development'.
 		   'Seaside-Email'. 'Seaside-Environment'. 'Seaside-Examples'.
@@ -189,7 +180,7 @@ CooBenchRunnerVariables class >> iwst1finalseaside [
 CooBenchRunnerVariables class >> iwst1finalspec [
 
 	<script>
-	^ (self allResultsFor:
+	^ (self new allResultsFor:
 		   { 'Spec2-Adapters-Morphic'. 'Spec2-Adapters-Morphic-ListView'.
 		   'Spec2-Adapters-Morphic-Tests'. 'Spec2-Adapters-Stub'.
 		   'Spec2-Backend-Tests'. 'Spec2-Code'. 'Spec2-Code-Backend-Tests'.
@@ -221,47 +212,6 @@ CooBenchRunnerVariables class >> runVariableOnNeCompletionPackage [
 	^ (CooStaticBenchmarksVariables 
 			runOnPackage: (PackageOrganizer default packageNamed: 'NECompletion')
 			heuristics: [:b | b]) inspect. 
-]
-
-{ #category : 'api' }
-CooBenchRunnerVariables >> allResultsFor: aColOfPackageNames [
-
-	| packages runs string latex |
-	packages := aColOfPackageNames collect: [ :p |
-		            PackageOrganizer default packageNamed: p ].
-	runs := self runComparisonForPackages: packages.
-	string := self stringResultForABenchCollection: runs.
-	latex := self latexTableResultForABenchCollection: runs.
-	^ {
-		  runs.
-		  string.
-		  latex }
-]
-
-{ #category : 'utils' }
-CooBenchRunnerVariables >> runComparisonForPackages: aCol [
-
-	^ aCol collect: [ :pack |
-			  self
-				  package: pack;
-				  baseline: #withoutPackageScope;
-				  others: { #withPackageScope };
-				  run ]
-]
-
-{ #category : 'utils' }
-CooBenchRunnerVariables >> stringResultForABenchCollection: aCol [
-
-	^ String streamContents: [ :s |
-		  aCol do: [ :p |
-			  s << p package name.
-			  s cr.
-			  p results keysAndValuesDo: [ :k :v |
-				 	s << k asString. 
-					s cr.  
-					s << v mmrString.
-				  s cr ].
-			  s cr ] ]
 ]
 
 { #category : 'experience' }

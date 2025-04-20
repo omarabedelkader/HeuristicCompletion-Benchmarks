@@ -14,6 +14,21 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
+{ #category : 'api' }
+CoBenchRunner >> allResultsFor: aColOfPackageNames [
+
+	| packages runs string latex |
+	packages := aColOfPackageNames collect: [ :p |
+		            PackageOrganizer default packageNamed: p ].
+	runs := self runComparisonForPackages: packages.
+	string := self stringResultForABenchCollection: runs.
+	latex := self latexTableResultForABenchCollection: runs.
+	^ {
+		  runs.
+		  string.
+		  latex }
+]
+
 { #category : 'baselines' }
 CoBenchRunner >> baseline: aSymbol [
 
@@ -123,6 +138,32 @@ CoBenchRunner >> run [
 	results := Dictionary new.
 	{ baseline } , others do: [ :s |
 		results at: s put: (self perform: s) ]
+]
+
+{ #category : 'utils' }
+CoBenchRunner >> runComparisonForPackages: aCol [
+
+	^ aCol collect: [ :pack |
+			  self
+				  package: pack;
+				  baseline: #withoutPackageScope;
+				  others: { #withPackageScope };
+				  run ]
+]
+
+{ #category : 'utils' }
+CoBenchRunner >> stringResultForABenchCollection: aCol [
+
+	^ String streamContents: [ :s |
+		  aCol do: [ :p |
+			  s << p package name.
+			  s cr.
+			  p results keysAndValuesDo: [ :k :v |
+				 	s << k asString. 
+					s cr.  
+					s << v mmrString.
+				  s cr ].
+			  s cr ] ]
 ]
 
 { #category : 'experience' }
