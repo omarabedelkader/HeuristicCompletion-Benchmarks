@@ -112,6 +112,59 @@ CooBenchRunnerVariables class >> iwst1final [
 ]
 
 { #category : 'iwst' }
+CooBenchRunnerVariables class >> iwst1finalseaside [
+
+<script>
+^ (self allLatexResultsFor: {
+    'Seaside-Ajaxifier-Core'.
+    'Seaside-Canvas'.
+    'Seaside-Component'.
+    'Seaside-Continuation'.
+    'Seaside-Core'.
+    'Seaside-Development'.
+    'Seaside-Email'.
+    'Seaside-Environment'.
+    'Seaside-Examples'.
+    'Seaside-Flow'.
+    'Seaside-JSON-Core'.
+    'Seaside-Pharo-Canvas'.
+    'Seaside-Pharo-Continuation'.
+    'Seaside-Pharo-Core'.
+    'Seaside-Pharo-Development'.
+    'Seaside-Pharo-Email'.
+    'Seaside-Pharo-Environment'.
+    'Seaside-Pharo-Flow'.
+    'Seaside-Pharo-JSON-Core'.
+    'Seaside-Pharo-Tools-Web'.
+    'Seaside-Pharo-Welcome'.
+    'Seaside-Pharo100-Tools-Spec2'.
+    'Seaside-Pharo90-REST-Core'.
+    'Seaside-REST-Core'.
+    'Seaside-RenderLoop'.
+    'Seaside-Session'.
+    'Seaside-Tests-Canvas'.
+    'Seaside-Tests-Component'.
+    'Seaside-Tests-Core'.
+    'Seaside-Tests-Environment'.
+    'Seaside-Tests-Flow'.
+    'Seaside-Tests-Functional'.
+    'Seaside-Tests-Pharo-Canvas'.
+    'Seaside-Tests-Pharo-Continuation'.
+    'Seaside-Tests-Pharo-Core'.
+    'Seaside-Tests-Pharo-Functional'.
+    'Seaside-Tests-RenderLoop'.
+    'Seaside-Tests-Session'.
+    'Seaside-Tools-Core'.
+    'Seaside-Tools-Web'.
+    'Seaside-Welcome'.
+    'Seaside-Widgets'.
+    'Seaside-Zinc-Core'.
+    'Seaside-Zinc-Pharo'
+}) inspect
+
+]
+
+{ #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1finalspec [
 
 	<script>
