@@ -74,13 +74,6 @@ CooBenchRunnerVariables class >> iwst1 [
 ]
 
 { #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1final [
-
-	<script>
-	^ (self allResultsFor: { 'Spec2-Tests' }) inspect
-]
-
-{ #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1finalIceberg [
 
 <script>
