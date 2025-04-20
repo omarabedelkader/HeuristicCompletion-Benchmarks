@@ -112,6 +112,67 @@ CooBenchRunnerVariables class >> iwst1final [
 ]
 
 { #category : 'iwst' }
+CooBenchRunnerVariables class >> iwst1finalroassal [
+
+<script>
+^ (self allLatexResultsFor: {
+    'Roassal'.
+    'Roassal-Animation'.
+    'Roassal-Animation-Tests'.
+    'Roassal-BaselineMap'.
+    'Roassal-BaselineMap-Tests'.
+    'Roassal-Builders'.
+    'Roassal-Chart'.
+    'Roassal-Chart-Examples'.
+    'Roassal-Chart-Tests'.
+    'Roassal-Class-Examples'.
+    'Roassal-Colors'.
+    'Roassal-DSM'.
+    'Roassal-Event'.
+    'Roassal-Examples'.
+    'Roassal-Experimental'.
+    'Roassal-Exporters'.
+    'Roassal-Exporters-Examples'.
+    'Roassal-Exporters-Tests'.
+    'Roassal-FlameGraph-Examples'.
+    'Roassal-Global-Tests'.
+    'Roassal-Inspector'.
+    'Roassal-Inspector-Tests'.
+    'Roassal-Interaction'.
+    'Roassal-Interaction-Tests'.
+    'Roassal-LayoutStudio'.
+    'Roassal-LayoutStudio-Tests'.
+    'Roassal-Layouts'.
+    'Roassal-Layouts-Tests'.
+    'Roassal-Layouts-Util'.
+    'Roassal-Legend'.
+    'Roassal-Legend-Examples'.
+    'Roassal-Menu'.
+    'Roassal-Mondrian'.
+    'Roassal-Pie'.
+    'Roassal-Pie-Examples'.
+    'Roassal-SVG'.
+    'Roassal-SVG-Examples'.
+    'Roassal-SVG-Tests'.
+    'Roassal-Shapes'.
+    'Roassal-Shapes-Tests'.
+    'Roassal-Spec'.
+    'Roassal-Spec-Examples'.
+    'Roassal-Spec-Morphic'.
+    'Roassal-Spec-Tests'.
+    'Roassal-Sunburst'.
+    'Roassal-Sunburst-Examples'.
+    'Roassal-TreeMap'.
+    'Roassal-TreeMap-Examples'.
+    'Roassal-UML'.
+    'Roassal-UML-Calypso'.
+    'Roassal-UML-Examples'.
+    'Roassal-UML-Tests'
+}) inspect
+
+]
+
+{ #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1finalspec [
 
 	<script>
