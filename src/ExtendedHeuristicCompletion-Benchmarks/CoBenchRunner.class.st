@@ -14,6 +14,16 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
+{ #category : 'as yet unclassified' }
+CoBenchRunner class >> iwst1 [
+	^ self subclassResponsibility
+]
+
+{ #category : 'as yet unclassified' }
+CoBenchRunner class >> runVariableOnNeCompletionPackage [
+	^ self subclassResponsibility
+]
+
 { #category : 'api' }
 CoBenchRunner >> allResultsFor: aColOfPackageNames [
 
@@ -43,7 +53,7 @@ CoBenchRunner >> computeRatio [
 		  (results at: others first) accuracyResults
 ]
 
-{ #category : 'api' }
+{ #category : 'reporting' }
 CoBenchRunner >> latexTableResultForABenchCollection: aCol [
     "Produce a LaTeX table showing the results from each benchmark in aCol."
     | header body mmrKeys footer rows |
@@ -140,7 +150,7 @@ CoBenchRunner >> run [
 		results at: s put: (self perform: s) ]
 ]
 
-{ #category : 'utils' }
+{ #category : 'utilities' }
 CoBenchRunner >> runComparisonForPackages: aCol [
 
 	^ aCol collect: [ :pack |
@@ -151,7 +161,7 @@ CoBenchRunner >> runComparisonForPackages: aCol [
 				  run ]
 ]
 
-{ #category : 'utils' }
+{ #category : 'utilities' }
 CoBenchRunner >> stringResultForABenchCollection: aCol [
 
 	^ String streamContents: [ :s |
