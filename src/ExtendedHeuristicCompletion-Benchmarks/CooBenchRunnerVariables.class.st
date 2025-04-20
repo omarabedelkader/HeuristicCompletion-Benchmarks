@@ -112,6 +112,87 @@ CooBenchRunnerVariables class >> iwst1final [
 ]
 
 { #category : 'iwst' }
+CooBenchRunnerVariables class >> iwst1finalmoose [
+
+<script>
+^ (self allLatexResultsFor: {
+    'Moose-Blueprint-Invocations-Models'.
+    'Moose-Blueprint-Models'.
+    'Moose-Blueprint-Models-Tests'.
+    'Moose-Blueprint-Visualization-Models'.
+    'Moose-Configuration'.
+    'Moose-Core'.
+    'Moose-Core-Generator'.
+    'Moose-Core-Tests'.
+    'Moose-Core-Tests-Entities'.
+    'Moose-Importers'.
+    'Moose-Importers-Tests'.
+    'Moose-Query'.
+    'Moose-Query-Extensions'.
+    'Moose-Query-Test'.
+    'Moose-SmalltalkImporter'.
+    'Moose-SmalltalkImporter-Core-Tests'.
+    'Moose-SmalltalkImporter-KGB-Tests'.
+    'Moose-SmalltalkImporter-LAN-Tests'.
+    'Moose-TestResources-KGB-P10InteractedReferee'.
+    'Moose-TestResources-KGB-P11FullReferee'.
+    'Moose-TestResources-KGB-P12FullReferencer'.
+    'Moose-TestResources-KGB-P13FullReferencer'.
+    'Moose-TestResources-KGB-P14FullReferee'.
+    'Moose-TestResources-KGB-P1FullReferencer'.
+    'Moose-TestResources-KGB-P2InteractedReferencerReferee'.
+    'Moose-TestResources-KGB-P3InteractedReferencer'.
+    'Moose-TestResources-KGB-P4FullInteracted'.
+    'Moose-TestResources-KGB-P5FullReferee'.
+    'Moose-TestResources-KGB-P6InteractedReferee'.
+    'Moose-TestResources-KGB-P7ReferencerReferee'.
+    'Moose-TestResources-KGB-P8FullReferencer'.
+    'Moose-TestResources-KGB-P9FullReferencer'.
+    'Moose-TestResources-KGB-PExtensions'.
+    'Moose-TestResources-LAN'.
+    'Moose-TestResources-LCOM'.
+    'Moose-TestResources-PackageBlueprint-P1'.
+    'Moose-TestResources-PackageBlueprint-P2'.
+    'Moose-TestResources-PackageBlueprint-P3'.
+    'Moose-TestResources-PackageBlueprint-P4'.
+    'Moose-TestResources-Reference-Core'.
+    'Moose-TestResources-Reference-External'.
+    'Moose-TestResources-Reference-PackageOne'.
+    'Moose-TestResources-Reference-PackageTwo'.
+    'Moose-WelcomeBrowser'.
+    'MooseIDE-Analysis'.
+    'MooseIDE-AttributedText'.
+    'MooseIDE-ButterflyMap'.
+    'MooseIDE-ButterflyMap-Tests'.
+    'MooseIDE-ClassBlueprint'.
+    'MooseIDE-CoUsageMap'.
+    'MooseIDE-CoUsageMap-Tests'.
+    'MooseIDE-Core'.
+    'MooseIDE-Core-Reporter'.
+    'MooseIDE-CriticBrowser'.
+    'MooseIDE-CriticBrowser-Tests'.
+    'MooseIDE-Dependency'.
+    'MooseIDE-Duplication'.
+    'MooseIDE-Export'.
+    'MooseIDE-Famix'.
+    'MooseIDE-LayerVisualization'.
+    'MooseIDE-Meta'.
+    'MooseIDE-NewTools'.
+    'MooseIDE-NewTools-Tests'.
+    'MooseIDE-QueriesBrowser'.
+    'MooseIDE-QueriesBrowser-Tests'.
+    'MooseIDE-QueriesDashboard'.
+    'MooseIDE-Spotter'.
+    'MooseIDE-Spotter-Tests'.
+    'MooseIDE-Tagging'.
+    'MooseIDE-Tagging-Tests'.
+    'MooseIDE-Tests'.
+    'MooseIDE-Visualization'
+}) inspect
+
+]
+
+{ #category : 'iwst' }
 CooBenchRunnerVariables class >> iwst1finalspec [
 
 	<script>
