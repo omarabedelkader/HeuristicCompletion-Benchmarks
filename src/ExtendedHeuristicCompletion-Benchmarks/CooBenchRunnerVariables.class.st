@@ -63,12 +63,17 @@ CooBenchRunnerVariables class >> allLatexResultsFor: aColOfPackageNames [
 
 { #category : 'api' }
 CooBenchRunnerVariables class >> allResultsFor: aColOfPackageNames [
-	
-	| packages runs string |
-	packages := aColOfPackageNames collect: [ :p |  PackageOrganizer default packageNamed: p ].
-	runs := self runComparisonForPackages: packages. 
-	string := self stringResultForABenchCollection: runs. 
-	^ {  runs . string }
+
+	| packages runs string latex |
+	packages := aColOfPackageNames collect: [ :p |
+		            PackageOrganizer default packageNamed: p ].
+	runs := self runComparisonForPackages: packages.
+	string := self stringResultForABenchCollection: runs.
+	latex := self latexTableResultForABenchCollection: runs.
+	^ {
+		  runs.
+		  string. 
+		  latex }
 ]
 
 { #category : 'api' }
@@ -107,8 +112,7 @@ CooBenchRunnerVariables class >> iwst1 [
 CooBenchRunnerVariables class >> iwst1final [
 
 	<script>
-	^ (self allLatexResultsFor: {'Spec2-Core'.'Spec2-Tests'})
-		  inspect
+	^ (self allResultsFor: { 'Spec2-Tests' }) inspect
 ]
 
 { #category : 'iwst' }
