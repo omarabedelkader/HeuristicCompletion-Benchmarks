@@ -55,7 +55,9 @@ Class {
 CooBenchRunnerVariables class >> iwst1 [
 
 	<script>
-	^ (self new allResultsFor: { 'NECompletion'.'NECompletion-Tests' }) inspect
+	self halt.
+	^ (self new allResultsFor: { 'NECompletion'. 'NECompletion-Tests' })
+		  inspect
 ]
 
 { #category : 'iwst' }

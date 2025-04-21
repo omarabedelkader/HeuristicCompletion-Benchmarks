@@ -14,16 +14,6 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
-{ #category : 'reporting' }
-CooBenchRunner class >> iwst1 [
-	^ self subclassResponsibility
-]
-
-{ #category : 'reporting' }
-CooBenchRunner class >> runVariableOnNeCompletionPackage [
-	^ self subclassResponsibility
-]
-
 { #category : 'api' }
 CooBenchRunner >> allResultsFor: aColOfPackageNames [
 
