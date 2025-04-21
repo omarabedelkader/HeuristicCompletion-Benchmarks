@@ -27,18 +27,16 @@ CoBenchRunner class >> runVariableOnNeCompletionPackage [
 { #category : 'api' }
 CoBenchRunner >> allResultsFor: aColOfPackageNames [
 
-	| packages runs string latex summary |
+	| packages runs string latex |
 	packages := aColOfPackageNames collect: [ :p |
 		            PackageOrganizer default packageNamed: p ].
 	runs := self runComparisonForPackages: packages.
 	string := self stringResultForABenchCollection: runs.
 	latex := self latexTableResultForABenchCollection: runs.
-	summary := self deltaSummaryForBenchCollection: runs.
 	^ {
 		  runs.
 		  string.
-		  latex.
-			summary }
+		  latex }
 ]
 
 { #category : 'baselines' }
@@ -53,66 +51,6 @@ CoBenchRunner >> computeRatio [
 	^ (results at: baseline) accuracyResults
 		  computeRatioWithReceiverAsBaselineComparedTo:
 		  (results at: others first) accuracyResults
-]
-
-{ #category : 'api' }
-CoBenchRunner >> deltaSummaryForBenchCollection: aCol [
-	"Compute the PDF‑style summary for the benchmarks contained in aCol.
-	 Assumes each bench has *one* baseline and *one* ‘other’ result.
-	 Answers a Dictionary with:
-	   #overall    -> Dictionary  metricSymbol → average Δ
-	   #categories -> Dictionary  familyName   → average ΔMMR
-	   #packages   -> OrderedCollection of { packageName . deltaDict }
-	                  sorted descending by ΔMMR."
-
-	| metrics deltas overall cats catStats sorted |
-	metrics := #('MMR' '2' '3' '4' '5' '6' '7' '8').
-	deltas  := OrderedCollection new.
-
-	"---- per‑package deltas -------------------------------------------"
-	aCol do: [ :bench |
-		| pkg baseVals otherVals delta |
-		pkg       := bench package name.
-		baseVals  := self numericValuesFromMmrString:
-					   ((bench results at: baseline) mmrString).
-		otherVals := self numericValuesFromMmrString:
-					   ((bench results at: others first) mmrString).
-		delta := Dictionary new.
-		1 to: metrics size do: [ :i |
-			delta at: (metrics at: i)
-				   put: ((otherVals at: i) - (baseVals at: i)) ].
-		deltas add: { pkg . delta } ].
-
-	"---- overall averages over every metric ---------------------------"
-	overall := Dictionary new.
-	metrics do: [ :m |
-		| vals |
-		vals := deltas collect: [ :pair | (pair second at: m) ].
-		overall at: m put: (vals sum / vals size) ].
-
-	"---- per‑family average ΔMMR -------------------------------------"
-	cats := Dictionary new.
-	deltas do: [ :pair |
-		| pkg fam |
-		pkg := pair first.
-		fam := (pkg findString: '-') > 0
-					ifTrue: [ pkg copyUpTo: $- ]
-					ifFalse: [ pkg ].
-		(cats at: fam ifAbsentPut: [ OrderedCollection new ])
-			add: (pair second at: 'MMR') ].
-	catStats := Dictionary new.
-	cats keysAndValuesDo: [ :fam :vals |
-		catStats at: fam put: (vals sum / vals size) ].
-
-	"---- sort packages by ΔMMR (descending) ---------------------------"
-	sorted := deltas asSortedCollection:
-		[ :a :b | (a second at: 'MMR') > (b second at: 'MMR') ].
-
-	^ Dictionary new
-		at: #overall    put: overall;
-		at: #categories put: catStats;
-		at: #packages   put: sorted;
-		yourself
 ]
 
 { #category : 'reporting' }
@@ -189,23 +127,6 @@ CoBenchRunner >> latexTableResultForABenchCollection: aCol [
 				          cr ].
 
 	^ header , body , footer
-]
-
-{ #category : 'api' }
-CoBenchRunner >> numericValuesFromMmrString: aString [
-	"Parse the eight numeric columns that come back from #mmrString
-	 and answer them as an OrderedCollection in column order:
-	   #( MMR 2 3 4 5 6 7 8 )."
-
-	| lines values |
-	lines  := aString lines.
-	values := OrderedCollection new.
-	lines do: [ :line |
-		| pieces |
-		pieces := line substrings.
-		(pieces size >= 2) ifTrue: [
-			values add: (pieces second asNumber) ] ].
-	^ values
 ]
 
 { #category : 'accessing' }
