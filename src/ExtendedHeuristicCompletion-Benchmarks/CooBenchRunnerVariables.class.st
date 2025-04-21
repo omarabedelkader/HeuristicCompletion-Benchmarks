@@ -197,15 +197,6 @@ CooBenchRunnerVariables class >> iwst1finalspec [
 ]
 
 { #category : 'examples to debug single run' }
-CooBenchRunnerVariables class >> runMessageOnNeCompletionPackage [
-	<script>
-	
-	^ (CooStaticBenchmarksMessage 
-			runOnPackage: (PackageOrganizer default packageNamed: 'NECompletion')
-			heuristics: [:b | b]) inspect. 
-]
-
-{ #category : 'examples to debug single run' }
 CooBenchRunnerVariables class >> runVariableOnNeCompletionPackage [
 	<script>
 	

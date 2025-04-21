@@ -36,15 +36,6 @@ CooBenchRunnerMessage class >> runMessageOnNeCompletionPackage [
 			heuristics: [:b | b]) inspect. 
 ]
 
-{ #category : 'examples to debug single run' }
-CooBenchRunnerMessage class >> runVariableOnNeCompletionPackage [
-	<script>
-	
-	^ (CooStaticBenchmarksVariables 
-			runOnPackage: (PackageOrganizer default packageNamed: 'NECompletion')
-			heuristics: [:b | b]) inspect. 
-]
-
 { #category : 'experience' }
 CooBenchRunnerMessage >> withDependency [
 	"self new 
