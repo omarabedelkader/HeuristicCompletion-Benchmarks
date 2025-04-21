@@ -205,6 +205,33 @@ CooBenchRunnerVariables class >> runVariableOnNeCompletionPackage [
 			heuristics: [:b | b]) inspect. 
 ]
 
+{ #category : 'api' }
+CooBenchRunnerVariables >> deltaResults [
+    "Return a Dictionary mapping each other‐heuristic symbol to
+     another Dictionary of metric→(other – baseline) deltas."
+
+    | deltas baselineResult |
+    baselineResult := results at: baseline.
+    deltas := Dictionary new.
+    
+    others do: [:otherSym |
+        | otherResult metricDeltas |
+        otherResult   := results at: otherSym.
+        metricDeltas := Dictionary new.
+        
+        "Assuming each result has an 'accuracyResults' which knows how
+         to expose its individual metric values:"
+        baselineResult accuracyResults keysAndValuesDo: [:metric :bVal |
+            | oVal |
+            oVal := (otherResult accuracyResults at: metric).
+            metricDeltas at: metric put: (oVal - bVal).
+        ].
+        
+        deltas at: otherSym put: metricDeltas
+    ].
+    ^ deltas
+]
+
 { #category : 'experience' }
 CooBenchRunnerVariables >> withAdaptiveWeightedMetaFetcher [
 	"self new 
