@@ -2,7 +2,7 @@
 a simple interface for managing the running of the benchs, look to my subclasses to know more
 "
 Class {
-	#name : 'CoBenchRunner',
+	#name : 'CooBenchRunner',
 	#superclass : 'Object',
 	#instVars : [
 		'package',
@@ -15,17 +15,17 @@ Class {
 }
 
 { #category : 'reporting' }
-CoBenchRunner class >> iwst1 [
+CooBenchRunner class >> iwst1 [
 	^ self subclassResponsibility
 ]
 
 { #category : 'reporting' }
-CoBenchRunner class >> runVariableOnNeCompletionPackage [
+CooBenchRunner class >> runVariableOnNeCompletionPackage [
 	^ self subclassResponsibility
 ]
 
 { #category : 'api' }
-CoBenchRunner >> allResultsFor: aColOfPackageNames [
+CooBenchRunner >> allResultsFor: aColOfPackageNames [
 
 	| packages runs string latex  |
 	packages := aColOfPackageNames collect: [ :p |
@@ -42,13 +42,13 @@ CoBenchRunner >> allResultsFor: aColOfPackageNames [
 ]
 
 { #category : 'baselines' }
-CoBenchRunner >> baseline: aSymbol [
+CooBenchRunner >> baseline: aSymbol [
 
 	baseline := aSymbol
 ]
 
 { #category : 'accessing' }
-CoBenchRunner >> computeRatio [
+CooBenchRunner >> computeRatio [
 
 	^ (results at: baseline) accuracyResults
 		  computeRatioWithReceiverAsBaselineComparedTo:
@@ -56,7 +56,7 @@ CoBenchRunner >> computeRatio [
 ]
 
 { #category : 'reporting' }
-CoBenchRunner >> latexTableResultForABenchCollection: aCol [
+CooBenchRunner >> latexTableResultForABenchCollection: aCol [
 	"Produce a LaTeX table showing the results from each benchmark in aCol."
 
 	| header body mmrKeys footer rows |
@@ -132,31 +132,31 @@ CoBenchRunner >> latexTableResultForABenchCollection: aCol [
 ]
 
 { #category : 'accessing' }
-CoBenchRunner >> others: aSymbolCollect [
+CooBenchRunner >> others: aSymbolCollect [
 
 	others := aSymbolCollect
 ]
 
 { #category : 'accessing' }
-CoBenchRunner >> package [
+CooBenchRunner >> package [
 
 	^ package
 ]
 
 { #category : 'accessing' }
-CoBenchRunner >> package: aPackage [
+CooBenchRunner >> package: aPackage [
 
 	package := aPackage
 ]
 
 { #category : 'accessing' }
-CoBenchRunner >> results [
+CooBenchRunner >> results [
 
 	^ results
 ]
 
 { #category : 'accessing' }
-CoBenchRunner >> run [
+CooBenchRunner >> run [
 
 	results := Dictionary new.
 	{ baseline } , others do: [ :s |
@@ -164,7 +164,7 @@ CoBenchRunner >> run [
 ]
 
 { #category : 'utilities' }
-CoBenchRunner >> runComparisonForPackages: aCol [
+CooBenchRunner >> runComparisonForPackages: aCol [
 
 	^ aCol collect: [ :pack |
 			  self
@@ -175,7 +175,7 @@ CoBenchRunner >> runComparisonForPackages: aCol [
 ]
 
 { #category : 'utilities' }
-CoBenchRunner >> stringResultForABenchCollection: aCol [
+CooBenchRunner >> stringResultForABenchCollection: aCol [
 
 	^ String streamContents: [ :s |
 		  aCol do: [ :p |
@@ -190,59 +190,59 @@ CoBenchRunner >> stringResultForABenchCollection: aCol [
 ]
 
 { #category : 'experience' }
-CoBenchRunner >> withAdaptiveWeightedMetaFetcher [
+CooBenchRunner >> withAdaptiveWeightedMetaFetcher [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CoBenchRunner >> withDependency [
+CooBenchRunner >> withDependency [
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CoBenchRunner >> withGlobalSorterScope [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
-CoBenchRunner >> withLateralDependency [
+CooBenchRunner >> withGlobalSorterScope [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CoBenchRunner >> withOllamaReRank [
+CooBenchRunner >> withLateralDependency [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CoBenchRunner >> withPackageScope [
+CooBenchRunner >> withOllamaReRank [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CoBenchRunner >> withReverseDependency [
+CooBenchRunner >> withPackageScope [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CoBenchRunner >> withTransitiveDependency [
+CooBenchRunner >> withReverseDependency [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CoBenchRunner >> withWeightedMetaFetcher [
+CooBenchRunner >> withTransitiveDependency [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CoBenchRunner >> withoutPackageScope [
+CooBenchRunner >> withWeightedMetaFetcher [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
+CooBenchRunner >> withoutPackageScope [
 	^ self subclassResponsibility
 ]

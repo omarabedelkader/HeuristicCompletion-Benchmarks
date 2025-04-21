@@ -22,7 +22,7 @@ CooBenchRunner new
 "
 Class {
 	#name : 'CooBenchRunnerMessage',
-	#superclass : 'CoBenchRunner',
+	#superclass : 'CooBenchRunner',
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
