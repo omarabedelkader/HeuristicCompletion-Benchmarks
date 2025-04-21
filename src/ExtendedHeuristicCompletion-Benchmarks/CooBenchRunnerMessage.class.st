@@ -1,17 +1,18 @@
 "
-```
+```smalltalk
+runMessageOnNeCompletionPackage
 
-CooBenchRunner new
-	package: SpPresenter package;
-	baseline: #classNamesWithoutPackageScope;
-	others: { #classNamesWithPackageScope };
-	run.
+	<script>
+	^ (CooStaticBenchmarksMessage
+		   runOnPackage:
+		   (PackageOrganizer default packageNamed: 'NECompletion')
+		   heuristics: [ :b | b ]) inspect
 	
 ```
 
 
 
-```
+```smalltalk
 CooBenchRunner new
    package: CompletionContextTest package;
    baseline: #WithoutPackageScope;
@@ -26,15 +27,6 @@ Class {
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
-
-{ #category : 'examples to debug single run' }
-CooBenchRunnerMessage class >> runMessageOnNeCompletionPackage [
-	<script>
-	
-	^ (CooStaticBenchmarksMessage 
-			runOnPackage: (PackageOrganizer default packageNamed: 'NECompletion')
-			heuristics: [:b | b]) inspect. 
-]
 
 { #category : 'experience' }
 CooBenchRunnerMessage >> withDependency [

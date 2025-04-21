@@ -1,5 +1,16 @@
 "
+```smalltalk
+runVariableOnNeCompletionPackage
+
+	<script>
+	^ (CooStaticBenchmarksVariables
+		   runOnPackage:
+		   (PackageOrganizer default packageNamed: 'NECompletion')
+		   heuristics: [ :b | b ]) inspect
 ```
+
+
+```smalltalk
 comparingSpecTest
 
 	<script>
@@ -11,31 +22,7 @@ comparingSpecTest
 ```
 
 
-
-```
-testcomparingdependcyandreverse
-
-	<script>
-	CooBenchRunnerVariables new
-		package: CompletionContextTest package;
-		baseline: #withoutPackageScope;
-		others: { #withWeightedMetaFetcher };
-		run
-```
-
-```
-
-CooBenchRunner new
-	package: SpPresenter package;
-	baseline: #classNamesWithoutPackageScope;
-	others: { #classNamesWithPackageScope };
-	run.
-	
-```
-
-
-
-```
+```smalltalk
 CooBenchRunner new
    package: CompletionContextTest package;
    baseline: #WithoutPackageScope;
@@ -296,15 +283,6 @@ CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 				  baseline: #withoutPackageScope;
 				  others: { #withPackageScope };
 				  run ]
-]
-
-{ #category : 'examples to debug single run' }
-CooBenchRunnerVariables class >> runVariableOnNeCompletionPackage [
-	<script>
-	
-	^ (CooStaticBenchmarksVariables 
-			runOnPackage: (PackageOrganizer default packageNamed: 'NECompletion')
-			heuristics: [:b | b]) inspect. 
 ]
 
 { #category : 'iwst' }
