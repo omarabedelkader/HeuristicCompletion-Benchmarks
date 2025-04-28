@@ -17,14 +17,17 @@ Class {
 { #category : 'iwst' }
 CooBenchRunner class >> allResultsFor: aColOfPackageNames [
 
-	| packages runs string latex |
+	| packages runs runs2 string latex |
 	packages := aColOfPackageNames collect: [ :p |
 		            PackageOrganizer default packageNamed: p ].
 	runs := self runComparisonForPackages: packages.
 	string := self stringResultForABenchCollection: runs.
+	runs2 := self runComparisonForPackages: packages.
+	runs2 do: [ :runner | runner results at: #delta put: runner computeDelta ].
 	latex := self latexTableResultForABenchCollection: runs.
 	^ {
 		  runs.
+		runs2.
 		  string.
 		  latex }
 ]
@@ -134,6 +137,42 @@ CooBenchRunner class >> stringResultForABenchCollection: aCol [
 CooBenchRunner >> baseline: aSymbol [
 
 	baseline := aSymbol
+]
+
+{ #category : 'accessing' }
+CooBenchRunner >> computeDelta [
+	"Return a Dictionary whose keys are the metric symbols of the benchmark and
+	 whose values are the absolute difference between the 'other' run and the
+	 baseline run (other – baseline)."
+
+	| baselineAcc otherAcc delta |
+	
+	"Grab the accuracy dictionaries produced by each run"
+	baselineAcc := (results at: baseline) mmr.
+	otherAcc    := (results at: others first) mmr.
+	
+	"Build a dictionary with the deltas"
+	delta := otherAcc- baselineAcc .
+	
+	^ delta
+
+]
+
+{ #category : 'accessing' }
+CooBenchRunner >> computeDelta2 [ 
+	"Compute the difference in accuracy between baseline and others."
+	
+	| baselineResults otherResults deltaResults |
+	baselineResults := (results at: baseline) accuracyResults.
+	otherResults := (results at: others first) accuracyResults.
+	deltaResults := Dictionary new.
+
+	baselineResults keysAndValuesDo: [ :key :baseValue |
+		| otherValue |
+		otherValue := otherResults at: key ifAbsent: [ 0 ].
+		deltaResults at: key put: (otherValue - baseValue) ].
+
+	^ deltaResults
 ]
 
 { #category : 'accessing' }
