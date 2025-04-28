@@ -141,38 +141,13 @@ CooBenchRunner >> baseline: aSymbol [
 
 { #category : 'accessing' }
 CooBenchRunner >> computeDelta [
-	"Return a Dictionary whose keys are the metric symbols of the benchmark and
-	 whose values are the absolute difference between the 'other' run and the
-	 baseline run (other – baseline)."
 
 	| baselineAcc otherAcc delta |
-	
-	"Grab the accuracy dictionaries produced by each run"
 	baselineAcc := (results at: baseline) mmr.
-	otherAcc    := (results at: others first) mmr.
-	
-	"Build a dictionary with the deltas"
-	delta := otherAcc- baselineAcc .
-	
+	otherAcc := (results at: others first) mmr.
+	delta := otherAcc - baselineAcc.
+
 	^ delta
-
-]
-
-{ #category : 'accessing' }
-CooBenchRunner >> computeDelta2 [ 
-	"Compute the difference in accuracy between baseline and others."
-	
-	| baselineResults otherResults deltaResults |
-	baselineResults := (results at: baseline) accuracyResults.
-	otherResults := (results at: others first) accuracyResults.
-	deltaResults := Dictionary new.
-
-	baselineResults keysAndValuesDo: [ :key :baseValue |
-		| otherValue |
-		otherValue := otherResults at: key ifAbsent: [ 0 ].
-		deltaResults at: key put: (otherValue - baseValue) ].
-
-	^ deltaResults
 ]
 
 { #category : 'accessing' }
