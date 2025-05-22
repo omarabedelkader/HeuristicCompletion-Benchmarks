@@ -47,7 +47,7 @@ CooBenchRunnerMessage >> withDependency [
 			 add: CoUnknownMessageHeuristic new;
 			 build).
 	benchmark := CooStaticBenchmarksMessage new
-		             name: '';
+		             name: 'Message with dependency';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
