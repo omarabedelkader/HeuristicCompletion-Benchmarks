@@ -1,6 +1,12 @@
 Class {
 	#name : 'AnalyserData1',
 	#superclass : 'Object',
+	#classVars : [
+		'Ans'
+	],
+	#pools : [
+		'AnalyserData1SharedPool'
+	],
 	#category : 'ExtendedHeuristicCompletion-Analyser-Data',
 	#package : 'ExtendedHeuristicCompletion-Analyser-Data'
 }
@@ -8,5 +14,17 @@ Class {
 { #category : 'as yet unclassified' }
 AnalyserData1 >> referToAnalyzer1 [
 
-	^ AnalyserData1 
+	^ AnalyserData1 foo
+]
+
+{ #category : 'as yet unclassified' }
+AnalyserData1 >> sharedCaller [
+
+	^ Ans foo
+]
+
+{ #category : 'as yet unclassified' }
+AnalyserData1 >> sharedPoolCaller [
+
+	^ Ansp1 foo
 ]
