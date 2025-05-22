@@ -107,8 +107,7 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	organizer := completionClass package organizer.
 
 	"First package level "
-	closeClassNames := completionClass package definedClasses collect: [
-		                   :each | each name ].
+	closeClassNames := completionClass package definedClasses collect: [ :each | each name ].
 	closeClassNames do: [ :closeClassName |
 		(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
 			aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].

@@ -164,7 +164,7 @@ CooStaticBenchmarks >> accuracyForCompletionIndex: completionIndexRange withPref
 ]
 
 { #category : 'inspector' }
-CooStaticBenchmarks >> accuracyInspectionResults [
+CooStaticBenchmarks >> accuracyInspectionResults: aBuilder [
 	"Generates a table displaying completion accuracy."
 
 	<inspectorPresentationOrder: 0 title: 'Accuracy'>
@@ -826,7 +826,7 @@ CooStaticBenchmarks >> maxPrefixSizeFor: receiver [
 ]
 
 { #category : 'inspector' }
-CooStaticBenchmarks >> memoryInspectionResults [
+CooStaticBenchmarks >> memoryInspectionResults: aBuilder [
 	"Displays memory usage statistics."
 	
 	<inspectorPresentationOrder: 3 title: 'Memory Usage'>
@@ -905,7 +905,7 @@ CooStaticBenchmarks >> mmrForPrefixSize: prefixSize [
 ]
 
 { #category : 'inspector' }
-CooStaticBenchmarks >> mmrInspectionResults [
+CooStaticBenchmarks >> mmrInspectionResults: aBuilder [
 	"Displays Mean Reciprocal Rank results."
 
 	<inspectorPresentationOrder: 4 title: 'MMR Results'>
@@ -998,7 +998,7 @@ CooStaticBenchmarks >> ndcgForPrefixSize: prefixSize [
 ]
 
 { #category : 'inspector' }
-CooStaticBenchmarks >> ndcgInspectionResults [
+CooStaticBenchmarks >> ndcgInspectionResults: aBuilder [
 	"Displays NDCG (ranking effectiveness) results."
 	
 	<inspectorPresentationOrder: 5 title: 'NDCG Results'>
@@ -1048,7 +1048,7 @@ CooStaticBenchmarks >> rankDistributionForPrefixSize: prefixSize [
 ]
 
 { #category : 'inspector' }
-CooStaticBenchmarks >> rankDistributionInspectionResults [
+CooStaticBenchmarks >> rankDistributionInspectionResults: aBuilder [
 
 	<inspectorPresentationOrder: 6 title: 'Rank Distribution'>
 	| table |
@@ -1079,7 +1079,7 @@ CooStaticBenchmarks >> recallAtK: k withPrefixSize: prefixSize [
 ]
 
 { #category : 'inspector' }
-CooStaticBenchmarks >> recallInspectionResults [
+CooStaticBenchmarks >> recallInspectionResults: aBuilder [
 	"Displays recall@K metrics."
 	
 	<inspectorPresentationOrder: 7 title: 'Recall@K Results'>
@@ -1138,7 +1138,7 @@ CooStaticBenchmarks >> startTimeMeasurement [
 ]
 
 { #category : 'inspector' }
-CooStaticBenchmarks >> timeInspectionResults [
+CooStaticBenchmarks >> timeInspectionResults: aBuilder [
 	"Generates a table displaying time-based benchmark results."
 
 	<inspectorPresentationOrder: 1 title: 'Time Results'>
@@ -1202,7 +1202,7 @@ CooStaticBenchmarks >> totalTimeForPrefix: prefixSize [
 ]
 
 { #category : 'inspector' }
-CooStaticBenchmarks >> totalTimeInspectionResults [
+CooStaticBenchmarks >> totalTimeInspectionResults: aBuilder [
 
 	<inspectorPresentationOrder: 2 title: 'Total Time'>
 	^ self totalTime asPresenter
