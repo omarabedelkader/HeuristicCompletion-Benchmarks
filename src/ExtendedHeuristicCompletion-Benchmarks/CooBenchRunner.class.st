@@ -113,8 +113,8 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 	^ aCol collect: [ :pack |
 			  self new
 				  package: pack;
-				  baseline: #withoutPackageScope;
-				  others: { #withPackageScope };
+				  baseline: #withSemantics;
+				  others: { #withGlobalSorterScope . #withPackageScope };
 				  run ]
 ]
 
@@ -232,6 +232,11 @@ CooBenchRunner >> withReverseDependency [
 ]
 
 { #category : 'experience' }
+CooBenchRunner >> withSemantics [
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
 CooBenchRunner >> withTransitiveDependency [
 
 	^ self subclassResponsibility
@@ -240,10 +245,5 @@ CooBenchRunner >> withTransitiveDependency [
 { #category : 'experience' }
 CooBenchRunner >> withWeightedMetaFetcher [
 
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
-CooBenchRunner >> withoutPackageScope [
 	^ self subclassResponsibility
 ]

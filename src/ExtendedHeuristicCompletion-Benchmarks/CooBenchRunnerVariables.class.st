@@ -210,7 +210,7 @@ CooBenchRunnerVariables >> withAdaptiveWeightedMetaFetcher [
 { #category : 'experience' }
 CooBenchRunnerVariables >> withDependency [
 	"self new 
-		package: AnalyserData1 package;
+		package: NECEntry package;
 		withDependency"
 
 	| builder benchmark |
@@ -233,7 +233,7 @@ CooBenchRunnerVariables >> withDependency [
 { #category : 'experience' }
 CooBenchRunnerVariables >> withGlobalSorterScope [
 	"self new 
-		package: AnalyserData1 package;
+		package: NECEntry package;
 		withGlobalSorterScope"
 
 	| builder benchmark |
@@ -344,6 +344,30 @@ CooBenchRunnerVariables >> withReverseDependency [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerVariables >> withSemantics [
+	"self new 
+		package: NECEntry package;
+		withoutPackageScope"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: CoGlobalVariablesHeuristic new;
+			 build).
+
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Without PackageScope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withTransitiveDependency [
 	"self new 
 		package: AnalyserData1 package;
@@ -383,28 +407,6 @@ CooBenchRunnerVariables >> withWeightedMetaFetcher [
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
 		             name: 'Weighted Dependency';
-		             scope: (CoBenchmarkPackage on: package);
-		             builder: builder;
-		             run.
-	^ benchmark
-]
-
-{ #category : 'experience' }
-CooBenchRunnerVariables >> withoutPackageScope [
-	"self new 
-		package: AnalyserData1 package;
-		withoutPackageScope"
-
-	| builder benchmark |
-	builder := CoASTHeuristicsResultSetBuilder new.
-	builder variablesHeuristic: (builder newHeuristicBuilder
-			 add: CoLocalScopeVariablesHeuristic new;
-			 add: CoWorkspaceVariablesHeuristic new;
-			 add: CoInstanceAccessibleVariablesHeuristic new;
-			 add: CoGlobalVariablesHeuristic new;
-			 build).
-	benchmark := CooStaticBenchmarksVariables new
-		             name: 'Without PackageScope';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.

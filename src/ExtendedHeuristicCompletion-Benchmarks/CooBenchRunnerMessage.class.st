@@ -55,7 +55,7 @@ CooBenchRunnerMessage >> withDependency [
 ]
 
 { #category : 'experience' }
-CooBenchRunnerMessage >> withoutPackageScope [
+CooBenchRunnerMessage >> withSemantics [
 	"self new 
 		package: AnalyserData1 package;
 		classNamesWithoutPackageScope"
