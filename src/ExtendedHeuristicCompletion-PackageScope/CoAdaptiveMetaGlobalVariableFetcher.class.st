@@ -41,9 +41,9 @@ Class {
 		'successCounts',
 		'completionClass'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Global-Fetchers',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Variables',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Global-Fetchers'
+	#tag : 'Variables'
 }
 
 { #category : 'initialization' }

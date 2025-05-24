@@ -208,6 +208,23 @@ CooBenchRunnerVariables >> withAdaptiveWeightedMetaFetcher [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerVariables >> withBaseline [
+	"self new 
+		package: NECEntry package;
+		withGlobalSorterScope"
+
+	| builder benchmark |
+	builder := CoGlobalSorterResultSetBuilder new.
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Flat global sorter variable';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	benchmark inspect.
+	^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withDependency [
 	"self new 
 		package: NECEntry package;
@@ -227,23 +244,6 @@ CooBenchRunnerVariables >> withDependency [
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
-	^ benchmark
-]
-
-{ #category : 'experience' }
-CooBenchRunnerVariables >> withGlobalSorterScope [
-	"self new 
-		package: NECEntry package;
-		withGlobalSorterScope"
-
-	| builder benchmark |
-	builder := CoGlobalSorterResultSetBuilder new.
-	benchmark := CooStaticBenchmarksVariables new
-		             name: 'Flat global sorter variable';
-		             scope: (CoBenchmarkPackage on: package);
-		             builder: builder;
-		             run.
-	benchmark inspect.
 	^ benchmark
 ]
 
@@ -347,7 +347,7 @@ CooBenchRunnerVariables >> withReverseDependency [
 CooBenchRunnerVariables >> withSemantics [
 	"self new 
 		package: NECEntry package;
-		withoutPackageScope"
+		withSemantics"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.

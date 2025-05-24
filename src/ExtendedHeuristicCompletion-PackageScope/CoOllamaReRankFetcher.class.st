@@ -58,9 +58,9 @@ Class {
 		'completionClass',
 		'astNode'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Global-Fetchers',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-Variables',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Global-Fetchers'
+	#tag : 'Variables'
 }
 
 { #category : 'enumerating' }

@@ -17,17 +17,14 @@ Class {
 { #category : 'iwst' }
 CooBenchRunner class >> allResultsFor: aColOfPackageNames [
 
-	| packages runs runs2 string latex |
+	| packages runs string latex |
 	packages := aColOfPackageNames collect: [ :p |
 		            PackageOrganizer default packageNamed: p ].
 	runs := self runComparisonForPackages: packages.
 	string := self stringResultForABenchCollection: runs.
-	runs2 := self runComparisonForPackages: packages.
-	runs2 do: [ :runner | runner results at: #delta put: runner computeDelta ].
 	latex := self latexTableResultForABenchCollection: runs.
 	^ {
 		  runs.
-		runs2.
 		  string.
 		  latex }
 ]
@@ -113,8 +110,8 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 	^ aCol collect: [ :pack |
 			  self new
 				  package: pack;
-				  baseline: #withSemantics;
-				  others: { #withGlobalSorterScope . #withPackageScope };
+				  baseline: #withBaseline ;
+				  others: {#withSemantics. #withPackageScope };
 				  run ]
 ]
 
@@ -197,13 +194,13 @@ CooBenchRunner >> withAdaptiveWeightedMetaFetcher [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withDependency [
+CooBenchRunner >> withBaseline [
+
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withGlobalSorterScope [
-
+CooBenchRunner >> withDependency [
 	^ self subclassResponsibility
 ]
 
