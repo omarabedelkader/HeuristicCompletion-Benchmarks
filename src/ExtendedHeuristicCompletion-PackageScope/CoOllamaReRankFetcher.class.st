@@ -70,13 +70,6 @@ CoOllamaReRankFetcher >> astNode: anASTNode [
 ]
 
 { #category : 'enumerating' }
-CoOllamaReRankFetcher >> buildReRankPayloadWith1: candidateStrings context: textSoFar [
-   ^ '{ "context": "', textSoFar, '", "candidates": [', 
-        (candidateStrings collect: [ :s | '"' , s , '"' ]) joinSeparatedBy: ',',
-       '] }'
-]
-
-{ #category : 'enumerating' }
 CoOllamaReRankFetcher >> buildReRankPayloadWith: candidateStrings context: textSoFar [
     "Return the string/payload sent to Ollama, 
      containing the typed user context and the candidate completions."
@@ -128,7 +121,7 @@ CoOllamaReRankFetcher >> entriesDo: aBlock [
 
 ]
 
-{ #category : 'enumerating' }
+{ #category : 'initialization' }
 CoOllamaReRankFetcher >> initialize [
 
    super initialize.
@@ -138,6 +131,7 @@ CoOllamaReRankFetcher >> initialize [
 { #category : 'enumerating' }
 CoOllamaReRankFetcher >> ollamaReRank: candidateEntries [
    | textUpToCaret candidateStrings payload api response newOrder |
+completionContext ifNil: [ ^ candidateEntries ].
    textUpToCaret := completionContext source
       copyFrom: 1
       to: completionContext position.
