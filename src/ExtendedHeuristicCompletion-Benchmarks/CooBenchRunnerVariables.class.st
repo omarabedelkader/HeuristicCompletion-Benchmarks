@@ -42,7 +42,7 @@ Class {
 CooBenchRunnerVariables class >> iwst1 [
 
 	<script>
-	^ (self allResultsFor: { 'NECompletion' . 'NECompletion-Tests' })
+	^ (self allResultsFor: {'NECompletion-Tests' })
 		  inspect
 ]
 

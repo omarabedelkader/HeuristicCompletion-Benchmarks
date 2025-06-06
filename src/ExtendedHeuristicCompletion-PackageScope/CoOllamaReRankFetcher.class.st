@@ -163,5 +163,13 @@ CoOllamaReRankFetcher >> ollamaReRank: candidateEntries [
 CoOllamaReRankFetcher >> parseReRankResponse: response forEntries: candidateEntries allStrings: candidateStrings [
    "parsing the response to reorder candidateEntries. 
     This must return an OrderedCollection of the same entries in the new rank order."
-   ^ self error: 'Not yet implemented.'
+      | newOrder |
+   newOrder := OrderedCollection new.
+
+   (response at: #ranked ifAbsent: [ candidateStrings ]) do: [:str |
+       | index |
+       index := candidateStrings indexOf: str ifAbsent: [ nil ].
+       index ifNotNil: [ newOrder add: (candidateEntries at: index) ] ].
+
+   ^ newOrder
 ]

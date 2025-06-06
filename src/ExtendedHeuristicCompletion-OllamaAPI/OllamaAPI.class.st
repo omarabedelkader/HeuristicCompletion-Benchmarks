@@ -275,7 +275,7 @@ OllamaAPI >> reRankCandidates: candidateEntries withContext: textSoFar [
 { #category : 'private' }
 OllamaAPI >> reRankWithPayload: aPayload [
    "Implement the logic you want here or integrate with the desired API."
-   ^ self error: 'Not yet implemented.'
+   ^ self sendReRankRequestToOllama: aPayload
 ]
 
 { #category : 'api' }
