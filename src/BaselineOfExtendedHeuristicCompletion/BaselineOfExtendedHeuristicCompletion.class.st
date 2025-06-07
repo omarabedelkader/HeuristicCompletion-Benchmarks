@@ -32,6 +32,8 @@ BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 							'ExtendedHeuristicCompletion-Benchmarks'].
 		spec package: 'ExtendedHeuristicCompletion-History'.
 		spec package: 'ExtendedHeuristicCompletion-OllamaAPI'.
+		spec package: 'ExtendedHeuristicCompletion-Model'
+			with: [ spec requires:'ExtendedHeuristicCompletion-PackageScope' ].
 	
 		"analyser"
 		spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.
