@@ -103,14 +103,13 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
 	"First package level"
 	self flag: #todo. "Do we sort them?"
-	
-	homePackageClassNames := completionClass package definedClasses collect: [ :each | each name ].
+	homePackageClassNames :=  SortedCollection sortUsing: [ :a :b | a <= b ].
+	completionClass package definedClasses do: [ :cls |  homePackageClassNames add: cls name ].
 	homePackageClassNames do: [ :closeClassName |
 		(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
 			aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
 
-
-	dependentClassNames := OrderedCollection new.
+	dependentClassNames := SortedCollection sortUsing: [ :a :b | a <= b ].
 	dependentPackages := self dependenciesOf: completionClass package name. 
 
 	dependentPackages do: [ :packageName |

@@ -11,6 +11,12 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Analyser-Data'
 }
 
+{ #category : 'accessing' }
+AnalyserData1 >> foo [  
+
+	^ AnalyserA 
+]
+
 { #category : 'as yet unclassified' }
 AnalyserData1 >> referToAnalyzer1 [
 

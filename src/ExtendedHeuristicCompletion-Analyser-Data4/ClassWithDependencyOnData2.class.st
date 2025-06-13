@@ -8,6 +8,7 @@ Class {
 { #category : 'methods for tests' }
 ClassWithDependencyOnData2 >> defineADependencyToAnalyserData1 [
 
+	
 	^ AnalyserData1
 ]
 
