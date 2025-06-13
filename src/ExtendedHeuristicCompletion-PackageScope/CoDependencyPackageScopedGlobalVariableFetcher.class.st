@@ -102,6 +102,8 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	organizer := completionClass package organizer.
 
 	"First package level"
+	self flag: #todo. "Do we sort them?"
+	
 	homePackageClassNames := completionClass package definedClasses collect: [ :each | each name ].
 	homePackageClassNames do: [ :closeClassName |
 		(closeClassName beginsWith: string caseSensitive: case) ifTrue: [

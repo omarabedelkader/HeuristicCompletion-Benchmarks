@@ -35,9 +35,9 @@ Class {
 	#classInstVars : [
 		'dependencies'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Variables',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-CandidatesForPharoInclusion',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Variables'
+	#tag : 'CandidatesForPharoInclusion'
 }
 
 { #category : 'class initialization' }
@@ -96,13 +96,7 @@ CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> dependenciesOf: aStr
 { #category : 'enumerating' }
 CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	| string case localClassNames dependentClassNames dependentPackages organizer keys |
-	completionClass isNil ifTrue: [
-		"Fallback to the global environment in case we do not have a target class"
-		^ self systemNavigation 
-				allGlobalNamesStartingWith: filter completionString
-				do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
-				caseSensitive: NECPreferences caseSensitive 
-	].
+	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
 	
 
 	string := filter completionString.
@@ -139,6 +133,15 @@ CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	keys do: [ :gName |
 		(gName beginsWith: string caseSensitive: case)
 			ifTrue: [ aBlock value: (NECGlobalEntry contents: gName node: astNode) ] ]
+]
+
+{ #category : 'enumerating' }
+CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> fallbackEntriesDo: aBlock [ 
+
+	^ self systemNavigation
+		allGlobalNamesStartingWith: filter completionString
+		do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
+		caseSensitive: NECPreferences caseSensitive
 ]
 
 { #category : 'accessing' }
