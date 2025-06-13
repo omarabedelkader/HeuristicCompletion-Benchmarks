@@ -94,21 +94,19 @@ CoDependencyPackageScopedGlobalVariableFetcher >> dependenciesOf: aString [
 { #category : 'enumerating' }
 CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| string case closeClassNames keys organizer dependentClassNames dependentPackages |
+	| string case homePackageClassNames keys organizer dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
 
 	string := filter completionString.
 	case := NECPreferences caseSensitive.
 	organizer := completionClass package organizer.
 
-	"First package level "
-	closeClassNames := completionClass package definedClasses collect: [ :each | each name ].
-	closeClassNames do: [ :closeClassName |
+	"First package level"
+	homePackageClassNames := completionClass package definedClasses collect: [ :each | each name ].
+	homePackageClassNames do: [ :closeClassName |
 		(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
 			aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
 
-	"Package of the project e.g that starts with the same tag bfore the - 
-	ExtendedHeuristicCompletion-PackageScope -> HeuristicCompletion"
 
 	dependentClassNames := OrderedCollection new.
 	dependentPackages := self dependenciesOf: completionClass package name. 
@@ -117,23 +115,27 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 		dependentClassNames addAll:
 			((organizer packageNamed: packageName ifAbsent: [  ])
 				 definedClasses collect: [ :each | each name ]) ].
-
+	self flag: #todo.
+	"should we not sort dependentClassNames?"
+	
 	dependentClassNames do: [ :closeClassName |
 		(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
 			aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
 
+	"if we blindly iterate the global environment i.e., delegating to the rest of the configuration,
+	it may happen that the global fetcher will return a class already seen. 
+	So we manage the global lookup here.
+	It may mean that the global fetcher could be working on keys and that it could 
+	be customized to support the semantics we want. This way we would avoid to redefine it locally."
 	keys := self systemNavigation environment keys asOrderedCollection.
-	closeClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
+	homePackageClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
 	dependentClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
-	"we could not use remove: ifAbsent: but this would hide something. 
-	Because I do not get why the navigation should not contain the same objects than before."
-
-	"Same as above this is the not the job of the fetcher to filter.
-	This is a pity because we cannot reuse the logic of systemNavigation because we should not 
-	modify the global environment."
 	keys do: [ :globalName |
 		(globalName beginsWith: string caseSensitive: case) ifTrue: [
 			aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
+	
+
+
 ]
 
 { #category : 'enumerating' }
