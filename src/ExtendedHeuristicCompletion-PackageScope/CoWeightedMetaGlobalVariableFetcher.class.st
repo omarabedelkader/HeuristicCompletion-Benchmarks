@@ -75,8 +75,7 @@ CoWeightedMetaGlobalVariableFetcher >> entriesDo: aBlock [
 					| name |
 					name := entry contents.
 					(suggestionsMap includesKey: name)
-						ifTrue: [
-						suggestionsMap at: name put: (suggestionsMap at: name) + weight ]
+						ifTrue: [ suggestionsMap at: name put: (suggestionsMap at: name) + weight ]
 						ifFalse: [ suggestionsMap at: name put: weight ] ] ].
 
 	(suggestionsMap associations

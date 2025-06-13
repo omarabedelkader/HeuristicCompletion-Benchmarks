@@ -50,9 +50,9 @@ Class {
 	#classInstVars : [
 		'dependencies'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Variables',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-CandidatesForPharoInclusion',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Variables'
+	#tag : 'CandidatesForPharoInclusion'
 }
 
 { #category : 'accessing' }
@@ -95,12 +95,7 @@ CoDependencyPackageScopedGlobalVariableFetcher >> dependenciesOf: aString [
 CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
 	| string case closeClassNames keys organizer dependentClassNames dependentPackages |
-	completionClass isNil ifTrue: [ "can we call another fetcher?"
-		^ self systemNavigation
-			  allGlobalNamesStartingWith: filter completionString
-			  do: [ :e |
-			  aBlock value: (NECGlobalEntry contents: e node: astNode) ]
-			  caseSensitive: NECPreferences caseSensitive ].
+	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
 
 	string := filter completionString.
 	case := NECPreferences caseSensitive.
@@ -139,6 +134,15 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	keys do: [ :globalName |
 		(globalName beginsWith: string caseSensitive: case) ifTrue: [
 			aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
+]
+
+{ #category : 'enumerating' }
+CoDependencyPackageScopedGlobalVariableFetcher >> fallbackEntriesDo: aBlock [ 
+
+	^ self systemNavigation
+		allGlobalNamesStartingWith: filter completionString
+		do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
+		caseSensitive: NECPreferences caseSensitive
 ]
 
 { #category : 'enumerating' }
