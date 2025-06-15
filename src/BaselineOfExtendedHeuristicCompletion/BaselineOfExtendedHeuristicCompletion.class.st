@@ -38,9 +38,17 @@ BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 		"analyser"
 		spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.
 		spec package: 'ExtendedHeuristicCompletion-Analyser-Data2'.
-		spec package: 'ExtendedHeuristicCompletion-Analyser'
-			 with: [ spec requires: #( 
-						'ExtendedHeuristicCompletion-Analyser-Data' 
-					 	'ExtendedHeuristicCompletion-Analyser-Data2') ].
+		spec 
+			package: 'ExtendedHeuristicCompletion-Analyser-Data3'
+			with: [ spec requires: 'ExtendedHeuristicCompletion-Analyser-Data2' ].
+		
+		spec 
+			package: 'ExtendedHeuristicCompletion-Analyser-Data4'
+			with: [ 
+				spec requires: 'ExtendedHeuristicCompletion-Analyser-Data'.
+				spec requires: 'ExtendedHeuristicCompletion-Analyser-Data2' ].
+		
+		
+		spec package: 'ExtendedHeuristicCompletion-Analyser' .
 
 ]
