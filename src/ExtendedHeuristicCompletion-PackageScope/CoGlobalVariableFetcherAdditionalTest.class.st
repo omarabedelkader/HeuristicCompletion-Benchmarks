@@ -1,16 +1,16 @@
 Class {
-	#name : 'CoAlternateGlobalVariableFetcherTest',
+	#name : 'CoGlobalVariableFetcherAdditionalTest',
 	#superclass : 'CoBasicFetcherWithElementsTest',
 	#instVars : [
 		'package'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Tests',
+	#category : 'ExtendedHeuristicCompletion-PackageScope-CandidatesForInclusionTest',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Tests'
+	#tag : 'CandidatesForInclusionTest'
 }
 
 { #category : 'running' }
-CoAlternateGlobalVariableFetcherTest >> setUp [
+CoGlobalVariableFetcherAdditionalTest >> setUp [
 
 	systemNavigation := CoMockSystemNavigation new
 		globals: {'Ab' . 'B' . 'AIGlobal' . 'AIa' };
@@ -30,7 +30,7 @@ CoAlternateGlobalVariableFetcherTest >> setUp [
 ]
 
 { #category : 'running' }
-CoAlternateGlobalVariableFetcherTest >> testCaseSensitive [ 
+CoGlobalVariableFetcherAdditionalTest >> testCaseSensitive [ 
 
 	"Tests that a case-sensitive filter 'AI' does not return e.g. 'aiGlobal'"
 	
@@ -58,7 +58,7 @@ CoAlternateGlobalVariableFetcherTest >> testCaseSensitive [
 ]
 
 { #category : 'running' }
-CoAlternateGlobalVariableFetcherTest >> testEmptyPrefix [
+CoGlobalVariableFetcherAdditionalTest >> testEmptyPrefix [
 	"Tests fetching with an empty prefix, which should return everything in the environment."
 	
 	| localFetcher fetchedElements localSystemNavigation globals |
@@ -87,7 +87,7 @@ CoAlternateGlobalVariableFetcherTest >> testEmptyPrefix [
 ]
 
 { #category : 'running' }
-CoAlternateGlobalVariableFetcherTest >> testEnvironment [ 
+CoGlobalVariableFetcherAdditionalTest >> testEnvironment [ 
 
 	| o | 
 	o := OrderedCollection new. 
@@ -101,7 +101,7 @@ CoAlternateGlobalVariableFetcherTest >> testEnvironment [
 ]
 
 { #category : 'running' }
-CoAlternateGlobalVariableFetcherTest >> testFirst [
+CoGlobalVariableFetcherAdditionalTest >> testFirst [
 
 	| fetchedElements expected |
 	fetchedElements := self fetcher next: 1.
@@ -112,7 +112,7 @@ CoAlternateGlobalVariableFetcherTest >> testFirst [
 ]
 
 { #category : 'running' }
-CoAlternateGlobalVariableFetcherTest >> testFirstThreeButOnlyTwo [
+CoGlobalVariableFetcherAdditionalTest >> testFirstThreeButOnlyTwo [
 
 	| fetchedElements  |
 	fetchedElements := self fetcher next: 3.
@@ -122,7 +122,7 @@ CoAlternateGlobalVariableFetcherTest >> testFirstThreeButOnlyTwo [
 ]
 
 { #category : 'running' }
-CoAlternateGlobalVariableFetcherTest >> testNoGlobalsInEnvironment [ 
+CoGlobalVariableFetcherAdditionalTest >> testNoGlobalsInEnvironment [ 
 
 	"Tests behavior when the environment is empty"
 	
@@ -141,7 +141,7 @@ CoAlternateGlobalVariableFetcherTest >> testNoGlobalsInEnvironment [
 ]
 
 { #category : 'running' }
-CoAlternateGlobalVariableFetcherTest >> testNoMatches [
+CoGlobalVariableFetcherAdditionalTest >> testNoMatches [
 	"Tests when there is no global matching the prefix."
 	
 	| localFetcher fetchedElements localSystemNavigation |
