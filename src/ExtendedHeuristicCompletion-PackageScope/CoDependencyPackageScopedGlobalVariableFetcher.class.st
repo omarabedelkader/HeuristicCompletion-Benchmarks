@@ -51,7 +51,7 @@ Class {
 { #category : 'enumerating' }
 CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| homePackageClassNames keys organizer dependentClassNames dependentPackages |
+	| homePackageClassNames keys dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
 	
 	"First package level. This could be a separate fetcher to produce more composible code"
