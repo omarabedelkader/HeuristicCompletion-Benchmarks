@@ -27,11 +27,7 @@
 "
 Class {
 	#name : 'CoTransitiveDependencyPackageScopedGlobalVariableFetcher',
-	#superclass : 'CoGlobalFetcher',
-	#instVars : [
-		'packages',
-		'completionClass'
-	],
+	#superclass : 'CoPackageScopedGlobalVariableFetcher',
 	#classInstVars : [
 		'dependencies'
 	],
@@ -87,12 +83,6 @@ CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> completionClass: anO
 	completionClass := anObject
 ]
 
-{ #category : 'accessing' }
-CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> dependenciesOf: aString [
-
-	^ self class dependenciesOf: aString
-]
-
 { #category : 'enumerating' }
 CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	| string case localClassNames dependentClassNames dependentPackages organizer keys |
@@ -135,23 +125,8 @@ CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 			ifTrue: [ aBlock value: (NECGlobalEntry contents: gName node: astNode) ] ]
 ]
 
-{ #category : 'enumerating' }
-CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> fallbackEntriesDo: aBlock [ 
-
-	^ self systemNavigation
-		allGlobalNamesStartingWith: filter completionString
-		do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
-		caseSensitive: NECPreferences caseSensitive
-]
-
 { #category : 'accessing' }
 CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> packages [
 
 	^ packages
-]
-
-{ #category : 'accessing' }
-CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> packages: anObject [
-
-	packages := anObject
 ]
