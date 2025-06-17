@@ -35,11 +35,10 @@ This fetcher is ideal when:
 "
 Class {
 	#name : 'CoAdaptiveMetaGlobalVariableFetcher',
-	#superclass : 'CoGlobalFetcher',
+	#superclass : 'CoPackageScopedGlobalVariableFetcher',
 	#instVars : [
 		'fetchersAndWeights',
-		'successCounts',
-		'completionClass'
+		'successCounts'
 	],
 	#category : 'ExtendedHeuristicCompletion-PackageScope-Variables',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
@@ -47,16 +46,11 @@ Class {
 }
 
 { #category : 'initialization' }
-CoAdaptiveMetaGlobalVariableFetcher >> completionClass [ 
-
-    ^ completionClass
-]
-
-{ #category : 'initialization' }
 CoAdaptiveMetaGlobalVariableFetcher >> completionClass: anObject [ 
-    completionClass := anObject.
-    fetchersAndWeights ifNotNil: [
-        fetchersAndWeights do: [:pair |
+	completionClass := anObject.
+	self flag: #todo. "this is horrible"
+	fetchersAndWeights ifNotNil: [
+		fetchersAndWeights do: [:pair |
             (pair key respondsTo: #completionClass:) ifTrue: [
                 pair key completionClass: anObject
             ]
@@ -67,10 +61,8 @@ CoAdaptiveMetaGlobalVariableFetcher >> completionClass: anObject [
 { #category : 'initialization' }
 CoAdaptiveMetaGlobalVariableFetcher >> entriesDo: aBlock [ 
 
-    | suggestionsMap case string |
+    | suggestionsMap |
     suggestionsMap := Dictionary new.
-    string := filter completionString.
-    case := NECPreferences caseSensitive.
 
     fetchersAndWeights do: [:pair |
         | fetcher weight |
@@ -86,10 +78,8 @@ CoAdaptiveMetaGlobalVariableFetcher >> entriesDo: aBlock [
     ].
 
     (suggestionsMap associations
-        asSortedCollection: [:a :b | a value > b value ]) do: [:assoc |
-        | name |
-        name := assoc key.
-        aBlock value: (NECGlobalEntry contents: name node: nil)
+        asSortedCollection: [:a :b | a value > b value ]) do: [ :assoc |
+        aBlock value: ((NECGlobalEntry contents: assoc key node: nil) fetcher: self ; yourself)
     ].
 ]
 

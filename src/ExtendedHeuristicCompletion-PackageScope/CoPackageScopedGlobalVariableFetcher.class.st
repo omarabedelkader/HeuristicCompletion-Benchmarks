@@ -33,6 +33,6 @@ CoPackageScopedGlobalVariableFetcher >> fallbackEntriesDo: aBlock [
 
 	^ self systemNavigation
 		allGlobalNamesStartingWith: filter completionString
-		do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
+		do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) fetcher: self ; yourself ]
 		caseSensitive: filter isCaseSensitive 
 ]

@@ -59,7 +59,7 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	package definedClasses do: [ :cls |  homePackageClassNames add: cls name ].
 	homePackageClassNames do: [ :closeClassName |
 		(filter accepts: closeClassName) ifTrue: [
-			aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
+			aBlock value: ((NECGlobalEntry contents: closeClassName node: nil) fetcher: self ; yourself) ] ].
 
 	dependentClassNames := SortedCollection sortUsing: [ :a :b | a <= b ].
 	dependentPackages := self dependenciesOf: package name. 
@@ -70,7 +70,7 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 				 definedClasses collect: [ :each | each name ]) ].
 	dependentClassNames do: [ :depClassName |
 		(filter accepts: depClassName) ifTrue: [
-			aBlock value: (NECGlobalEntry contents: depClassName node: nil) ] ].
+			aBlock value: ((NECGlobalEntry contents: depClassName node: nil) fetcher: self ; yourself) ] ].
 
 
 	"if we blindly iterate the global environment i.e., delegating to the rest of the configuration,
@@ -84,7 +84,7 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	dependentClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
 	keys do: [ :globalName |
 		(filter accepts: globalName) ifTrue: [
-			aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
+			aBlock value: ((NECGlobalEntry contents: globalName node: astNode) fetcher: self ; yourself) ] ]
 	
 
 

@@ -42,7 +42,7 @@ CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	localClassNames := package definedClasses collect: [ :each | each name ].
 	localClassNames do: [ :className |
 		(filter accepts: className)
-			ifTrue: [ aBlock value: (NECGlobalEntry contents: className node: nil) ] ].
+			ifTrue: [ aBlock value: ((NECGlobalEntry contents: className node: nil) fetcher: self ; yourself) ] ].
 
 	"2) Add classes from transitive dependencies"
 	dependentPackages := self dependenciesOf: package name.
@@ -68,5 +68,5 @@ CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	"4) Finally, fill in standard global suggestions"
 	keys do: [ :gName |
 		(filter accepts: gName)
-			ifTrue: [ aBlock value: (NECGlobalEntry contents: gName node: astNode) ] ]
+			ifTrue: [ aBlock value: ((NECGlobalEntry contents: gName node: astNode) fetcher: self ; yourself) ] ]
 ]
