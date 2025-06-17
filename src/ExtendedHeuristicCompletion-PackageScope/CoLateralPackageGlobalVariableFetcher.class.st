@@ -7,33 +7,19 @@ Class {
 }
 
 { #category : 'enumerating' }
-CoLateralPackageGlobalVariableFetcher >> completionClass [ 
-
-	^ completionClass
-]
-
-{ #category : 'enumerating' }
-CoLateralPackageGlobalVariableFetcher >> completionClass: anObject [ 
-
-	completionClass := anObject
-]
-
-{ #category : 'enumerating' }
 CoLateralPackageGlobalVariableFetcher >> entriesDo: aBlock [
-		| allGlobals excludedNames packageNamePart organizer excludedPackages |
+		| allGlobals excludedNames packageNamePart excludedPackages |
 		completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
-	
-		organizer := completionClass package organizer.
 
 		"Identify current and repository packages to exclude"
-		packageNamePart := completionClass package name copyUpTo: $-.
+		packageNamePart := package name copyUpTo: $-.
 		excludedPackages := organizer packageNames select: [ :pkg |
 				                    pkg = completionClass package name or: [ packageNamePart , '*' match: pkg ] ].
 
 		"Gather all class names from excluded packages"
 		excludedNames := excludedPackages flatCollect: [ :pkg |
 				                 (organizer packageNamed: pkg ifAbsent: [ nil ])
-					                 ifNotNil: [ :package | package definedClasses collect: [ :each | each name ] ]
+					                 ifNotNil: [ :packag | packag definedClasses collect: [ :each | each name ] ]
 					                 ifNil: [ #(  ) ] ].
 
 		"Now get all global keys, subtract those excluded, and filter"
@@ -42,14 +28,5 @@ CoLateralPackageGlobalVariableFetcher >> entriesDo: aBlock [
 
 		allGlobals do: [ :globalName |
 				(filter accepts: globalName) ifTrue: [
-					aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ] 
-]
-
-{ #category : 'enumerating' }
-CoLateralPackageGlobalVariableFetcher >> fallbackEntriesDo: aBlock [ 
-
-	^ self systemNavigation
-		allGlobalNamesStartingWith: filter completionString
-		do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
-		caseSensitive: filter isCaseSensitive
+					aBlock value: ((NECGlobalEntry contents: globalName node: astNode) fetcher: self ; yourself) ] ] 
 ]
