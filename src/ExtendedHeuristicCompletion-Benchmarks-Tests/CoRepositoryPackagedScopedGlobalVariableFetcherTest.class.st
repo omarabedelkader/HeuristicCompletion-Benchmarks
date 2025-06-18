@@ -6,9 +6,8 @@ Class {
 		'package2',
 		'package3'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Tests',
-	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Tests'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Tests',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks-Tests'
 }
 
 { #category : 'one local one global' }

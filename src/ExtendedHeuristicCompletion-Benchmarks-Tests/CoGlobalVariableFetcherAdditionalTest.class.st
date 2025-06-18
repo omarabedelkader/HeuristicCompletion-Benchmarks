@@ -4,9 +4,8 @@ Class {
 	#instVars : [
 		'package'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-CandidatesForInclusionTest',
-	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'CandidatesForInclusionTest'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Tests',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks-Tests'
 }
 
 { #category : 'running' }

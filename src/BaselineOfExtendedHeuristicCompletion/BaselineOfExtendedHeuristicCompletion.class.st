@@ -34,7 +34,6 @@ BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 			with: [spec requires:
 							'ExtendedHeuristicCompletion-Benchmarks'].
 		spec package: 'ExtendedHeuristicCompletion-History'.
-		spec package: 'ExtendedHeuristicCompletion-OllamaAPI'.
 		spec package: 'ExtendedHeuristicCompletion-Model'
 			with: [ spec requires:'ExtendedHeuristicCompletion-PackageScope' ].
 	

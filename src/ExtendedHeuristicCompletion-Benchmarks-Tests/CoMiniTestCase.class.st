@@ -8,9 +8,8 @@ Class {
 		'fetcher',
 		'expectedElements'
 	],
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Tests',
-	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Tests'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Tests',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks-Tests'
 }
 
 { #category : 'assert' }

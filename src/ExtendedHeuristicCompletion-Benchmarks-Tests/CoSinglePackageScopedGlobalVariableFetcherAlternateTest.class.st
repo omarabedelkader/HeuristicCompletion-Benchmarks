@@ -1,9 +1,8 @@
 Class {
 	#name : 'CoSinglePackageScopedGlobalVariableFetcherAlternateTest',
 	#superclass : 'CoMiniTestCase',
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Tests',
-	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Tests'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Tests',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks-Tests'
 }
 
 { #category : 'one local one global' }
