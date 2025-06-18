@@ -57,7 +57,7 @@ CoGlobalVariableFetcherAdditionalTest >> testCaseSensitive [
 ]
 
 { #category : 'running' }
-CoGlobalVariableFetcherAdditionalTest >> testEmptyPrefix [
+CoGlobalVariableFetcherAdditionalTest >> testEmptyPrefixShouldReturnEverything [
 	"Tests fetching with an empty prefix, which should return everything in the environment."
 	
 	| localFetcher fetchedElements localSystemNavigation globals |
