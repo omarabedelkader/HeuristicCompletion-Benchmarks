@@ -22,6 +22,22 @@ CoDependencyPackageScopedGlobalVariableTest >> testLocalFirstThenDependent [
 ]
 
 { #category : 'tests' }
+CoDependencyPackageScopedGlobalVariableTest >> testWhenNoLocalAndNoDependentThenGlobal [
+
+	| localFetcher  fetchedElements |
+	localFetcher := CoDependencyPackageScopedGlobalVariableFetcher  new.
+	localFetcher
+		completionClass: ClassWithDependencyOnData2;
+		filter: (CoBeginsWithFilter caseSensitive: false filterString: 'Po').
+
+	fetchedElements := localFetcher next: 1.
+
+	self
+		assert: (fetchedElements collect: #contents) asArray 
+		equals: #(#Point)
+]
+
+{ #category : 'tests' }
 CoDependencyPackageScopedGlobalVariableTest >> testWhenNoLocalThenDependentPackages [
 
 	| localFetcher  fetchedElements |
