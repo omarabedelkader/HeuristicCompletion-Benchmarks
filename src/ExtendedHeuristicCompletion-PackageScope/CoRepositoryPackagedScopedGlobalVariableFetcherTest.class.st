@@ -71,7 +71,7 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> setUpThreePackages [
 		yourself.
 
 	fetcher := CoRepositoryPackageScopedGlobalVariableFetcher new. 
-	fetcher packages: { package1 . package2 . package3 }.
+	"fetcher packages: { package1 . package2 . package3 }."
 	fetcher completionClass: completionClass.
 	fetcher systemNavigation: systemNavigation.
 	fetcher filter: (CoBeginsWithFilter caseSensitive: false filterString: 'Ai').
@@ -150,7 +150,6 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testNoClassesInPackage [
 
 	localFetcher := CoRepositoryPackageScopedGlobalVariableFetcher new.
 	localFetcher
-		packages: { localPackage };
 		completionClass: nil;
 		systemNavigation: localSystemNavigation;
 		filter: (CoBeginsWithFilter caseSensitive: false filterString: 'Ai').

@@ -24,8 +24,9 @@ CoPackageScopedGlobalVariableFetcher >> completionClass [
 CoPackageScopedGlobalVariableFetcher >> completionClass: anObject [
 
 	completionClass := anObject.
-	package := completionClass package.
-	organizer := package organizer.
+	completionClass ifNotNil: [ 
+		package := completionClass package.
+		organizer := package organizer ]
 ]
 
 { #category : 'enumerating' }

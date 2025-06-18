@@ -29,14 +29,14 @@ CoRepositoryPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	friendClassNames := OrderedCollection new. 
 	
 	friendPackageNames := organizer packageNames asOrderedCollection.
-	friendPackageNames remove: completionClass package name. 
+	friendPackageNames remove: package name. 
 	
 	friendPackageNames do: [ :packageName | 
 			(packageNamePart, '*' match: packageName)
 				ifTrue: [ friendClassNames addAll: ((organizer packageNamed: packageName ifAbsent: [ ]) definedClasses collect: [ :each |each name ])]]. 
 	
 	friendClassNames do: [ :closeClassName | 
-		(closeClassName beginsWith: string caseSensitive: case) 
+		(filter accepts: closeClassName) 
 			ifTrue: [ aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ]].
 	
 	

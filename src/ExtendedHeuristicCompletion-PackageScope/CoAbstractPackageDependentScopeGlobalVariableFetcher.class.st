@@ -4,9 +4,6 @@ I'm a fetcher supporting group of packages
 Class {
 	#name : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#superclass : 'CoPackageScopedGlobalVariableFetcher',
-	#instVars : [
-		'packages'
-	],
 	#classVars : [
 		'Dependencies'
 	],
@@ -40,16 +37,4 @@ CoAbstractPackageDependentScopeGlobalVariableFetcher class >> dependencyCache [
 CoAbstractPackageDependentScopeGlobalVariableFetcher >> dependenciesOf: aString [
 
 	^ self class dependenciesOf: aString
-]
-
-{ #category : 'accessing' }
-CoAbstractPackageDependentScopeGlobalVariableFetcher >> packages [
-
-	^ packages
-]
-
-{ #category : 'enumerating' }
-CoAbstractPackageDependentScopeGlobalVariableFetcher >> packages: aCollection [
-
-	packages := aCollection
 ]
