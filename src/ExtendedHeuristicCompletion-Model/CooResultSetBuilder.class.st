@@ -20,7 +20,6 @@ CooResultSetBuilder >> messageHeuristic [
 { #category : 'heuristics' }
 CooResultSetBuilder >> variablesHeuristic [
 
-	self halt.
 	^ variablesHeuristic ifNil: [ variablesHeuristic := self newHeuristicBuilder
 		add: CoLocalScopeVariablesHeuristic new;
 		add: CoWorkspaceVariablesHeuristic new;
