@@ -40,6 +40,7 @@ CooBenchResult >> addColumn: aCooResultColumn [
 { #category : 'accessing' }
 CooBenchResult >> columns [
 	^ columns
+	
 ]
 
 { #category : 'accessing' }

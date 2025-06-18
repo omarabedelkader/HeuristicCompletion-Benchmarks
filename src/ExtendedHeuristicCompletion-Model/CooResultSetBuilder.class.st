@@ -1,3 +1,6 @@
+"
+A new `ResultSetBuilder` for our fetchers
+"
 Class {
 	#name : 'CooResultSetBuilder',
 	#superclass : 'CoASTHeuristicsResultSetBuilder',
@@ -8,15 +11,23 @@ Class {
 { #category : 'heuristics' }
 CooResultSetBuilder >> messageHeuristic [ 
 
-    ^ self newHeuristicBuilder
-            add: CoSuperMessageHeuristic new;             "changed order"
-            add: CoSelfMessageHeuristic new;
-            add: CoTypedReceiverMessageHeuristic new;
-            add: CoInitializeInferencedMessageHeuristic new;
-            add: CoLiteralMessageHeuristic new;
-            add: CoGlobalVariableMessageHeuristic new;
-            add: CoVariableWithTypeNameMessageHeuristic new;
-            add: CoVariableValueMessageHeuristic new;
-            add: CoUnknownMessageHeuristic new;
-            build
+	^ messageHeuristic ifNil: [ messageHeuristic := self newHeuristicBuilder
+		add: CoSuperMessageHeuristic new;
+		add: CoTypedReceiverMessageHeuristic new;
+		add: CoVariableWithTypeNameMessageHeuristic new;
+		add: CoVariableValueMessageHeuristic new;
+		add: CoUnknownMessageHeuristic new;
+		build ]
+]
+
+{ #category : 'heuristics' }
+CooResultSetBuilder >> variablesHeuristic [
+
+	^ variablesHeuristic ifNil: [ variablesHeuristic := self newHeuristicBuilder
+		add: CoLocalScopeVariablesHeuristic new;
+		add: CoWorkspaceVariablesHeuristic new;
+		add: CoInstanceAccessibleVariablesHeuristic new;
+		add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+					CoDependencyPackageScopedGlobalVariableFetcher);
+		build ]
 ]

@@ -27,11 +27,13 @@ BaselineOfExtendedHeuristicCompletion >> defineDependencies: spec [
 BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 
 		spec package: 'ExtendedHeuristicCompletion-Benchmarks'.
+		spec package: 'ExtendedHeuristicCompletion-Benchmarks-Tests' 
+			with: [spec requires:
+							'ExtendedHeuristicCompletion-Benchmarks'].
 		spec package: 'ExtendedHeuristicCompletion-PackageScope' 
 			with: [spec requires:
 							'ExtendedHeuristicCompletion-Benchmarks'].
 		spec package: 'ExtendedHeuristicCompletion-History'.
-		spec package: 'ExtendedHeuristicCompletion-OllamaAPI'.
 		spec package: 'ExtendedHeuristicCompletion-Model'
 			with: [ spec requires:'ExtendedHeuristicCompletion-PackageScope' ].
 	

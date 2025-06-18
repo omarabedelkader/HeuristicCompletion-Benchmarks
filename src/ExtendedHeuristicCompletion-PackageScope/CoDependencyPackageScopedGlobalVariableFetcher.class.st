@@ -43,10 +43,25 @@ Use this fetcher when:
 Class {
 	#name : 'CoDependencyPackageScopedGlobalVariableFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
+	#instVars : [
+		'dependencies'
+	],
 	#category : 'ExtendedHeuristicCompletion-PackageScope-CandidatesForPharoInclusion',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'CandidatesForPharoInclusion'
 }
+
+{ #category : 'accessing' }
+CoDependencyPackageScopedGlobalVariableFetcher >> dependencies [
+
+	^ dependencies
+]
+
+{ #category : 'accessing' }
+CoDependencyPackageScopedGlobalVariableFetcher >> dependencies: anObject [
+
+	dependencies := anObject
+]
 
 { #category : 'enumerating' }
 CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
