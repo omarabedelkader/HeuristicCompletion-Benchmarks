@@ -29,10 +29,8 @@ CoRepositoryPackageScopedGlobalMessageFetcher >> entriesDo: aBlock [
 									node: astNode)
 									selector: sel) fetcher: self ; yourself) ] ] ] ].
 
-	closeClassNames := completionClass package definedClasses collect: [ :each | each name ].
-	closeClassNames do: [ :className |
-		(filter accepts: className)
-			ifTrue: [ aBlock value: ((NECGlobalEntry contents: className node: nil) fetcher: self ; yourself) ] ].
+	closeClassNames := self packageLocalClasses: aBlock.
+		
 		
 	packageNamePart := package name copyUpTo: $-.
 	friendPackageNames := organizer packageNames asOrderedCollection.

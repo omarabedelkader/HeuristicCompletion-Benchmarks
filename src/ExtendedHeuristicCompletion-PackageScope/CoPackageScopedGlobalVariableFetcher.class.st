@@ -37,3 +37,20 @@ CoPackageScopedGlobalVariableFetcher >> fallbackEntriesDo: aBlock [
 		do: [ :e | aBlock value: ((NECGlobalEntry contents: e node: astNode) fetcher: self ; yourself) ]
 		caseSensitive: filter isCaseSensitive 
 ]
+
+{ #category : 'enumerating' }
+CoPackageScopedGlobalVariableFetcher >> packageLocalClasses: aBlock [
+
+	| homePackageClassNames |
+	homePackageClassNames := SortedCollection sortUsing: [ :a :b |
+		                         a <= b ]. "First package level. This could be a separate fetcher to produce more composible code"
+	package definedClasses do: [ :cls |
+		homePackageClassNames add: cls name ].
+	homePackageClassNames do: [ :closeClassName |
+			(filter accepts: closeClassName) ifTrue: [
+					aBlock value:
+						((NECGlobalEntry contents: closeClassName node: nil)
+							 fetcher: self;
+							 yourself) ] ].
+	^ homePackageClassNames
+]

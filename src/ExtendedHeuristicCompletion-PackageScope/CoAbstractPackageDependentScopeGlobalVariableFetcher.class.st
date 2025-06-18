@@ -33,6 +33,12 @@ CoAbstractPackageDependentScopeGlobalVariableFetcher class >> dependencyCache [
 	^ Dependencies ifNil: [ Dependencies := Dictionary new ]
 ]
 
+{ #category : 'accessing' }
+CoAbstractPackageDependentScopeGlobalVariableFetcher class >> resetCache [
+
+	Dependencies := nil
+]
+
 { #category : 'enumerating' }
 CoAbstractPackageDependentScopeGlobalVariableFetcher >> dependenciesOf: aString [
 

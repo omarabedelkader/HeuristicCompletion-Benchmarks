@@ -67,40 +67,37 @@ CoDependencyPackageScopedGlobalVariableFetcher >> dependencies: anObject [
 CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
 	| homePackageClassNames keys dependentClassNames dependentPackages |
+	"First package level. This could be a separate fetcher to produce more composible code"
+	
 	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
 	
-	"First package level. This could be a separate fetcher to produce more composible code"
-	homePackageClassNames :=  SortedCollection sortUsing: [ :a :b | a <= b ].
-	package definedClasses do: [ :cls |  homePackageClassNames add: cls name ].
-	homePackageClassNames do: [ :closeClassName |
-		(filter accepts: closeClassName) ifTrue: [
-			aBlock value: ((NECGlobalEntry contents: closeClassName node: nil) fetcher: self ; yourself) ] ].
 
+	homePackageClassNames := self packageLocalClasses: aBlock.
 	dependentClassNames := SortedCollection sortUsing: [ :a :b | a <= b ].
-	dependentPackages := self dependenciesOf: package name. 
-
+	dependentPackages := self dependenciesOf: package name.
 	dependentPackages do: [ :packageName |
-		dependentClassNames addAll:
-			((organizer packageNamed: packageName ifAbsent: [  ])
-				 definedClasses collect: [ :each | each name ]) ].
+			dependentClassNames addAll:
+				((organizer packageNamed: packageName ifAbsent: [ ])
+					 definedClasses collect: [ :each | each name ]) ].
 	dependentClassNames do: [ :depClassName |
-		(filter accepts: depClassName) ifTrue: [
-			aBlock value: ((NECGlobalEntry contents: depClassName node: nil) fetcher: self ; yourself) ] ].
-
-
+			(filter accepts: depClassName) ifTrue: [
+					aBlock value: ((NECGlobalEntry contents: depClassName node: nil)
+							 fetcher: self;
+							 yourself) ] ].
+					
 	"if we blindly iterate the global environment i.e., delegating to the rest of the configuration,
 	it may happen that the global fetcher will return a class already seen. 
 	So we manage the global lookup here.
 	It may mean that the global fetcher could be working on keys and that it could 
-	be customized to support the semantics we want. This way we would avoid to redefine it locally."
-
+	be customized to support the semantics we want. This way we would avoid to redefine it locally."				
+					
 	keys := systemNavigation environment keys asOrderedCollection.
-	homePackageClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
-	dependentClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
+	homePackageClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
+	dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
 	keys do: [ :globalName |
-		(filter accepts: globalName) ifTrue: [
-			aBlock value: ((NECGlobalEntry contents: globalName node: astNode) fetcher: self ; yourself) ] ]
-	
-
-
+			(filter accepts: globalName) ifTrue: [
+					aBlock value:
+						((NECGlobalEntry contents: globalName node: astNode)
+							 fetcher: self;
+							 yourself) ] ]
 ]
