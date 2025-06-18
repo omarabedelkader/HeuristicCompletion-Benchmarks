@@ -1,3 +1,6 @@
+"
+Fetcher that takes into account the lateral dependencies
+"
 Class {
 	#name : 'CoLateralPackageGlobalVariableFetcher',
 	#superclass : 'CoPackageScopedGlobalVariableFetcher',

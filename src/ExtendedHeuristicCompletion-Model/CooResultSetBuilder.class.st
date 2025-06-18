@@ -1,3 +1,6 @@
+"
+A new `ResultSetBuilder` for our fetchers
+"
 Class {
 	#name : 'CooResultSetBuilder',
 	#superclass : 'CoASTHeuristicsResultSetBuilder',

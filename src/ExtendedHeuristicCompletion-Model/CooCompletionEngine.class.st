@@ -1,3 +1,6 @@
+"
+our new engine that implemement the a new `CooResultSetBuilder` that has our new fetchers
+"
 Class {
 	#name : 'CooCompletionEngine',
 	#superclass : 'CoCompletionEngine',
