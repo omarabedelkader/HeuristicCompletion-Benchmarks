@@ -1,0 +1,55 @@
+"
+I'm a fetcher supporting group of packages
+"
+Class {
+	#name : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
+	#superclass : 'CoPackageScopedGlobalVariableFetcher',
+	#instVars : [
+		'packages'
+	],
+	#classVars : [
+		'Dependencies'
+	],
+	#classInstVars : [
+		'dependencies'
+	],
+	#category : 'ExtendedHeuristicCompletion-PackageScope-CandidatesForPharoInclusion',
+	#package : 'ExtendedHeuristicCompletion-PackageScope',
+	#tag : 'CandidatesForPharoInclusion'
+}
+
+{ #category : 'accessing' }
+CoAbstractPackageDependentScopeGlobalVariableFetcher class >> computeDependenciesOf: aPackageName [
+	
+	^ StDependencyChecker new dependenciesOf: aPackageName
+]
+
+{ #category : 'accessing' }
+CoAbstractPackageDependentScopeGlobalVariableFetcher class >> dependenciesOf: aPackageName [
+
+	^ self dependencyCache at: aPackageName ifAbsentPut: [ self computeDependenciesOf: aPackageName ]
+]
+
+{ #category : 'accessing' }
+CoAbstractPackageDependentScopeGlobalVariableFetcher class >> dependencyCache [
+
+	^ Dependencies ifNil: [ Dependencies := Dictionary new ]
+]
+
+{ #category : 'enumerating' }
+CoAbstractPackageDependentScopeGlobalVariableFetcher >> dependenciesOf: aString [
+
+	^ self class dependenciesOf: aString
+]
+
+{ #category : 'accessing' }
+CoAbstractPackageDependentScopeGlobalVariableFetcher >> packages [
+
+	^ packages
+]
+
+{ #category : 'enumerating' }
+CoAbstractPackageDependentScopeGlobalVariableFetcher >> packages: aCollection [
+
+	packages := aCollection
+]

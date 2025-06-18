@@ -13,5 +13,5 @@ Class {
 ManifestHeuristicCompletionCocot class >> ruleLongMethodsRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#CoAutononousPackageScopedGlobalVariableFetcherTest #setUpThreePackages #false)) #'2025-02-12T11:58:24.179052+01:00') )
+	^ #(#(#(#RGMethodDefinition #(#CoRepositoryPackagedScopedGlobalVariableFetcherTest #setUpThreePackages #false)) #'2025-02-12T11:58:24.179052+01:00') )
 ]

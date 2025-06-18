@@ -1,5 +1,5 @@
 Class {
-	#name : 'CoAutononousPackageScopedGlobalVariableFetcherTest',
+	#name : 'CoRepositoryPackagedScopedGlobalVariableFetcherTest',
 	#superclass : 'CoMiniTestCase',
 	#instVars : [
 		'package1',
@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : 'one local one global' }
-CoAutononousPackageScopedGlobalVariableFetcherTest >> setUpThreePackages [
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> setUpThreePackages [
 	" we have
 		2 packages 
 			P1A : Ai12 Ai13 A11 AA1 CoInP1
@@ -88,7 +88,7 @@ CoAutononousPackageScopedGlobalVariableFetcherTest >> setUpThreePackages [
 ]
 
 { #category : 'one local one global' }
-CoAutononousPackageScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClass [
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClass [
 
 	| fetchedElements expected |
 	self setUpThreePackages. 
@@ -100,7 +100,7 @@ CoAutononousPackageScopedGlobalVariableFetcherTest >> testFirstPackageOfCompleti
 ]
 
 { #category : 'one local one global' }
-CoAutononousPackageScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenAllProjectLevelPackage [
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenAllProjectLevelPackage [
 
 	| fetchedElements expected |
 	self setUpThreePackages. 
@@ -112,7 +112,7 @@ CoAutononousPackageScopedGlobalVariableFetcherTest >> testFirstPackageOfCompleti
 ]
 
 { #category : 'one local one global' }
-CoAutononousPackageScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenAllProjectLevelPackageThenGlobals [
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenAllProjectLevelPackageThenGlobals [
 
 	| fetchedElements expected |
 	self setUpThreePackages. 
@@ -124,7 +124,7 @@ CoAutononousPackageScopedGlobalVariableFetcherTest >> testFirstPackageOfCompleti
 ]
 
 { #category : 'one local one global' }
-CoAutononousPackageScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenProjectLevelPackage [
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenProjectLevelPackage [
 
 	| fetchedElements expected |
 	self setUpThreePackages. 
@@ -136,7 +136,7 @@ CoAutononousPackageScopedGlobalVariableFetcherTest >> testFirstPackageOfCompleti
 ]
 
 { #category : 'one local one global' }
-CoAutononousPackageScopedGlobalVariableFetcherTest >> testNoClassesInPackage [
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testNoClassesInPackage [
 	"Tests the behavior if a package has no classes that match 'Ai'."
 
 	| localPackage localFetcher localSystemNavigation fetchedElements |
@@ -167,7 +167,7 @@ CoAutononousPackageScopedGlobalVariableFetcherTest >> testNoClassesInPackage [
 ]
 
 { #category : 'one local one global' }
-CoAutononousPackageScopedGlobalVariableFetcherTest >> testRequestMoreThanAvailableOnlyReturnAvailable [
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testRequestMoreThanAvailableOnlyReturnAvailable [
 
 	| fetchedElements expected |
 	self setUpThreePackages. 

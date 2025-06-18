@@ -3,54 +3,29 @@ I am a fetcher looking for globals in an environment.
 "
 Class {
 	#name : 'CoRepositoryPackageScopedGlobalVariableFetcher',
-	#superclass : 'CoGlobalFetcher',
-	#instVars : [
-		'packages',
-		'completionClass'
-	],
+	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#category : 'ExtendedHeuristicCompletion-PackageScope-Variables',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'Variables'
 }
 
-{ #category : 'accessing' }
-CoRepositoryPackageScopedGlobalVariableFetcher >> completionClass [
-
-	^ completionClass
-]
-
-{ #category : 'accessing' }
-CoRepositoryPackageScopedGlobalVariableFetcher >> completionClass: anObject [
-
-	completionClass := anObject
-]
-
 { #category : 'enumerating' }
 CoRepositoryPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| string case closeClassNames keys organizer packageNamePart friendClassNames friendPackageNames | 
-	completionClass isNil
-		ifTrue: [
-				"can we call another fetcher?" 
-					^ self systemNavigation
-							allGlobalNamesStartingWith: filter completionString
-							do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
-							caseSensitive: NECPreferences caseSensitive ].
+	| string case closeClassNames keys packageNamePart friendClassNames friendPackageNames | 
+	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
 	
-	string := filter completionString.
-	case := NECPreferences caseSensitive.
-	organizer := completionClass package organizer.
-
+	self flag: #todo. "Code duplication!!!"
 	"First package level "
-	closeClassNames := completionClass package definedClasses collect: [ :each | each name ].
+	closeClassNames :=  package definedClasses collect: [ :each | each name ].
 	closeClassNames do: [ :closeClassName | 
-		(closeClassName beginsWith: string caseSensitive: case) 
-			ifTrue: [ aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ]] .
+		(filter accepts: closeClassName) 
+			ifTrue: [ aBlock value: ((NECGlobalEntry contents: closeClassName node: nil) fetcher: self ; yourself) ]] .
 	
 	"Package of the project e.g that starts with the same tag bfore the - 
 	ExtendedHeuristicCompletion-PackageScope -> HeuristicCompletion"
 	
-	packageNamePart := completionClass package name copyUpTo: $-.
+	packageNamePart := package name copyUpTo: $-.
 	friendClassNames := OrderedCollection new. 
 	
 	friendPackageNames := organizer packageNames asOrderedCollection.
@@ -78,14 +53,8 @@ CoRepositoryPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	This is a pity because we cannot reuse the logic of systemNavigation because we should not 
 	modify the global environment."
 	keys do: [ :globalName | 
-		(globalName beginsWith: string caseSensitive: case) 
-			ifTrue: [ aBlock value: (NECGlobalEntry contents: globalName node: astNode) ]]
+		(filter accepts: globalName) 
+			ifTrue: [ aBlock value: ((NECGlobalEntry contents: globalName node: astNode) fetcher: self ; yourself) ]]
 		
 	
-]
-
-{ #category : 'enumerating' }
-CoRepositoryPackageScopedGlobalVariableFetcher >> packages: aCollection [
-
-	packages := aCollection
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : 'CoAutononousSinglePackageScopedGlobalVariableFetcherTest',
+	#name : 'CoSinglePackageScopedGlobalVariableFetcherAlternateTest',
 	#superclass : 'CoMiniTestCase',
 	#category : 'ExtendedHeuristicCompletion-PackageScope-Tests',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'one local one global' }
-CoAutononousSinglePackageScopedGlobalVariableFetcherTest >> setUpOneLocalThenGlobal [ 
+CoSinglePackageScopedGlobalVariableFetcherAlternateTest >> setUpOneLocalThenGlobal [ 
 
 	| a b c |
 	completionClass := CoMockClass new name: 'CoInP1'. 
@@ -32,7 +32,7 @@ CoAutononousSinglePackageScopedGlobalVariableFetcherTest >> setUpOneLocalThenGlo
 ]
 
 { #category : 'two locals one global' }
-CoAutononousSinglePackageScopedGlobalVariableFetcherTest >> setUpTwoLocalThenGlobal [ 
+CoSinglePackageScopedGlobalVariableFetcherAlternateTest >> setUpTwoLocalThenGlobal [ 
 
 	| a b c a1 |
 	completionClass := CoMockClass new name: 'CoInP1'. 
@@ -60,7 +60,7 @@ CoAutononousSinglePackageScopedGlobalVariableFetcherTest >> setUpTwoLocalThenGlo
 ]
 
 { #category : 'one local one global' }
-CoAutononousSinglePackageScopedGlobalVariableFetcherTest >> testFirstPackageLevelThenGlobal [
+CoSinglePackageScopedGlobalVariableFetcherAlternateTest >> testFirstPackageLevelThenGlobal [
 
 	| fetchedElements expected |
 	self setUpOneLocalThenGlobal. 
@@ -72,7 +72,7 @@ CoAutononousSinglePackageScopedGlobalVariableFetcherTest >> testFirstPackageLeve
 ]
 
 { #category : 'two locals one global' }
-CoAutononousSinglePackageScopedGlobalVariableFetcherTest >> testFirstPackageLevelWithTwoClassesThenGlobal [
+CoSinglePackageScopedGlobalVariableFetcherAlternateTest >> testFirstPackageLevelWithTwoClassesThenGlobal [
 
 	| fetchedElements |
 	self setUpTwoLocalThenGlobal. 
@@ -83,7 +83,7 @@ CoAutononousSinglePackageScopedGlobalVariableFetcherTest >> testFirstPackageLeve
 ]
 
 { #category : 'one local one global' }
-CoAutononousSinglePackageScopedGlobalVariableFetcherTest >> testResetShouldRestartGenerator [
+CoSinglePackageScopedGlobalVariableFetcherAlternateTest >> testResetShouldRestartGenerator [
 
 	| fetchedElements |
 	self setUpOneLocalThenGlobal. 

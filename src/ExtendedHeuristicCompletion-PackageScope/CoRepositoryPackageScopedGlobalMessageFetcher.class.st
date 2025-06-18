@@ -1,33 +1,21 @@
 Class {
 	#name : 'CoRepositoryPackageScopedGlobalMessageFetcher',
-	#superclass : 'CoGlobalFetcher',
-	#instVars : [
-		'packages',
-		'completionClass'
-	],
+	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#category : 'ExtendedHeuristicCompletion-PackageScope-Message',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'Message'
 }
 
-{ #category : 'accessing' }
-CoRepositoryPackageScopedGlobalMessageFetcher >> completionClass [
-
-	^ completionClass
-]
-
-{ #category : 'accessing' }
-CoRepositoryPackageScopedGlobalMessageFetcher >> completionClass: anObject [
-
-	completionClass := anObject
-]
-
 { #category : 'enumerating' }
 CoRepositoryPackageScopedGlobalMessageFetcher >> entriesDo: aBlock [
 
-	| string case closeClassNames keys organizer
+	| closeClassNames keys 
 	  packageNamePart friendClassNames friendPackageNames |
-
+	self flag: #todo. 
+	"We should split this method and the one of the superclass to revise.
+	
+	"
+	
 	astNode ifNotNil: [ :node |
 		node parent ifNotNil: [ :parent |
 			(parent isMessage and: [ parent isKeyword ])
@@ -36,24 +24,19 @@ CoRepositoryPackageScopedGlobalMessageFetcher >> entriesDo: aBlock [
 						allSelectorsStartingWith: parent selector , filter completionString
 						do: [ :sel |
 							aBlock value:
-								((NECSelectorEntry
+								(((NECSelectorEntry
 									contents: (sel copyFrom: parent selector size + 1 to: sel size)
 									node: astNode)
-									selector: sel) ] ] ] ].
+									selector: sel) fetcher: self ; yourself) ] ] ] ].
 
-	string := filter completionString.
-	case := NECPreferences caseSensitive.
-	organizer := completionClass package organizer.
-
-	closeClassNames := completionClass package definedClasses
-						collect: [ :each | each name ].
+	closeClassNames := completionClass package definedClasses collect: [ :each | each name ].
 	closeClassNames do: [ :className |
-		(className beginsWith: string caseSensitive: case)
-			ifTrue: [ aBlock value:
-						(NECGlobalEntry contents: className node: nil) ] ].
-	packageNamePart := completionClass package name copyUpTo: $-.
+		(filter accepts: className)
+			ifTrue: [ aBlock value: ((NECGlobalEntry contents: className node: nil) fetcher: self ; yourself) ] ].
+		
+	packageNamePart := package name copyUpTo: $-.
 	friendPackageNames := organizer packageNames asOrderedCollection.
-	friendPackageNames remove: completionClass package name.
+	friendPackageNames remove:  package name.
 
 	friendClassNames := OrderedCollection new.
 	friendPackageNames do: [ :pkgName |
@@ -63,29 +46,16 @@ CoRepositoryPackageScopedGlobalMessageFetcher >> entriesDo: aBlock [
 							definedClasses collect: [ :each | each name ]) ] ].
 
 	friendClassNames do: [ :className |
-		(className beginsWith: string caseSensitive: case)
-			ifTrue: [ aBlock value:
-						(NECGlobalEntry contents: className node: nil) ] ].
+		(filter accepts: className)
+			ifTrue: [ aBlock value: ((NECGlobalEntry contents: className node: nil)  fetcher: self ; yourself) ] ].
 
 	keys := self systemNavigation environment keys asOrderedCollection.
 	closeClassNames do: [ :n | keys remove: n ifAbsent: [ ] ].
 	friendClassNames do: [ :n | keys remove: n ifAbsent: [ ] ].
 
 	keys do: [ :globalName |
-		(globalName beginsWith: string caseSensitive: case)
+		(filter accepts: globalName)
 			ifTrue: [ aBlock value:
-						(NECGlobalEntry contents: globalName node: astNode) ] ].
+						((NECGlobalEntry contents: globalName node: astNode) fetcher: self ; yourself) ] ].
 
-]
-
-{ #category : 'accessing' }
-CoRepositoryPackageScopedGlobalMessageFetcher >> packages [
-
-	^ packages
-]
-
-{ #category : 'accessing' }
-CoRepositoryPackageScopedGlobalMessageFetcher >> packages: anObject [
-
-	packages := anObject
 ]

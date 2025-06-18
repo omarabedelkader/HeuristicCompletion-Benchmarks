@@ -42,114 +42,50 @@ Use this fetcher when:
 "
 Class {
 	#name : 'CoDependencyPackageScopedGlobalVariableFetcher',
-	#superclass : 'CoGlobalFetcher',
-	#instVars : [
-		'packages',
-		'completionClass'
-	],
-	#classInstVars : [
-		'dependencies'
-	],
+	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#category : 'ExtendedHeuristicCompletion-PackageScope-CandidatesForPharoInclusion',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'CandidatesForPharoInclusion'
 }
 
-{ #category : 'accessing' }
-CoDependencyPackageScopedGlobalVariableFetcher class >> computeDependenciesOf: aPackageName [
-	
-	^ StDependencyChecker new dependenciesOf: aPackageName
-]
-
-{ #category : 'accessing' }
-CoDependencyPackageScopedGlobalVariableFetcher class >> dependenciesOf: aPackageName [
-
-	^ dependencies at: aPackageName ifAbsentPut: [ self computeDependenciesOf: aPackageName ]
-]
-
-{ #category : 'accessing' }
-CoDependencyPackageScopedGlobalVariableFetcher class >> initialize [ 
-	
-	dependencies := Dictionary new
-]
-
-{ #category : 'accessing' }
-CoDependencyPackageScopedGlobalVariableFetcher >> completionClass [
-
-	^ completionClass
-]
-
-{ #category : 'accessing' }
-CoDependencyPackageScopedGlobalVariableFetcher >> completionClass: anObject [
-
-	completionClass := anObject
-]
-
-{ #category : 'enumerating' }
-CoDependencyPackageScopedGlobalVariableFetcher >> dependenciesOf: aString [
-
-	^ self class dependenciesOf: aString
-]
-
 { #category : 'enumerating' }
 CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| string case homePackageClassNames keys organizer dependentClassNames dependentPackages |
+	| homePackageClassNames keys dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
-
-	string := filter completionString.
-	case := NECPreferences caseSensitive.
-	organizer := completionClass package organizer.
-
-	"First package level"
-	self flag: #todo. "Do we sort them?"
+	
+	"First package level. This could be a separate fetcher to produce more composible code"
 	homePackageClassNames :=  SortedCollection sortUsing: [ :a :b | a <= b ].
-	completionClass package definedClasses do: [ :cls |  homePackageClassNames add: cls name ].
+	package definedClasses do: [ :cls |  homePackageClassNames add: cls name ].
 	homePackageClassNames do: [ :closeClassName |
-		(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
-			aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
+		(filter accepts: closeClassName) ifTrue: [
+			aBlock value: ((NECGlobalEntry contents: closeClassName node: nil) fetcher: self ; yourself) ] ].
 
 	dependentClassNames := SortedCollection sortUsing: [ :a :b | a <= b ].
-	dependentPackages := self dependenciesOf: completionClass package name. 
+	dependentPackages := self dependenciesOf: package name. 
 
 	dependentPackages do: [ :packageName |
 		dependentClassNames addAll:
 			((organizer packageNamed: packageName ifAbsent: [  ])
 				 definedClasses collect: [ :each | each name ]) ].
-	self flag: #todo.
-	"should we not sort dependentClassNames?"
-	
-	dependentClassNames do: [ :closeClassName |
-		(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
-			aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
+	dependentClassNames do: [ :depClassName |
+		(filter accepts: depClassName) ifTrue: [
+			aBlock value: ((NECGlobalEntry contents: depClassName node: nil) fetcher: self ; yourself) ] ].
+
 
 	"if we blindly iterate the global environment i.e., delegating to the rest of the configuration,
 	it may happen that the global fetcher will return a class already seen. 
 	So we manage the global lookup here.
 	It may mean that the global fetcher could be working on keys and that it could 
 	be customized to support the semantics we want. This way we would avoid to redefine it locally."
-	keys := self systemNavigation environment keys asOrderedCollection.
+
+	keys := systemNavigation environment keys asOrderedCollection.
 	homePackageClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
 	dependentClassNames do: [ :e | keys remove: e ifAbsent: [  ] ].
 	keys do: [ :globalName |
-		(globalName beginsWith: string caseSensitive: case) ifTrue: [
-			aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
+		(filter accepts: globalName) ifTrue: [
+			aBlock value: ((NECGlobalEntry contents: globalName node: astNode) fetcher: self ; yourself) ] ]
 	
 
 
-]
-
-{ #category : 'enumerating' }
-CoDependencyPackageScopedGlobalVariableFetcher >> fallbackEntriesDo: aBlock [ 
-
-	^ self systemNavigation
-		allGlobalNamesStartingWith: filter completionString
-		do: [ :e | aBlock value: (NECGlobalEntry contents: e node: astNode) ]
-		caseSensitive: NECPreferences caseSensitive
-]
-
-{ #category : 'enumerating' }
-CoDependencyPackageScopedGlobalVariableFetcher >> packages: aCollection [
-
-	packages := aCollection
 ]
