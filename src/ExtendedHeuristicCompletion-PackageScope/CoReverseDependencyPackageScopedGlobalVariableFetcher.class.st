@@ -85,17 +85,12 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher class >> initialize [
 { #category : 'enumerating' }
 CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| closeClassNames keys organizer dependentClassNames dependentPackages |
+	| closeClassNames keys dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
 	
 	organizer := package organizer.
 
-	"First, include classes from the current package"
-	closeClassNames := package definedClasses collect: [
-		                   :each | each name ].
-	closeClassNames do: [ :closeClassName |
-			(filter accepts:  closeClassName) ifTrue: [
-				aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
+	self packageLocalClasses: aBlock.
 
 	"Then include dependent classes from reverse dependencies"
 	dependentClassNames := OrderedCollection new.
