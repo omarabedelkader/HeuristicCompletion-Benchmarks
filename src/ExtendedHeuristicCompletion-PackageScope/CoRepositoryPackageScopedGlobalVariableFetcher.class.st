@@ -12,15 +12,12 @@ Class {
 { #category : 'enumerating' }
 CoRepositoryPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| string case closeClassNames keys packageNamePart friendClassNames friendPackageNames | 
+	| closeClassNames keys packageNamePart friendClassNames friendPackageNames | 
 	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
 	
 	self flag: #todo. "Code duplication!!!"
 	"First package level "
-	closeClassNames :=  package definedClasses collect: [ :each | each name ].
-	closeClassNames do: [ :closeClassName | 
-		(filter accepts: closeClassName) 
-			ifTrue: [ aBlock value: ((NECGlobalEntry contents: closeClassName node: nil) fetcher: self ; yourself) ]] .
+	closeClassNames := self packageLocalClasses: aBlock.
 	
 	"Package of the project e.g that starts with the same tag bfore the - 
 	ExtendedHeuristicCompletion-PackageScope -> HeuristicCompletion"
@@ -33,7 +30,8 @@ CoRepositoryPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	
 	friendPackageNames do: [ :packageName | 
 			(packageNamePart, '*' match: packageName)
-				ifTrue: [ friendClassNames addAll: ((organizer packageNamed: packageName ifAbsent: [ ]) definedClasses collect: [ :each |each name ])]]. 
+				ifTrue: [ friendClassNames addAll: ((organizer packageNamed: packageName ifAbsent: [ ]) 
+					definedClasses collect: [ :each |each name ])]]. 
 	
 	friendClassNames do: [ :closeClassName | 
 		(filter accepts: closeClassName) 
