@@ -53,10 +53,8 @@ It complements forward-based fetchers (like transitive or direct dependency-base
 "
 Class {
 	#name : 'CoReverseDependencyPackageScopedGlobalVariableFetcher',
-	#superclass : 'CoGlobalFetcher',
+	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#instVars : [
-		'packages',
-		'completionClass',
 		'reverseDependencies'
 	],
 	#category : 'ExtendedHeuristicCompletion-PackageScope-Variables',
@@ -84,60 +82,33 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher class >> initialize [
 	dependencies := Dictionary new
 ]
 
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> completionClass [
-
-	^ completionClass
-]
-
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> completionClass: anObject [
-
-	completionClass := anObject
-]
-
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> dependenciesOf: aString [
-
-	^ self class dependenciesOf: aString
-]
-
 { #category : 'enumerating' }
 CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| string case closeClassNames keys organizer dependentClassNames dependentPackages |
-	completionClass isNil ifTrue: [
-			^ self systemNavigation
-				  allGlobalNamesStartingWith: filter completionString
-				  do: [ :e |
-				  aBlock value: (NECGlobalEntry contents: e node: astNode) ]
-				  caseSensitive: NECPreferences caseSensitive ].
-
-	string := filter completionString.
-	case := NECPreferences caseSensitive.
-	organizer := completionClass package organizer.
+	| closeClassNames keys organizer dependentClassNames dependentPackages |
+	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
+	
+	organizer := package organizer.
 
 	"First, include classes from the current package"
-	closeClassNames := completionClass package definedClasses collect: [
+	closeClassNames := package definedClasses collect: [
 		                   :each | each name ].
 	closeClassNames do: [ :closeClassName |
-			(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
+			(filter accepts:  closeClassName) ifTrue: [
 				aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
 
 	"Then include dependent classes from reverse dependencies"
 	dependentClassNames := OrderedCollection new.
-	dependentPackages := self reverseDependenciesOf:
-		                     completionClass package name.
+	dependentPackages := self reverseDependenciesOf:  package name.
 	dependentPackages do: [ :packageName |
 			dependentClassNames addAll:
 				((organizer packageNamed: packageName ifAbsent: [ nil ])
-					 ifNotNil: [ :pkg |
-					 pkg definedClasses collect: [ :each | each name ] ]
+					 ifNotNil: [ :pkg | pkg definedClasses collect: [ :each | each name ] ]
 					 ifNil: [ #(  ) ]) ].
 
-	dependentClassNames do: [ :closeClassName |
-			(closeClassName beginsWith: string caseSensitive: case) ifTrue: [
-				aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ] ].
+	dependentClassNames do: [ :depclassName |
+			(filter accept: depclassName) ifTrue: [
+				aBlock value: (NECGlobalEntry contents: depclassName node: nil) ] ].
 
 	"Avoid duplicates from systemNavigation environment"
 	keys := self systemNavigation environment keys asOrderedCollection.
@@ -145,26 +116,19 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
 
 	keys do: [ :globalName |
-			(globalName beginsWith: string caseSensitive: case) ifTrue: [
+			(filter accepts: globalName) ifTrue: [
 				aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
-]
-
-{ #category : 'enumerating' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> packages: aCollection [
-
-	packages := aCollection
 ]
 
 { #category : 'accessing' }
 CoReverseDependencyPackageScopedGlobalVariableFetcher >> reverseDependenciesOf: aPackageName [
 
 	| allPackages dependentPackages |
-	allPackages := PackageOrganizer default packages. "self class packageOrganizer"
+	allPackages := PackageOrganizer default packages. 
 
-	dependentPackages := allPackages select: [ :package |
+	dependentPackages := allPackages select: [ :pack|
 			                     | dependencies |
-			                     dependencies := self dependenciesOf:
-				                                     package name.
+			                     dependencies := self dependenciesOf: pack name.
 			                     dependencies includes: aPackageName ].
 
 	^ dependentPackages collect: [ :pkg | pkg name ]
