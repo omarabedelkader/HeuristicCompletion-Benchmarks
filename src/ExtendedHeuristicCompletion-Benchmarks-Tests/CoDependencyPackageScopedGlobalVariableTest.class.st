@@ -6,7 +6,7 @@ Class {
 }
 
 { #category : 'tests' }
-CoDependencyPackageScopedGlobalVariableTest >> testCompletionClassIsUnknownShouldGiveGlobal [
+CoDependencyPackageScopedGlobalVariableTest >> testCompletionClassIsUnknownShouldGiveZero [
 	| localFetcher fetchedElements |
 	localFetcher := CoDependencyPackageScopedGlobalVariableFetcher  new.
 	localFetcher
@@ -16,8 +16,7 @@ CoDependencyPackageScopedGlobalVariableTest >> testCompletionClassIsUnknownShoul
 
 	"since the global namespace is not sorted by any means I have no warranty that the next global is the one
 	I asked for so "
-	self
-		assert: ('Object*' match: (fetchedElements collect: #contents) first)
+	self assert: (fetchedElements collect: #contents) isEmpty.
 ]
 
 { #category : 'tests' }

@@ -36,7 +36,7 @@ Class {
 { #category : 'enumerating' }
 CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	| localClassNames dependentClassNames dependentPackages keys |
-	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
+	completionClass isNil ifTrue: [ ^ self ].
 
 	"1) Add classes from current package"
 	localClassNames := package definedClasses collect: [ :each | each name ].

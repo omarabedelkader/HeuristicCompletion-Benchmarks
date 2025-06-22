@@ -86,7 +86,7 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher class >> initialize [
 CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
 	| closeClassNames keys dependentClassNames dependentPackages |
-	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
+	completionClass isNil ifTrue: [ ^ self ].
 	
 	organizer := package organizer.
 

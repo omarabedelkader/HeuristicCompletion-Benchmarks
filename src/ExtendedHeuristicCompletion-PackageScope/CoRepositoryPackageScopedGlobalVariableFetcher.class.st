@@ -13,7 +13,7 @@ Class {
 CoRepositoryPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
 	| closeClassNames keys packageNamePart friendClassNames friendPackageNames | 
-	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
+	completionClass isNil ifTrue: [ ^ self ].
 	
 	self flag: #todo. "Code duplication!!!"
 	"First package level "

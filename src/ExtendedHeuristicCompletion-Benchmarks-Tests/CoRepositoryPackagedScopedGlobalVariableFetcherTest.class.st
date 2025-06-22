@@ -154,13 +154,10 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testNoClassesInPackage [
 
 	fetchedElements := localFetcher upToEnd.
 
-	"Because the package is empty and we have no 'completionClass', 
-	 the default logic might just revert to the global fetcher or return the 2 globals."
+	"Because the package is empty and we have no 'completionClass'"
 
-	self assert: fetchedElements size equals: 2.
-	self
-		assert: (fetchedElements collect: #contents) asSet
-		equals: #( 'AiGlobal1' 'AiGlobal2' ) asSet
+	self assert: fetchedElements size equals: 0.
+
 ]
 
 { #category : 'one local one global' }

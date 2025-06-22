@@ -12,7 +12,7 @@ Class {
 { #category : 'enumerating' }
 CoLateralPackageGlobalVariableFetcher >> entriesDo: aBlock [
 		| allGlobals excludedNames packageNamePart excludedPackages |
-		completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
+		completionClass isNil ifTrue: [ ^ self ].
 
 		"Identify current and repository packages to exclude"
 		packageNamePart := package name copyUpTo: $-.

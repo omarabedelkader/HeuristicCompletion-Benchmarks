@@ -35,7 +35,7 @@ CoAbstractPackageDependentScopeGlobalVariableFetcher class >> dependencyCache [
 
 { #category : 'accessing' }
 CoAbstractPackageDependentScopeGlobalVariableFetcher class >> resetCache [
-
+	<script>
 	Dependencies := nil
 ]
 

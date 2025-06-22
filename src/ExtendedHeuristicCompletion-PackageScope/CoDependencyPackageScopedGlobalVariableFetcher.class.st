@@ -68,9 +68,9 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
 	| homePackageClassNames keys dependentClassNames dependentPackages |
 	"First package level. This could be a separate fetcher to produce more composible code"
+
 	
-	completionClass isNil ifTrue: [ ^ self fallbackEntriesDo: aBlock ].
-	
+	completionClass isNil ifTrue: [ ^ self ].
 
 	homePackageClassNames := self packageLocalClasses: aBlock.
 	dependentClassNames := SortedCollection sortUsing: [ :a :b | a <= b ].

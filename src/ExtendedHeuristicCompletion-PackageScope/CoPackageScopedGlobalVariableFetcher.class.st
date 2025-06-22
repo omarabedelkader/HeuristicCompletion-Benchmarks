@@ -30,15 +30,6 @@ CoPackageScopedGlobalVariableFetcher >> completionClass: anObject [
 ]
 
 { #category : 'enumerating' }
-CoPackageScopedGlobalVariableFetcher >> fallbackEntriesDo: aBlock [ 
-
-	^ self systemNavigation
-		allGlobalNamesStartingWith: filter completionString
-		do: [ :e | aBlock value: ((NECGlobalEntry contents: e node: astNode) fetcher: self ; yourself) ]
-		caseSensitive: filter isCaseSensitive 
-]
-
-{ #category : 'enumerating' }
 CoPackageScopedGlobalVariableFetcher >> packageLocalClasses: aBlock [
 
 	| homePackageClassNames |
