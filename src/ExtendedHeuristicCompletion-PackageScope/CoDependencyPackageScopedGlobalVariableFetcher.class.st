@@ -66,13 +66,11 @@ CoDependencyPackageScopedGlobalVariableFetcher >> dependencies: anObject [
 { #category : 'enumerating' }
 CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| homePackageClassNames keys dependentClassNames dependentPackages |
-	"First package level. This could be a separate fetcher to produce more composible code"
-
-	
+	| dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self ].
 
-	homePackageClassNames := self packageLocalClasses: aBlock.
+	self packageLocalClasses: aBlock.
+	
 	dependentClassNames := SortedCollection sortUsing: [ :a :b | a <= b ].
 	dependentPackages := self dependenciesOf: package name.
 	dependentPackages do: [ :packageName |
@@ -84,20 +82,9 @@ CoDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 					aBlock value: ((NECGlobalEntry contents: depClassName node: nil)
 							 fetcher: self;
 							 yourself) ] ].
-					
-	"if we blindly iterate the global environment i.e., delegating to the rest of the configuration,
-	it may happen that the global fetcher will return a class already seen. 
-	So we manage the global lookup here.
-	It may mean that the global fetcher could be working on keys and that it could 
-	be customized to support the semantics we want. This way we would avoid to redefine it locally."				
-					
-	keys := systemNavigation environment keys asOrderedCollection.
-	homePackageClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
-	dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
-	keys do: [ :globalName |
-			(filter accepts: globalName) ifTrue: [
-					aBlock value:
-						((NECGlobalEntry contents: globalName node: astNode)
-							 fetcher: self;
-							 yourself) ] ]
+	
+	"In the past this fetcher was handling the global namespace search by removing the 
+	already seen classes from the namespace. In fact this is not needed because 
+	the heuristics handles the repettion of proposition. 
+	So here we default to the configuration and following fetcher."
 ]

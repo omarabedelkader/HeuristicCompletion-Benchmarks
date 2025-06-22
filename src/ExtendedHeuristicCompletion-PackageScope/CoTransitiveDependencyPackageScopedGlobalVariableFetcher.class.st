@@ -35,14 +35,11 @@ Class {
 
 { #category : 'enumerating' }
 CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
-	| localClassNames dependentClassNames dependentPackages keys |
+	| dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self ].
 
-	"1) Add classes from current package"
-	localClassNames := package definedClasses collect: [ :each | each name ].
-	localClassNames do: [ :className |
-		(filter accepts: className)
-			ifTrue: [ aBlock value: ((NECGlobalEntry contents: className node: nil) fetcher: self ; yourself) ] ].
+	"2) first localclasses"
+	self packageLocalClasses: aBlock.
 
 	"2) Add classes from transitive dependencies"
 	dependentPackages := self dependenciesOf: package name.
@@ -60,13 +57,5 @@ CoTransitiveDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 		(filter accepts: className)
 			ifTrue: [ aBlock value: (NECGlobalEntry contents: className node: nil) ] ].
 
-	"3) Exclude them from the environment so we don't suggest duplicates"
-	keys := self systemNavigation environment keys asOrderedCollection.
-	localClassNames do: [ :nm | keys remove: nm ifAbsent: [] ].
-	dependentClassNames do: [ :nm | keys remove: nm ifAbsent: [] ].
 
-	"4) Finally, fill in standard global suggestions"
-	keys do: [ :gName |
-		(filter accepts: gName)
-			ifTrue: [ aBlock value: ((NECGlobalEntry contents: gName node: astNode) fetcher: self ; yourself) ] ]
 ]

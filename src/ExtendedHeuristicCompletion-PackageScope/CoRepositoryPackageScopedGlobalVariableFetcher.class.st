@@ -15,8 +15,6 @@ CoRepositoryPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	| closeClassNames keys packageNamePart friendClassNames friendPackageNames | 
 	completionClass isNil ifTrue: [ ^ self ].
 	
-	self flag: #todo. "Code duplication!!!"
-	"First package level "
 	closeClassNames := self packageLocalClasses: aBlock.
 	
 	"Package of the project e.g that starts with the same tag bfore the - 
