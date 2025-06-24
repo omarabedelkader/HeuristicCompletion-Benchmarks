@@ -97,9 +97,7 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> setUp [
 		NECGlobalEntry contents: 'Ai13' node: nil .
 		NECGlobalEntry contents: 'Ai2' node: nil .
 		NECGlobalEntry contents: 'Ai23' node: nil .
-		NECGlobalEntry contents: 'Ai3' node: nil .
-		NECGlobalEntry contents: 'AiGlobal1' node: nil .
-		NECGlobalEntry contents: 'AiGlobal2' node: nil .
+		NECGlobalEntry contents: 'Ai3' node: nil 
 		}
 ]
 
