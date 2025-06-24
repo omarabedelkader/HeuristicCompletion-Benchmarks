@@ -4,14 +4,27 @@ Class {
 	#instVars : [
 		'package1',
 		'package2',
-		'package3'
+		'package3',
+		'organizer',
+		'ai12',
+		'ai13',
+		'a11',
+		'aa1',
+		'ai2',
+		'ai23',
+		'aa2',
+		'ai3',
+		'a33',
+		'blop',
+		'aiGlobal1',
+		'aiGlobal2'
 	],
 	#category : 'ExtendedHeuristicCompletion-Benchmarks-Tests',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks-Tests'
 }
 
 { #category : 'one local one global' }
-CoRepositoryPackagedScopedGlobalVariableFetcherTest >> setUpThreePackages [
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> setUp [
 	" we have
 		2 packages 
 			P1A : Ai12 Ai13 A11 AA1 CoInP1
@@ -21,7 +34,8 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> setUpThreePackages [
 	and two globals		
 		"
 	
-	| ai12 ai13 a11 aa1 ai2 ai23 aa2 ai3 a33 blop classesInP1 classesInP2 classesInP3 organizer dict |
+	| classesInP1 classesInP2 classesInP3 dict |
+	super setUp.
 	completionClass := CoMockClass new name: 'CoInP1'. 
 	ai12 := CoMockClass new name: 'Ai12'.
 	ai13 := CoMockClass new name: 'Ai13'.
@@ -35,6 +49,9 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> setUpThreePackages [
 	ai3 := CoMockClass new name: 'Ai3'.
 	a33 := CoMockClass new name: 'A33'.
 	blop := CoMockClass new name: 'Blop'.
+	
+	aiGlobal1 := CoMockClass new name: 'AiGlobal1'.
+	aiGlobal2 := CoMockClass new name: 'AiGlobal2'.
 		
 	package1 := CoMockPackage new. 
 	package1 name: 'P1-Core1'.
@@ -56,14 +73,15 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> setUpThreePackages [
 	classesInP3 do: [:cl | cl package: package3]. 
 	
 	organizer := CoMockPackageOrganizer new.
-	organizer packages: { package1 . package2. package3 }.
+	organizer packages: { package1 . package2. package3 } asOrderedCollection.
 	 { package1 . package2. package3 } do: [ :p | p organizer: organizer ].
 	
 	
 	"We need an environment with keys. We create a dummy dictionary with keys and just the same as value"
+	
 	dict := Dictionary new. 
-	{'AiGlobal1' . 'AiGlobal2' . 'Ai12' .  'Ai13' . 'A11' .'Aa1' . 'Ai2' . 'Ai23' . 'Aa2' . 'Ai3' . 'A33' . 'Blop'}
-		do: [ :each | dict at: each put: each ].
+	{aiGlobal1 . aiGlobal2 . ai12 .  ai13 . a11 . aa1 . ai2 . ai23 . aa2 . ai3 . a33 . blop}
+		do: [ :each | dict at: each name put: each ].
 		
 	systemNavigation := CoMockSystemNavigation new
 		globals: dict;
@@ -89,7 +107,6 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> setUpThreePackages [
 CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClass [
 
 	| fetchedElements expected |
-	self setUpThreePackages. 
 	fetchedElements := self fetcher next: 2.
 	expected := { self firstExpectedElement . self secondExpectedElement }.
 	fetchedElements withIndexDo: [ :each :index |
@@ -101,7 +118,7 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfComplet
 CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenAllProjectLevelPackage [
 
 	| fetchedElements expected |
-	self setUpThreePackages. 
+
 	fetchedElements := self fetcher next: 5.
 	expected  := expectedElements first: 5. 
 	fetchedElements withIndexDo: [ :each :index |
@@ -110,12 +127,12 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfComplet
 ]
 
 { #category : 'one local one global' }
-CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenAllProjectLevelPackageThenGlobals [
-
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenAllProjectLevelPackageThenNoGlobals [
+	"we do not repo global since this is the next fetcher' job "
 	| fetchedElements expected |
-	self setUpThreePackages. 
+	
 	fetchedElements := self fetcher next: 7.
-	expected  := expectedElements first: 7. 
+	expected  := expectedElements first: 5. 
 	fetchedElements withIndexDo: [ :each :index |
 		self assertEntry: each equals: (expected at: index) ].
 	self assert: fetchedElements size equals: expected size
@@ -125,7 +142,7 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfComplet
 CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfCompletionClassThenProjectLevelPackage [
 
 	| fetchedElements expected |
-	self setUpThreePackages. 
+
 	fetchedElements := self fetcher next: 3.
 	expected  := expectedElements first: 3. 
 	fetchedElements withIndexDo: [ :each :index |
@@ -134,22 +151,25 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testFirstPackageOfComplet
 ]
 
 { #category : 'one local one global' }
-CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testNoClassesInPackage [
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testNoClassesMatchingInPackage [
 	"Tests the behavior if a package has no classes that match 'Ai'."
 
-	| localPackage localFetcher localSystemNavigation fetchedElements |
+	| localPackage localFetcher fetchedElements noMatch |
+	
+	noMatch := CoMockClass new name: 'NoMatch'.
 	localPackage := CoMockPackage new.
 	localPackage name: 'Empty-Package'.
-	localPackage definedClasses: #(  ).
-
-	localSystemNavigation := CoMockSystemNavigation new
-		                         globals: { 'AiGlobal1'. 'AiGlobal2' };
-		                         yourself.
-
+	localPackage definedClasses: { noMatch }.
+	noMatch package: localPackage.
+	localPackage organizer: organizer.
+	organizer add: localPackage.
+	
+	systemNavigation globals at: noMatch name put: noMatch.
+	
 	localFetcher := CoRepositoryPackageScopedGlobalVariableFetcher new.
 	localFetcher
-		completionClass: nil;
-		systemNavigation: localSystemNavigation;
+		completionClass: noMatch;
+		systemNavigation: systemNavigation;
 		filter: (CoBeginsWithFilter caseSensitive: false filterString: 'Ai').
 
 	fetchedElements := localFetcher upToEnd.
@@ -161,16 +181,32 @@ CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testNoClassesInPackage [
 ]
 
 { #category : 'one local one global' }
+CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testNoCompletionClassReturnsZeroEntry [
+	"Tests the behavior if a package has no classes that match 'Ai'."
+
+	| localFetcher fetchedElements |
+	
+	localFetcher := CoRepositoryPackageScopedGlobalVariableFetcher new.
+	localFetcher
+		completionClass: nil;
+		filter: (CoBeginsWithFilter caseSensitive: false filterString: 'Ai').
+
+	fetchedElements := localFetcher upToEnd.
+
+	self assert: fetchedElements size equals: 0.
+
+]
+
+{ #category : 'one local one global' }
 CoRepositoryPackagedScopedGlobalVariableFetcherTest >> testRequestMoreThanAvailableOnlyReturnAvailable [
 
 	| fetchedElements expected |
-	self setUpThreePackages. 
-	fetchedElements := self fetcher next: 10.
-	
+
+	fetchedElements := self fetcher next: 10.	
 	"There is more than 7 classes starting with Ai"
-	self assert: fetchedElements size equals: 7.
+	self assert: fetchedElements size equals: 5.
 	
-	expected  := expectedElements first: 7. 
+	expected  := expectedElements first: 5. 
 	fetchedElements withIndexDo: [ :each :index |
 		self assertEntry: each equals: (expected at: index) ].
 	self assert: fetchedElements size equals: expected size

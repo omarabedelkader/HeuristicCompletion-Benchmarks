@@ -21,7 +21,7 @@ CoSinglePackageScopedGlobalVariableFetcherAlternateTest >> setUpOneLocalThenGlob
 		yourself.
 
 	fetcher := CoSinglePackageScopedGlobalVariableFetcher new. 
-	fetcher packages: { package }.
+	fetcher completionClass: a.
 	fetcher systemNavigation: systemNavigation.
 	fetcher filter: (CoBeginsWithFilter caseSensitive: false filterString: 'AI').
 

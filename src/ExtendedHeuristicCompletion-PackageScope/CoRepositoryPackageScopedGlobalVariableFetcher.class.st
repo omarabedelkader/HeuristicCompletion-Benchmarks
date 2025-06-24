@@ -12,45 +12,27 @@ Class {
 { #category : 'enumerating' }
 CoRepositoryPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| closeClassNames keys packageNamePart friendClassNames friendPackageNames | 
+	|  packageNamePart friendClassNames friendPackageNames | 
 	completionClass isNil ifTrue: [ ^ self ].
 	
-	closeClassNames := self packageLocalClasses: aBlock.
+	self packageLocalClasses: aBlock.
+	
 	
 	"Package of the project e.g that starts with the same tag bfore the - 
 	ExtendedHeuristicCompletion-PackageScope -> HeuristicCompletion"
-	
 	packageNamePart := package name copyUpTo: $-.
 	friendClassNames := OrderedCollection new. 
-	
 	friendPackageNames := organizer packageNames asOrderedCollection.
-	friendPackageNames remove: package name. 
+	friendPackageNames remove: package name "ifAbsent: [ nil ]".
+	"It is improbable but let us make sure that we do not break is the organizer
+	does not contain the package"
 	
 	friendPackageNames do: [ :packageName | 
 			(packageNamePart, '*' match: packageName)
 				ifTrue: [ friendClassNames addAll: ((organizer packageNamed: packageName ifAbsent: [ ]) 
 					definedClasses collect: [ :each |each name ])]]. 
 	
-	friendClassNames do: [ :closeClassName | 
-		(filter accepts: closeClassName) 
-			ifTrue: [ aBlock value: (NECGlobalEntry contents: closeClassName node: nil) ]].
-	
-	
-	"Global"
-	"forced to copy the keys but let us try."
-	
-	keys := self systemNavigation environment keys asOrderedCollection.
-	closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
-	friendClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
-	"we could not use remove: ifAbsent: but this would hide something. 
-	Because I do not get why the navigation should not contain the same objects than before."
-	
-	"Same as above this is the not the job of the fetcher to filter.
-	This is a pity because we cannot reuse the logic of systemNavigation because we should not 
-	modify the global environment."
-	keys do: [ :globalName | 
-		(filter accepts: globalName) 
-			ifTrue: [ aBlock value: ((NECGlobalEntry contents: globalName node: astNode) fetcher: self ; yourself) ]]
-		
-	
+	friendClassNames do: [ :friend | 
+		(filter accepts: friend) 
+			ifTrue: [ aBlock value: (NECGlobalEntry contents: friend node: nil) ]].
 ]
