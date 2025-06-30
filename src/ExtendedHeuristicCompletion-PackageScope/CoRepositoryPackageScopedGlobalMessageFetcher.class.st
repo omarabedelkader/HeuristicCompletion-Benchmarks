@@ -11,10 +11,6 @@ CoRepositoryPackageScopedGlobalMessageFetcher >> entriesDo: aBlock [
 
 	| closeClassNames keys 
 	  packageNamePart friendClassNames friendPackageNames |
-	self flag: #todo. 
-	"We should split this method and the one of the superclass to revise.
-	
-	"
 	
 	astNode ifNotNil: [ :node |
 		node parent ifNotNil: [ :parent |
