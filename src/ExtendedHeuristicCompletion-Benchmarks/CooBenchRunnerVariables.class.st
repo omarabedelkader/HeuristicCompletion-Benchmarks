@@ -50,7 +50,7 @@ CooBenchRunnerVariables class >> iwst1 [
 CooBenchRunnerVariables class >> iwst1finalIceberg [
 
 	<script>
-	^ (self new allResultsFor:
+	^ (self allResultsFor:
 		   { 'Iceberg'. 'Iceberg-Libgit'. 'Iceberg-Libgit-Filetree'.
 		   'Iceberg-Libgit-Tonel'. 'Iceberg-Metacello-Integration'.
 		   'Iceberg-Plugin'. 'Iceberg-Plugin-Github'. 'Iceberg-Plugin-Migration'.
@@ -114,7 +114,7 @@ CooBenchRunnerVariables class >> iwst1finalmoose [
 CooBenchRunnerVariables class >> iwst1finalroassal [
 
 	<script>
-	^ (self new allResultsFor:
+	^ (self allResultsFor:
 		   { 'Roassal'. 'Roassal-Animation'. 'Roassal-Animation-Tests'.
 		   'Roassal-BaselineMap'. 'Roassal-BaselineMap-Tests'.
 		   'Roassal-Builders'. 'Roassal-Chart'. 'Roassal-Chart-Examples'.

@@ -111,7 +111,7 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 			  self new
 				  package: pack;
 				  baseline: #withBaseline ;
-				  others: {#withOllamaReRank};
+				  others: {#withPackageScope. #withDependency. #withTransitiveDependency. #withLateralDependency };
 				  run ]
 ]
 
