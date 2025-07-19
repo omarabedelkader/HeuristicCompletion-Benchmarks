@@ -57,6 +57,9 @@ Class {
 	#instVars : [
 		'reverseDependencies'
 	],
+	#classInstVars : [
+		'dependencies'
+	],
 	#category : 'ExtendedHeuristicCompletion-PackageScope-Variables',
 	#package : 'ExtendedHeuristicCompletion-PackageScope',
 	#tag : 'Variables'
