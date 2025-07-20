@@ -167,7 +167,7 @@ CooBenchRunnerVariables class >> iwst1finalseaside [
 CooBenchRunnerVariables class >> iwst1finalspec [
 
 	<script>
-	^ (self new allResultsFor:
+	^ (self allResultsFor:
 		   { 'Spec2-Adapters-Morphic'. 'Spec2-Adapters-Morphic-ListView'.
 		   'Spec2-Adapters-Morphic-Tests'. 'Spec2-Adapters-Stub'.
 		   'Spec2-Backend-Tests'. 'Spec2-Code'. 'Spec2-Code-Backend-Tests'.
