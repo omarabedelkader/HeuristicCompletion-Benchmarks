@@ -141,7 +141,7 @@ CooBenchRunnerVariables class >> iwst1finalroassal [
 CooBenchRunnerVariables class >> iwst1finalseaside [
 
 	<script>
-	^ (self new allResultsFor:
+	^ (self allResultsFor:
 		   { 'Seaside-Ajaxifier-Core'. 'Seaside-Canvas'. 'Seaside-Component'.
 		   'Seaside-Continuation'. 'Seaside-Core'. 'Seaside-Development'.
 		   'Seaside-Email'. 'Seaside-Environment'. 'Seaside-Examples'.
@@ -150,8 +150,7 @@ CooBenchRunnerVariables class >> iwst1finalseaside [
 		   'Seaside-Pharo-Development'. 'Seaside-Pharo-Email'.
 		   'Seaside-Pharo-Environment'. 'Seaside-Pharo-Flow'.
 		   'Seaside-Pharo-JSON-Core'. 'Seaside-Pharo-Tools-Web'.
-		   'Seaside-Pharo-Welcome'. 'Seaside-Pharo100-Tools-Spec2'.
-		   'Seaside-Pharo90-REST-Core'. 'Seaside-REST-Core'.
+		   'Seaside-Pharo-Welcome'.'Seaside-REST-Core'.
 		   'Seaside-RenderLoop'. 'Seaside-Session'. 'Seaside-Tests-Canvas'.
 		   'Seaside-Tests-Component'. 'Seaside-Tests-Core'.
 		   'Seaside-Tests-Environment'. 'Seaside-Tests-Flow'.

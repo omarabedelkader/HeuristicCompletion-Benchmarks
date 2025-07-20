@@ -93,7 +93,7 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 	
 	organizer := package organizer.
 
-	self packageLocalClasses: aBlock.
+	closeClassNames := self packageLocalClasses: aBlock.
 
 	"Then include dependent classes from reverse dependencies"
 	dependentClassNames := OrderedCollection new.
@@ -105,7 +105,7 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 					 ifNil: [ #(  ) ]) ].
 
 	dependentClassNames do: [ :depclassName |
-			(filter accept: depclassName) ifTrue: [
+			(filter accepts: depclassName) ifTrue: [
 				aBlock value: (NECGlobalEntry contents: depclassName node: nil) ] ].
 
 	"Avoid duplicates from systemNavigation environment"
