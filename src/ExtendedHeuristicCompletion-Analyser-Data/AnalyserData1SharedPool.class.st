@@ -8,3 +8,9 @@ Class {
 	#category : 'ExtendedHeuristicCompletion-Analyser-Data',
 	#package : 'ExtendedHeuristicCompletion-Analyser-Data'
 }
+
+{ #category : 'accessing' }
+AnalyserData1SharedPool >> accessingSharedVariable2 [ 
+	
+	^ Ansp1 + Ansp2 
+]

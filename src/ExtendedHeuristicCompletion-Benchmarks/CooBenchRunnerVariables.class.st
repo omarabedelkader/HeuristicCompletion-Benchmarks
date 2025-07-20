@@ -359,7 +359,7 @@ CooBenchRunnerVariables >> withSemantics [
 			 build).
 
 	benchmark := CooStaticBenchmarksVariables new
-		             name: 'Without PackageScope';
+		             name: 'Semantics';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.

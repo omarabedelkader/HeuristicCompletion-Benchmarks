@@ -12,6 +12,12 @@ Class {
 }
 
 { #category : 'accessing' }
+AnalyserData1 >> accessingAnalyserData1SharedPool [
+
+	^ AnalyserData1SharedPool
+]
+
+{ #category : 'accessing' }
 AnalyserData1 >> foo [  
 
 	^ AnalyserA 
