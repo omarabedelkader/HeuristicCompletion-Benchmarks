@@ -1,3 +1,6 @@
+"
+A class used inside the bench
+"
 Class {
 	#name : 'CooResultColumn',
 	#superclass : 'Object',

@@ -58,7 +58,7 @@ CoAdaptiveMetaGlobalVariableFetcher >> completionClass: anObject [
     ].
 ]
 
-{ #category : 'initialization' }
+{ #category : 'enumerating' }
 CoAdaptiveMetaGlobalVariableFetcher >> entriesDo: aBlock [ 
 
     | suggestionsMap |

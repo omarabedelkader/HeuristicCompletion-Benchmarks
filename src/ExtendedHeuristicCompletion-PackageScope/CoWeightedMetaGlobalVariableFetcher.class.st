@@ -59,7 +59,7 @@ CoWeightedMetaGlobalVariableFetcher >> completionClass: anObject [
 
 ]
 
-{ #category : 'accessing' }
+{ #category : 'enumerating' }
 CoWeightedMetaGlobalVariableFetcher >> entriesDo: aBlock [
 
 	| suggestionsMap case string |
@@ -92,7 +92,7 @@ CoWeightedMetaGlobalVariableFetcher >> fetchersAndWeights: aCollection [
 	fetchersAndWeights := aCollection
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 CoWeightedMetaGlobalVariableFetcher >> initialize [
 
 	super initialize.
