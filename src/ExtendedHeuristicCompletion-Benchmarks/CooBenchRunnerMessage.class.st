@@ -221,6 +221,26 @@ CooBenchRunnerMessage class >> specTests [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerMessage >> withAdaptiveWeightedMetaFetcher [ 
+    "self new
+            package: AnalyserData1 package;
+            withAdaptiveWeightedMetaFetcher"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
+                                CoAdaptiveMetaGlobalVariableFetcher);
+                         build).
+    benchmark := CooStaticBenchmarksMessage new
+                             name: 'Adaptive Weighted Dependency';
+                             scope: (CoBenchmarkPackage on: package);
+                             builder: builder;
+                             run.
+    ^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerMessage >> withBaseline [
 	"self new 
 		package: AnalyserData1 package;
@@ -238,6 +258,86 @@ CooBenchRunnerMessage >> withBaseline [
 		             builder: builder;
 		             run.
 	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withDependency [
+    "self new
+            package: NECEntry package;
+            withDependency"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
+                                CoDependencyPackageScopedGlobalVariableFetcher);
+                         build).
+    benchmark := CooStaticBenchmarksMessage new
+                             name: 'Dependency';
+                             scope: (CoBenchmarkPackage on: package);
+                             builder: builder;
+                             run.
+    ^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withLateralDependency [
+    "self new
+            package: AnalyserData1 package;
+            withReverseDependency"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
+                                CoLateralPackageGlobalVariableFetcher);
+                         build).
+    benchmark := CooStaticBenchmarksMessage new
+                             name: 'Lateral Dependency';
+                             scope: (CoBenchmarkPackage on: package);
+                             builder: builder;
+                             run.
+    ^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withPackageScope [
+    "self new
+            package: AnalyserData1 package;
+            withPackageScope"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
+                                CoRepositoryPackageScopedGlobalMessageFetcher);
+                         build).
+    benchmark := CooStaticBenchmarksMessage new
+                             name: 'Packages Scope';
+                             scope: (CoBenchmarkPackage on: package);
+                             builder: builder;
+                             run.
+    ^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withReverseDependency [
+    "self new
+            package: AnalyserData1 package;
+            withReverseDependency"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
+                                CoReverseDependencyPackageScopedGlobalVariableFetcher);
+                         build).
+    benchmark := CooStaticBenchmarksMessage new
+                             name: 'Reverse Dependency';
+                             scope: (CoBenchmarkPackage on: package);
+                             builder: builder;
+                             run.
+    ^ benchmark
 ]
 
 { #category : 'experience' }
@@ -264,4 +364,44 @@ CooBenchRunnerMessage >> withSemantics [
 		             builder: builder;
 		             run.
 	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withTransitiveDependency [
+    "self new
+            package: AnalyserData1 package;
+            withTransitiveDependency"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
+                                CoTransitiveDependencyPackageScopedGlobalVariableFetcher);
+                         build).
+    benchmark := CooStaticBenchmarksMessage new
+                             name: 'Transitive Dependency';
+                             scope: (CoBenchmarkPackage on: package);
+                             builder: builder;
+                             run.
+    ^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withWeightedMetaFetcher [
+    "self new
+            package: AnalyserData1 package;
+            withWeightedMetaFetcher"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
+                                CoWeightedMetaGlobalVariableFetcher);
+                         build).
+    benchmark := CooStaticBenchmarksMessage new
+                             name: 'Weighted Dependency';
+                             scope: (CoBenchmarkPackage on: package);
+                             builder: builder;
+                             run.
+    ^ benchmark
 ]

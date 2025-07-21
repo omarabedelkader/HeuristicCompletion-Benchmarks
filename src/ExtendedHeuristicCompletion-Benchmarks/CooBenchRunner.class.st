@@ -14,7 +14,7 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
-{ #category : 'iwst' }
+{ #category : 'benchmarks' }
 CooBenchRunner class >> allResultsFor: aColOfPackageNames [
 
 	| packages runs string latex |
@@ -29,7 +29,12 @@ CooBenchRunner class >> allResultsFor: aColOfPackageNames [
 		  latex }
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
+CooBenchRunner class >> iceberg [
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
 CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
 	"Produce a LaTeX table showing the results from each benchmark in aCol."
 
@@ -104,7 +109,38 @@ CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
 	^ header , body , footer
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
+CooBenchRunner class >> moose [
+	^ self subclassResponsibility
+]
+
+{ #category : 'examples' }
+CooBenchRunner class >> mooseTests [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'examples' }
+CooBenchRunner class >> nec [
+	^ self subclassResponsibility
+]
+
+{ #category : 'examples' }
+CooBenchRunner class >> necTests [
+	^ self subclassResponsibility
+]
+
+{ #category : 'examples' }
+CooBenchRunner class >> roassal [
+	^ self subclassResponsibility
+]
+
+{ #category : 'examples' }
+CooBenchRunner class >> roassalTests [
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
 CooBenchRunner class >> runComparisonForPackages: aCol [
 
 	^ aCol collect: [ :pack |
@@ -115,7 +151,30 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 				  run ]
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
+CooBenchRunner class >> seaside [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'examples' }
+CooBenchRunner class >> seasideTests [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'examples' }
+CooBenchRunner class >> spec [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'examples' }
+CooBenchRunner class >> specTests [
+	^ self subclassResponsibility
+]
+
+{ #category : 'benchmarks' }
 CooBenchRunner class >> stringResultForABenchCollection: aCol [
 
 	^ String streamContents: [ :s |
