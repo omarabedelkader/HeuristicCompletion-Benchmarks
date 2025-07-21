@@ -4,9 +4,8 @@ I am a fetcher looking for globals in an environment.
 Class {
 	#name : 'CoRepositoryPackageScopedGlobalVariableFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Variables',
-	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Variables'
+	#category : 'ExtendedHeuristicCompletion-PackageScope',
+	#package : 'ExtendedHeuristicCompletion-PackageScope'
 }
 
 { #category : 'enumerating' }

@@ -6,9 +6,8 @@ See the #entriesDo:
 Class {
 	#name : 'CooGlobalSelectorFetcher',
 	#superclass : 'CoGlobalFetcher',
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Message',
-	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Message'
+	#category : 'ExtendedHeuristicCompletion-PackageScope',
+	#package : 'ExtendedHeuristicCompletion-PackageScope'
 }
 
 { #category : 'enumerating' }

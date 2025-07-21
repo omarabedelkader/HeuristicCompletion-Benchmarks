@@ -1,9 +1,8 @@
 Class {
 	#name : 'CoRepositoryPackageScopedGlobalMessageFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
-	#category : 'ExtendedHeuristicCompletion-PackageScope-Message',
-	#package : 'ExtendedHeuristicCompletion-PackageScope',
-	#tag : 'Message'
+	#category : 'ExtendedHeuristicCompletion-PackageScope',
+	#package : 'ExtendedHeuristicCompletion-PackageScope'
 }
 
 { #category : 'enumerating' }
