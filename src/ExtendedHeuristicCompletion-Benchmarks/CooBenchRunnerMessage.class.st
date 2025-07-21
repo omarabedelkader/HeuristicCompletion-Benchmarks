@@ -241,26 +241,6 @@ CooBenchRunnerMessage >> withBaseline [
 ]
 
 { #category : 'experience' }
-CooBenchRunnerMessage >> withPackageScope [
-    "self new
-            package: AnalyserData1 package;
-            withPackageScope"
-
-    | builder benchmark |
-    builder := CoASTHeuristicsResultSetBuilder new.
-    builder messageHeuristic: (builder newHeuristicBuilder
-                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
-                                CoRepositoryPackageScopedGlobalMessageFetcher);
-                         build).
-    benchmark := CooStaticBenchmarksMessage new
-                             name: 'Packages Scope';
-                             scope: (CoBenchmarkPackage on: package);
-                             builder: builder;
-                             run.
-    ^ benchmark
-]
-
-{ #category : 'experience' }
 CooBenchRunnerMessage >> withSemantics [
 	"self new 
 		package: AnalyserData1 package;
