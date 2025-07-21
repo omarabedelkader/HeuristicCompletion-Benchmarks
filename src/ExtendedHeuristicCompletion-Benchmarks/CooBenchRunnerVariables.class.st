@@ -143,7 +143,7 @@ CooBenchRunnerVariables class >> nec [
 ]
 
 { #category : 'iwst' }
-CooBenchRunnerVariables class >> nectest [
+CooBenchRunnerVariables class >> necTests [
 
 	<script>
 	^ (self allResultsFor: {'NECompletion-Tests' })
