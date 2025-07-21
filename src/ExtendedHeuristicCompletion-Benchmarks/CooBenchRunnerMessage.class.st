@@ -29,7 +29,7 @@ Class {
 }
 
 { #category : 'iwst' }
-CooBenchRunnerMessage class >> iwst1 [
+CooBenchRunnerMessage class >> simpletest [
 
 	<script>
 	^ (self allResultsFor: { 'NECompletion' . 'NECompletion-Tests' })

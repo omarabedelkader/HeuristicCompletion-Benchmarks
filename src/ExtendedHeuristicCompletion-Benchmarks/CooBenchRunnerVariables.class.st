@@ -39,15 +39,7 @@ Class {
 }
 
 { #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1 [
-
-	<script>
-	^ (self allResultsFor: {'NECompletion-Tests' })
-		  inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1finalIceberg [
+CooBenchRunnerVariables class >> iceberg [
 
 	<script>
 	^ (self allResultsFor:
@@ -59,10 +51,10 @@ CooBenchRunnerVariables class >> iwst1finalIceberg [
 ]
 
 { #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1finalmoose [
+CooBenchRunnerVariables class >> moose [
 
 	<script>
-	^ (self new allResultsFor: { 'Moose-Blueprint-Invocations-Models'.
+	^ (self allResultsFor: { 'Moose-Blueprint-Invocations-Models'.
 		   'Moose-Blueprint-Models'. 'Moose-Blueprint-Models-Tests'.
 		   'Moose-Blueprint-Visualization-Models'.
 		   'Moose-Configuration'. 'Moose-Core'. 'Moose-Core-Generator'.
@@ -111,7 +103,7 @@ CooBenchRunnerVariables class >> iwst1finalmoose [
 ]
 
 { #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1finalroassal [
+CooBenchRunnerVariables class >> roassal [
 
 	<script>
 	^ (self allResultsFor:
@@ -138,7 +130,7 @@ CooBenchRunnerVariables class >> iwst1finalroassal [
 ]
 
 { #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1finalseaside [
+CooBenchRunnerVariables class >> seaside [
 
 	<script>
 	^ (self allResultsFor:
@@ -164,7 +156,15 @@ CooBenchRunnerVariables class >> iwst1finalseaside [
 ]
 
 { #category : 'iwst' }
-CooBenchRunnerVariables class >> iwst1finalspec [
+CooBenchRunnerVariables class >> simpletest [
+
+	<script>
+	^ (self allResultsFor: {'NECompletion-Tests' })
+		  inspect
+]
+
+{ #category : 'iwst' }
+CooBenchRunnerVariables class >> spec [
 
 	<script>
 	^ (self allResultsFor:
@@ -266,33 +266,6 @@ CooBenchRunnerVariables >> withLateralDependency [
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
-	^ benchmark
-]
-
-{ #category : 'experience' }
-CooBenchRunnerVariables >> withOllamaReRank [
-	"self new 
-		package: AnalyserData1 package;
-		withOllamaReRank"
-
-	| builder benchmark |
-	builder := CoASTHeuristicsResultSetBuilder new.
-
-	builder variablesHeuristic: (builder newHeuristicBuilder
-			 add: CoLocalScopeVariablesHeuristic new;
-			 add: CoWorkspaceVariablesHeuristic new;
-			 add: CoInstanceAccessibleVariablesHeuristic new;
-			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoOllamaReRankFetcher);
-			 build).
-
-	"Finally build and run the benchmark"
-	benchmark := CooStaticBenchmarksVariables new
-		             name: 'Ollama Re-rank Global';
-		             scope: (CoBenchmarkPackage on: package);
-		             builder: builder;
-		             run.
-
 	^ benchmark
 ]
 

@@ -211,12 +211,6 @@ CooBenchRunner >> withLateralDependency [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withOllamaReRank [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
 CooBenchRunner >> withPackageScope [
 
 	^ self subclassResponsibility
