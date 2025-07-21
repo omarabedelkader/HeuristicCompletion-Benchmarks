@@ -29,10 +29,18 @@ Class {
 }
 
 { #category : 'iwst' }
-CooBenchRunnerMessage class >> nectest [
+CooBenchRunnerMessage class >> nec [
 
 	<script>
-	^ (self allResultsFor: { 'NECompletion' . 'NECompletion-Tests' })
+	^ (self allResultsFor: { 'NECompletion' })
+		  inspect
+]
+
+{ #category : 'iwst' }
+CooBenchRunnerMessage class >> necTests [
+
+	<script>
+	^ (self allResultsFor: { 'NECompletion-Tests' })
 		  inspect
 ]
 
@@ -88,7 +96,7 @@ CooBenchRunnerMessage >> withSemantics [
 	"self new 
 		package: AnalyserData1 package;
 		withSemantics"
-		
+
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
 	builder messageHeuristic: (builder newHeuristicBuilder
@@ -99,8 +107,7 @@ CooBenchRunnerMessage >> withSemantics [
 			 add: CoLiteralMessageHeuristic new;
 			 add: CoGlobalVariableMessageHeuristic new;
 			 add: CoVariableWithTypeNameMessageHeuristic new;
-			 add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
-				CooGlobalSelectorFetcher );
+			 add: CoUnknownMessageHeuristic new ;
 			 build).
 	benchmark := CooStaticBenchmarksMessage new
 		             name: '';

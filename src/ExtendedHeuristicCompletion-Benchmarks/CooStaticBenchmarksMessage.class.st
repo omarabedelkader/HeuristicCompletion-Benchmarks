@@ -134,7 +134,7 @@ CooStaticBenchmarksMessage >> buildCompletionFor: aMessageNode atPosition: aPosi
 
 	^ builder
 		  node: aMessageNode;
-		  completionContext: (CoBenchmarkMessageContext new
+		  completionContext: (CoBenchmarkContext new
 				   callsite: aMessageNode;
 				   position: aPosition;
 				   yourself);
