@@ -97,9 +97,10 @@ CoWeightedMetaGlobalVariableFetcher >> initialize [
 	super initialize.
 	fetchersAndWeights := {
 		                      (CoRepositoryPackageScopedGlobalVariableFetcher
-			                       new -> 0.5).
+			                       new -> 0.1).
 		                      (CoDependencyPackageScopedGlobalVariableFetcher
-			                       new -> 0.3).
-		                      (CoTransitiveDependencyPackageScopedGlobalVariableFetcher new -> 0.2) "Fallback to vanilla global" }
+			                       new -> 0.7).
+		                      (CoTransitiveDependencyPackageScopedGlobalVariableFetcher
+			                       new -> 0.2) "Fallback to vanilla global" }
 		                      asOrderedCollection
 ]
