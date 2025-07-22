@@ -19,29 +19,6 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Weights'
 }
 
-{ #category : 'as yet unclassified' }
-CoWeightedMetaGlobalVariableFetcher class >> defaultFetcher [ 
-
-	^ self new
-		fetchersAndWeights: {
-			(CoRepositoryPackageScopedGlobalVariableFetcher new) -> 0.5.
-			(CoDependencyPackageScopedGlobalVariableFetcher new) -> 0.3.
-			(CoGlobalVariablesHeuristic new) -> 0.2
-		};
-		yourself
-]
-
-{ #category : 'as yet unclassified' }
-CoWeightedMetaGlobalVariableFetcher class >> withDefaultFetchers [ 
-	^ self new
-		fetchersAndWeights: {
-			(CoRepositoryPackageScopedGlobalVariableFetcher new) -> 0.5.
-			(CoDependencyPackageScopedGlobalVariableFetcher new) -> 0.3.
-			(CoGlobalVariablesHeuristic new) -> 0.2
-		};
-		yourself
-]
-
 { #category : 'accessing' }
 CoWeightedMetaGlobalVariableFetcher >> completionClass [ 
 
@@ -95,12 +72,11 @@ CoWeightedMetaGlobalVariableFetcher >> fetchersAndWeights: aCollection [
 CoWeightedMetaGlobalVariableFetcher >> initialize [
 
 	super initialize.
-	fetchersAndWeights := {
-		                      (CoRepositoryPackageScopedGlobalVariableFetcher
-			                       new -> 0.1).
-		                      (CoDependencyPackageScopedGlobalVariableFetcher
+	fetchersAndWeights := {(CoDependencyPackageScopedGlobalVariableFetcher
 			                       new -> 0.7).
+		                      (CoRepositoryPackageScopedGlobalVariableFetcher
+			                       new -> 0.05).
+		                      
 		                      (CoTransitiveDependencyPackageScopedGlobalVariableFetcher
-			                       new -> 0.2) "Fallback to vanilla global" }
-		                      asOrderedCollection
+			                       new -> 0.25) } asOrderedCollection
 ]
