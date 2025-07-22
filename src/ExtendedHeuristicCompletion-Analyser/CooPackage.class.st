@@ -1,3 +1,6 @@
+"
+I'm an abstract class. see my subclasses
+"
 Class {
 	#name : 'CooPackage',
 	#superclass : 'Object',

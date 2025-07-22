@@ -1,3 +1,6 @@
+"
+I'm a class that list the class name inside a list of packages
+"
 Class {
 	#name : 'CooPackageClassLister',
 	#superclass : 'CooPackage',
