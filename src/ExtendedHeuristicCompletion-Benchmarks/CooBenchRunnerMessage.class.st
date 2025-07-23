@@ -28,7 +28,7 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> iceberg [
 
 	<script>
@@ -60,7 +60,7 @@ CooBenchRunnerMessage class >> moose [
 		  inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> mooseTests [
 
 	<script>
@@ -100,14 +100,14 @@ CooBenchRunnerMessage class >> mooseTests [
 		   'MooseIDE-Tagging-Tests'. 'MooseIDE-Tests' }) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> nec [
 
 	<script>
 	^ (self allResultsFor: { 'NECompletion' }) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> necTests [
 
 	<script>
@@ -171,7 +171,7 @@ CooBenchRunnerMessage class >> seaside [
 		   'Seaside-Zinc-Pharo' }) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> seasideTests [
 
 	<script>
@@ -184,7 +184,7 @@ CooBenchRunnerMessage class >> seasideTests [
 		   'Seaside-Tests-RenderLoop'. 'Seaside-Tests-Session' }) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> spec [
 
 	<script>
@@ -200,7 +200,7 @@ CooBenchRunnerMessage class >> spec [
 		   'Spec2-Transmission' }) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> specTests [
 
 	<script>

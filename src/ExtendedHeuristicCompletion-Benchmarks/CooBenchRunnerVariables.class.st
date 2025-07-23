@@ -38,7 +38,7 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> iceberg [
 
 	<script>
@@ -50,7 +50,7 @@ CooBenchRunnerVariables class >> iceberg [
 		  inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> icebergTest [
 
 	<script>
@@ -59,7 +59,7 @@ CooBenchRunnerVariables class >> icebergTest [
 		   'Iceberg-Tests'. 'Iceberg-Tests-MetacelloIntegration' .'Iceberg-TipUI-SnapshotBrowser-Tests'}) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> moose [
 
 	<script>
@@ -96,7 +96,7 @@ CooBenchRunnerVariables class >> moose [
  'MooseIDE-Visualization' }) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> mooseTests [
 
 	<script>
@@ -143,7 +143,7 @@ CooBenchRunnerVariables class >> mooseTests [
  'MooseIDE-Tests' }) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> nec [
 
 	<script>
@@ -151,7 +151,7 @@ CooBenchRunnerVariables class >> nec [
 		  inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> necTests [
 
 	<script>
@@ -159,7 +159,7 @@ CooBenchRunnerVariables class >> necTests [
 		  inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> roassal [
 
 	<script>
@@ -205,7 +205,7 @@ CooBenchRunnerVariables class >> roassal [
  'Roassal-UML-Examples'}) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> roassalTests [
 
 	<script>
