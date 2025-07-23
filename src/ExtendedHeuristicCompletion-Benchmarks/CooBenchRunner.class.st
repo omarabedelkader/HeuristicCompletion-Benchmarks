@@ -165,12 +165,12 @@ CooBenchRunner class >> seasideTests [
 
 { #category : 'examples' }
 CooBenchRunner class >> spec [
-
 	^ self subclassResponsibility
 ]
 
 { #category : 'examples' }
 CooBenchRunner class >> specTests [
+
 	^ self subclassResponsibility
 ]
 

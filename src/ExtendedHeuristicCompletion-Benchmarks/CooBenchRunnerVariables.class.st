@@ -216,7 +216,7 @@ CooBenchRunnerVariables class >> roassalTests [
  'Roassal-UML-Tests' }) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> seaside [
 
 	<script>
@@ -254,7 +254,7 @@ CooBenchRunnerVariables class >> seaside [
 		  inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> seasideTests [
 
 	<script>
@@ -273,28 +273,8 @@ CooBenchRunnerVariables class >> seasideTests [
  'Seaside-Tests-Session' }) inspect
 ]
 
-{ #category : 'iwst' }
+{ #category : 'examples' }
 CooBenchRunnerVariables class >> spec [
-
-	<script>
-	^ (self allResultsFor:
-		   { 'Spec2-Adapters-Morphic'. 'Spec2-Adapters-Morphic-ListView'.
-		   'Spec2-Adapters-Morphic-Tests'. 'Spec2-Adapters-Stub'.
-		   'Spec2-Backend-Tests'. 'Spec2-Code'. 'Spec2-Code-Backend-Tests'.
-		   'Spec2-Code-Commands'. 'Spec2-Code-Diff'. 'Spec2-Code-Diff-Morphic'.
-		   'Spec2-Code-Diff-Tests'. 'Spec2-Code-Morphic'.
-		   'Spec2-Code-Tests'. 'Spec2-CommandLine'. 'Spec2-Commander2'.
-		   'Spec2-Commander2-Tests'. 'Spec2-Commands'. 'Spec2-CommonWidgets'.
-		   'Spec2-Core'. 'Spec2-Dialogs'. 'Spec2-Dialogs-Tests'.
-		   'Spec2-Examples'. 'Spec2-Interactions'. 'Spec2-Layout'.
-		   'Spec2-ListView'. 'Spec2-ListView-Tests'. 'Spec2-Microdown'.
-		   'Spec2-Morphic'. 'Spec2-Morphic-Backend-Tests'.
-		   'Spec2-Morphic-Examples'. 'Spec2-Morphic-Tests'.
-		   'Spec2-Tests'. 'Spec2-Transmission' }) inspect
-]
-
-{ #category : 'iwst' }
-CooBenchRunnerVariables class >> specTests [
 
 	<script>
 	^ (self allResultsFor:
@@ -320,6 +300,22 @@ CooBenchRunnerVariables class >> specTests [
  'Spec2-Morphic'.
  'Spec2-Morphic-Examples'.
  'Spec2-Transmission' }) inspect
+]
+
+{ #category : 'examples' }
+CooBenchRunnerVariables class >> specTests [
+
+	<script>
+	^ (self allResultsFor:
+		   { 
+		   'Spec2-Adapters-Morphic-Tests'. 'Spec2-Adapters-Stub'.
+		   'Spec2-Backend-Tests'.'Spec2-Code-Backend-Tests'.
+		  
+		   'Spec2-Code-Diff-Tests'. 
+		   'Spec2-Code-Tests'.
+		   'Spec2-Commander2-Tests'. 
+		   'Spec2-Dialogs-Tests'.'Spec2-Morphic-Backend-Tests'.'Spec2-Morphic-Tests'.
+		   'Spec2-Tests'}) inspect
 ]
 
 { #category : 'experience' }
