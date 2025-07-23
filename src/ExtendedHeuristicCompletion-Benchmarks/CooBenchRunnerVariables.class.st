@@ -43,11 +43,20 @@ CooBenchRunnerVariables class >> iceberg [
 
 	<script>
 	^ (self allResultsFor:
-		   { 'Iceberg'. 'Iceberg-Libgit'. 'Iceberg-Libgit-Filetree'.
-		   'Iceberg-Libgit-Tonel'. 'Iceberg-Metacello-Integration'.
-		   'Iceberg-Plugin'. 'Iceberg-Plugin-Github'. 'Iceberg-Plugin-Migration'.
+		   { 'Iceberg'. 'Iceberg-ArchitecturalRules'.'Iceberg-Libgit'. 'Iceberg-Libgit-Filetree'.
+		   'Iceberg-Libgit-Tonel'.'Iceberg-Memory'. 'Iceberg-Metacello-Integration'.'Iceberg-Playground-Plugin-Gist'.
+		   'Iceberg-Plugin'. 'Iceberg-Plugin-Github'.'Iceberg-Plugin-Metacello'. 'Iceberg-Plugin-Migration'.
 		   'Iceberg-Plugin-Pharo'. 'Iceberg-TipUI'. 'Iceberg-TipUI-SnapShotBrowser' })
 		  inspect
+]
+
+{ #category : 'iwst' }
+CooBenchRunnerVariables class >> icebergTest [
+
+	<script>
+	^ (self allResultsFor:
+		   { 'Iceberg-Plugin-Migration-Tests'.
+		   'Iceberg-Tests'. 'Iceberg-Tests-MetacelloIntegration' .'Iceberg-TipUI-SnapshotBrowser-Tests'}) inspect
 ]
 
 { #category : 'iwst' }
