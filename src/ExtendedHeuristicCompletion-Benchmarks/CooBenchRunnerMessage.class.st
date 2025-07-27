@@ -245,6 +245,28 @@ CooBenchRunnerMessage >> withBaseline [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerMessage >> withPackageScope [ 
+    "self new 
+        package: CompletionSorter package;
+        withPackageScope"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+        add: (CooUnknownMessageHeuristic new
+                globalMessageFetcherClass: CoRepositoryPackageScopedGlobalSelectorFetcher);
+        build).
+
+    benchmark := CooStaticBenchmarksMessage new
+        name: 'Package Scope';
+        scope: (CoBenchmarkPackage on: package);
+        builder: builder;
+        run.
+
+    ^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerMessage >> withSemantics [
 	"self new 
 		package: AnalyserData1 package;
