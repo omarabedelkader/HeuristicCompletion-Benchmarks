@@ -38,10 +38,12 @@ CooSessionMessagesHeuristic >> appliesForNode: aNode inContext: aContext [
 ]
 
 { #category : 'requests' }
-CooSessionMessagesHeuristic >> buildFetcherFor: aMessageNode inContext: aContext [
-	
-	^ CoCollectionFetcher onCollection: 
-			( self session words collect: [ :each | (NECSelectorEntry contents: each key node: each value) ])
+CooSessionMessagesHeuristic >> buildFetcherFor: aMessageNode inContext: aContext [ 
+
+    | prefix entries |
+    prefix := aContext completionToken ifNil: [ '' ].
+    entries := self session messageEntriesForPrefix: prefix limit: 20 inContext: aContext.
+    ^ CoCollectionFetcher onCollection: entries
 ]
 
 { #category : 'accessing' }

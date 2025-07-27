@@ -6,7 +6,10 @@ Class {
 	#name : 'CooSession',
 	#superclass : 'Object',
 	#instVars : [
-		'vocabularyCache'
+		'vocabularyCache',
+		'history',
+		'weights',
+		'halfLifeDays'
 	],
 	#classVars : [
 		'Current'
@@ -75,10 +78,157 @@ CooSession >> addVocabulary: aString at: aDateAndTime [
 ]
 
 { #category : 'initialization' }
-CooSession >> initialize [
+CooSession >> completionSelected: anEntry in: aCompletionContext [ 
 
-	super initialize.
-	vocabularyCache := LRUCache new maximumWeight: 1000
+    "Record that a completion item was activated by the user."
+    | nm kind pkgName clsName now item |
+    nm := anEntry contents.
+    kind := (anEntry isKindOf: NECSelectorEntry)
+        ifTrue: [ #message ]
+        ifFalse: [ #global ].
+
+    pkgName := (aCompletionContext completionClass ifNotNil: [ :c | c package name ]) ifNil: [ nil ].
+    clsName := (aCompletionContext completionClass ifNotNil: [ :c | c name ]) ifNil: [ nil ].
+
+    now := DateAndTime now.
+    item := self history at: nm ifAbsentPut: [
+        CooHistoryItem new
+            name: nm;
+            kind: kind;
+            yourself ].
+    "Normalize kind if we learn more (e.g., first time was #global, later we see a selector)"
+    (item kind ~= kind and: [ item kind isNil ])
+        ifTrue: [ item kind: kind ].
+
+    item touchAt: now package: pkgName class: clsName.
+]
+
+{ #category : 'initialization' }
+CooSession >> defaultWeights [ 
+
+    "Tuneable weights for scoring."
+    ^ weights ifNil: [ weights := { #recency -> 0.4. #frequency -> 0.6 } asDictionary ]
+]
+
+{ #category : 'initialization' }
+CooSession >> globalEntriesForPrefix: prefix limit: k inContext: aCompletionContext [ 
+
+    "Return NECGlobalEntry instances ranked by history."
+    ^ (self globalsMatching: prefix limit: k inContext: aCompletionContext)
+        collect: [ :it | NECGlobalEntry contents: it name node: nil ]
+]
+
+{ #category : 'initialization' }
+CooSession >> globalsMatching: prefix limit: k inContext: aCompletionContext [ 
+
+    | now pkgName clsName matches |
+    now := DateAndTime now.
+    pkgName := (aCompletionContext completionClass ifNotNil: [ :c | c package name ]) ifNil: [ nil ].
+    clsName := (aCompletionContext completionClass ifNotNil: [ :c | c name ]) ifNil: [ nil ].
+
+    matches := self history values
+        select: [ :it | it kind = #global and: [ it name beginsWith: prefix ] ].
+
+    ^ (matches
+        asSortedCollection: [ :a :b |
+            (a scoreAt: now withWeights: self defaultWeights halfLifeDays: self halfLifeDays inPackage: pkgName inClass: clsName)
+                >
+            (b scoreAt: now withWeights: self defaultWeights halfLifeDays: self halfLifeDays inPackage: pkgName inClass: clsName) ])
+        first: (k min: matches size)
+]
+
+{ #category : 'initialization' }
+CooSession >> halfLifeDays [ 
+
+    ^ halfLifeDays ifNil: [ halfLifeDays := 3 ]  "decay half-life in days"
+]
+
+{ #category : 'accessing' }
+CooSession >> history [ 
+
+    ^ history ifNil: [ history := Dictionary new ]
+]
+
+{ #category : 'initialization' }
+CooSession >> initialize [ 
+
+    super initialize.
+    vocabularyCache := LRUCache new maximumWeight: 1000.
+    history := Dictionary new.
+    weights := nil.
+    halfLifeDays := 3.
+]
+
+{ #category : 'initialization' }
+CooSession >> loadFromDefaultFile [ 
+
+    | ref file dict |
+    ref := FileLocator imageDirectory / 'coo-history.ston'.
+    ref exists ifFalse: [ ^ self ].
+    file := ref readStream.
+    [ dict := STON fromStream: file ] ensure: [ file close ].
+    dict do: [ :assoc |
+        | d item |
+        d := assoc.
+        item := CooHistoryItem new
+            name: (d at: #name);
+            kind: (d at: #kind ifAbsent: [ #message ]);
+            yourself.
+        item
+            instVarNamed: #count put: (d at: #count ifAbsent: [ 1 ]);
+            instVarNamed: #firstSeen put: (d at: #firstSeen ifAbsent: [ nil ]);
+            instVarNamed: #lastSeen put: (d at: #lastSeen ifAbsent: [ nil ]).
+        item packages addAll: (d at: #packages ifAbsent: [ #() ]).
+        item classes addAll: (d at: #classes ifAbsent: [ #() ]).
+        self history at: item name put: item ].
+]
+
+{ #category : 'initialization' }
+CooSession >> messageEntriesForPrefix: prefix limit: k inContext: aCompletionContext [ 
+
+    "Return NECSelectorEntry instances ranked by history."
+    ^ (self selectorsMatching: prefix limit: k inContext: aCompletionContext)
+        collect: [ :it | NECSelectorEntry contents: it name node: nil ]
+]
+
+{ #category : 'initialization' }
+CooSession >> saveToDefaultFile [ 
+
+    "Optional: persist history to a STON file next to the image."
+    | file ref dict |
+    ref := FileLocator imageDirectory / 'coo-history.ston'.
+    dict := self history collect: [ :item |
+        {
+            #name -> item name.
+            #kind -> item kind.
+            #count -> item count.
+            #firstSeen -> item firstSeen.
+            #lastSeen -> item lastSeen.
+            #packages -> item packages asArray.
+            #classes -> item classes asArray
+        } asDictionary ].
+    file := ref ensureCreateFile; writeStream.
+    [ STON put: dict onStream: file ] ensure: [ file close ].
+]
+
+{ #category : 'initialization' }
+CooSession >> selectorsMatching: prefix limit: k inContext: aCompletionContext [ 
+
+    "Return the best matching message names by score."
+    | now pkgName clsName matches |
+    now := DateAndTime now.
+    pkgName := (aCompletionContext completionClass ifNotNil: [ :c | c package name ]) ifNil: [ nil ].
+    clsName := (aCompletionContext completionClass ifNotNil: [ :c | c name ]) ifNil: [ nil ].
+
+    matches := self history values
+        select: [ :it | it kind = #message and: [ it name beginsWith: prefix ] ].
+
+    ^ (matches
+        asSortedCollection: [ :a :b |
+            (a scoreAt: now withWeights: self defaultWeights halfLifeDays: self halfLifeDays inPackage: pkgName inClass: clsName)
+                >
+            (b scoreAt: now withWeights: self defaultWeights halfLifeDays: self halfLifeDays inPackage: pkgName inClass: clsName) ])
+        first: (k min: matches size)
 ]
 
 { #category : 'accessing' }
