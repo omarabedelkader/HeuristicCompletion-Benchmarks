@@ -6,20 +6,22 @@ Class {
 }
 
 { #category : 'running' }
-CoWeightedMetaGlobalVariableFetcherTest >> setUp [ 
+CoWeightedMetaGlobalVariableFetcherTest >> setUp [
 
-    fetcher := CoWeightedMetaGlobalVariableFetcher new.
-    fetcher fetchersAndWeights: {
-        (CoCollectionFetcher onCollection:{
-            NECGlobalEntry contents: 'A2' node: nil }) -> 0.2.
-        (CoCollectionFetcher onCollection:{
-            NECGlobalEntry contents: 'A1' node: nil }) -> 0.7.
-        (CoCollectionFetcher onCollection:{
-            NECGlobalEntry contents: 'A1' node: nil }) -> 0.1 }.
-    fetcher filter: (CoBeginsWithFilter caseSensitive: false filterString: 'A').
-    expectedElements := {
-        NECGlobalEntry contents: 'A1' node: nil .
-        NECGlobalEntry contents: 'A2' node: nil }
+	super setUp.
+	fetcher := CoWeightedMetaGlobalVariableFetcher new.
+	fetcher fetchersAndWeights: {
+			((CoCollectionFetcher onCollection:
+				  { (NECGlobalEntry contents: 'A2' node: nil) }) -> 0.2).
+			((CoCollectionFetcher onCollection:
+				  { (NECGlobalEntry contents: 'A1' node: nil) }) -> 0.7).
+			((CoCollectionFetcher onCollection:
+				  { (NECGlobalEntry contents: 'A1' node: nil) }) -> 0.1) }.
+	fetcher filter:
+		(CoBeginsWithFilter caseSensitive: false filterString: 'A').
+	expectedElements := {
+		                    (NECGlobalEntry contents: 'A1' node: nil).
+		                    (NECGlobalEntry contents: 'A2' node: nil) }
 ]
 
 { #category : 'running' }

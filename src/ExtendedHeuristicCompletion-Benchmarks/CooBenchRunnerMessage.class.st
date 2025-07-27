@@ -33,11 +33,23 @@ CooBenchRunnerMessage class >> iceberg [
 
 	<script>
 	^ (self allResultsFor:
-		   { 'Iceberg'. 'Iceberg-Libgit'. 'Iceberg-Libgit-Filetree'.
-		   'Iceberg-Libgit-Tonel'. 'Iceberg-Metacello-Integration'.
-		   'Iceberg-Plugin'. 'Iceberg-Plugin-Github'. 'Iceberg-Plugin-Migration'.
-		   'Iceberg-Plugin-Pharo'. 'Iceberg-TipUI'. 'Iceberg-TipUI-SnapShotBrowser' })
-		  inspect
+		   { 'Iceberg'. 'Iceberg-ArchitecturalRules'.
+		   'Iceberg-Libgit'. 'Iceberg-Libgit-Filetree'.
+		   'Iceberg-Libgit-Tonel'. 'Iceberg-Memory'. 'Iceberg-Metacello-Integration'.
+		   'Iceberg-Playground-Plugin-Gist'. 'Iceberg-Plugin'.
+		   'Iceberg-Plugin-Github'. 'Iceberg-Plugin-Metacello'.
+		   'Iceberg-Plugin-Migration'. 'Iceberg-Plugin-Pharo'.
+		   'Iceberg-TipUI'. 'Iceberg-TipUI-SnapShotBrowser' }) inspect
+]
+
+{ #category : 'examples' }
+CooBenchRunnerMessage class >> icebergTest [
+
+	<script>
+	^ (self allResultsFor:
+		   { 'Iceberg-Plugin-Migration-Tests'.
+		   'Iceberg-Tests'. 'Iceberg-Tests-MetacelloIntegration'.
+		   'Iceberg-TipUI-SnapshotBrowser-Tests' }) inspect
 ]
 
 { #category : 'examples' }
@@ -115,7 +127,7 @@ CooBenchRunnerMessage class >> necTests [
 		  inspect
 ]
 
-{ #category : 'accessing - external projects' }
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> roassal [
 
 	<script>
@@ -138,7 +150,7 @@ CooBenchRunnerMessage class >> roassal [
 		  inspect
 ]
 
-{ #category : 'accessing - external projects' }
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> roassalTests [
 
 	<script>
@@ -205,19 +217,11 @@ CooBenchRunnerMessage class >> specTests [
 
 	<script>
 	^ (self allResultsFor:
-		   { 'Spec2-Adapters-Morphic'. 'Spec2-Adapters-Morphic-ListView'.
-		   'Spec2-Adapters-Morphic-Tests'. 'Spec2-Adapters-Stub'.
-		   'Spec2-Backend-Tests'. 'Spec2-Code'. 'Spec2-Code-Backend-Tests'.
-		   'Spec2-Code-Commands'. 'Spec2-Code-Diff'. 'Spec2-Code-Diff-Morphic'.
-		   'Spec2-Code-Diff-Tests'. 'Spec2-Code-Morphic'.
-		   'Spec2-Code-Tests'. 'Spec2-CommandLine'. 'Spec2-Commander2'.
-		   'Spec2-Commander2-Tests'. 'Spec2-Commands'. 'Spec2-CommonWidgets'.
-		   'Spec2-Core'. 'Spec2-Dialogs'. 'Spec2-Dialogs-Tests'.
-		   'Spec2-Examples'. 'Spec2-Interactions'. 'Spec2-Layout'.
-		   'Spec2-ListView'. 'Spec2-ListView-Tests'. 'Spec2-Microdown'.
-		   'Spec2-Morphic'. 'Spec2-Morphic-Backend-Tests'.
-		   'Spec2-Morphic-Examples'. 'Spec2-Morphic-Tests'.
-		   'Spec2-Tests'. 'Spec2-Transmission' }) inspect
+		   { 'Spec2-Adapters-Morphic-Tests'. 'Spec2-Adapters-Stub'.
+		   'Spec2-Backend-Tests'. 'Spec2-Code-Backend-Tests'.
+		   'Spec2-Code-Diff-Tests'. 'Spec2-Code-Tests'. 'Spec2-Commander2-Tests'.
+		   'Spec2-Dialogs-Tests'. 'Spec2-Morphic-Backend-Tests'.
+		   'Spec2-Morphic-Tests'. 'Spec2-Tests' }) inspect
 ]
 
 { #category : 'experience' }
