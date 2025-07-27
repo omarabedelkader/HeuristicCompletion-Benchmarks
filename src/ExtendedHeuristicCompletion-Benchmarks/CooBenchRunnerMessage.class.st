@@ -233,7 +233,7 @@ CooBenchRunnerMessage >> withBaseline [
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
 	builder messageHeuristic: (builder newHeuristicBuilder
-			 add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
 				CoGlobalSelectorFetcher) ;
 			 build).
 	benchmark := CooStaticBenchmarksMessage new
