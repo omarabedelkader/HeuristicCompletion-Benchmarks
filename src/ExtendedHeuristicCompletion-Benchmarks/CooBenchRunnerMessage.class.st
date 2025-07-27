@@ -245,6 +245,26 @@ CooBenchRunnerMessage >> withBaseline [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerMessage >> withDependency [ 
+    "self new
+            package: NECEntry package;
+            withDependency"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
+                                CoDependencyPackageScopedGlobalVariableFetcher);
+                         build).
+    benchmark := CooStaticBenchmarksMessage new
+                             name: 'Dependency';
+                             scope: (CoBenchmarkPackage on: package);
+                             builder: builder;
+                             run.
+    ^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerMessage >> withPackageScope [ 
     "self new 
         package: CompletionSorter package;
