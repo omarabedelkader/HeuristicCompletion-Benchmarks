@@ -253,8 +253,8 @@ CooBenchRunnerMessage >> withDependency [
     | builder benchmark |
     builder := CoASTHeuristicsResultSetBuilder new.
     builder messageHeuristic: (builder newHeuristicBuilder
-                         add: (CoUnknownMessageHeuristic new globalMessageFetcherClass:
-                                CoDependencyPackageScopedGlobalVariableFetcher);
+                         add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
+                                CoDependencyPackageScopedSelectorFetcher);
                          build).
     benchmark := CooStaticBenchmarksMessage new
                              name: 'Dependency';
