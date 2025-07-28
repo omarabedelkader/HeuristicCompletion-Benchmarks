@@ -19,7 +19,7 @@ Class {
 }
 
 { #category : 'actions' }
-CooSession class >> current [
+CooSession class >> current [ 
 
 	^ Current ifNil: [ Current := self new ]
 ]
@@ -31,13 +31,6 @@ CooSession class >> deinstall [
 	self environment codeChangeAnnouncer unsubscribe: self current.
 	CooSession allInstances 
 		do: [ :each | self environment codeChangeAnnouncer unsubscribe: each ]
-]
-
-{ #category : 'actions' }
-CooSession class >> inspectcurrent [
-
-    <script>
-    self current inspect
 ]
 
 { #category : 'actions' }
@@ -58,26 +51,12 @@ CooSession class >> install [
 ]
 
 { #category : 'actions' }
-CooSession class >> loadHistoryIfPresent [ 
-
-    <script>
-    self current loadFromDefaultFile
-]
-
-{ #category : 'actions' }
 CooSession class >> reset [
 	<script>
 	Current ifNotNil: [ 
 		self environment codeChangeAnnouncer
 			unsubscribe: Current.
 	Current := nil ]
-]
-
-{ #category : 'actions' }
-CooSession class >> saveHistoryNow [ 
-
-    <script>
-    self current saveToDefaultFile
 ]
 
 { #category : 'accessing' }

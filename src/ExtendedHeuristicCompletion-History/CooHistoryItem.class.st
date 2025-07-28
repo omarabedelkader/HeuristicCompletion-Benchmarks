@@ -54,7 +54,6 @@ CooHistoryItem >> firstSeen: anObject [
 CooHistoryItem >> initialize [
 
     super initialize.
-	 self halt.
     count := 0.
     packages := Set new.
     classes := Set new.
