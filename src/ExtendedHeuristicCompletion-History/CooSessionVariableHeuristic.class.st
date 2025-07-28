@@ -9,23 +9,6 @@ Class {
 }
 
 { #category : 'requests' }
-CooSessionVariableHeuristic class >> installSessionInSystem [ 
-
-    <script>
-    "Install this heuristic in front of the variables chain."
-    | engine builder heuBuilder newElement |
-    engine := CoCompletionEngine new.
-    builder := CoASTHeuristicsResultSetBuilder new.
-    heuBuilder := CoHeuristicBuilder new.
-
-    newElement := heuBuilder add: CooSessionVariableHeuristic new; build.
-    newElement next: builder variablesHeuristic.
-
-    engine completionBuilder: (builder variablesHeuristic: newElement).
-    RubSmalltalkEditor completionEngineInstance: engine
-]
-
-{ #category : 'requests' }
 CooSessionVariableHeuristic >> appliesForNode: aNode inContext: aContext [ 
 
     "Be conservative: only when we are in a variable/global context.
@@ -37,6 +20,7 @@ CooSessionVariableHeuristic >> appliesForNode: aNode inContext: aContext [
 CooSessionVariableHeuristic >> buildFetcherFor: aNode inContext: aContext [ 
 
     | prefix entries |
+	self halt.
     prefix := aContext completionToken ifNil: [ '' ].
     entries := self session globalEntriesForPrefix: prefix limit: 20 inContext: aContext.
     ^ CoCollectionFetcher onCollection: entries

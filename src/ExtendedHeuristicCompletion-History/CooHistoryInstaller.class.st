@@ -9,24 +9,8 @@ Class {
 }
 
 { #category : 'actions' }
-CooHistoryInstaller class >> install [ 
+CooHistoryInstaller class >> current [
 
     <script>
-    CooSession install.
-    CooSessionMessagesHeuristic installSessionInSystem.
-    CooSessionVariableHeuristic installSessionInSystem.
-]
-
-{ #category : 'actions' }
-CooHistoryInstaller class >> loadHistoryIfPresent [ 
-
-    <script>
-    CooSession current loadFromDefaultFile
-]
-
-{ #category : 'actions' }
-CooHistoryInstaller class >> saveHistoryNow [ 
-
-    <script>
-    CooSession current saveToDefaultFile
+    (CooSession current) inspect
 ]
