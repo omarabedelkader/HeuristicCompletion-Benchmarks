@@ -147,7 +147,9 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 			  self new
 				  package: pack;
 				  baseline: #withBaseline;
-				  others: { #withSemantics. #withPackageScope };
+				  others: { #withDependencyPrefix. #withPackageScopePrefix.
+					  #withReverseDependencyPrefix. #withTransitiveDependencyPrefix.
+					  #withLateralDependencyPrefix. #withWeightedMetaFetcherPrefix };
 				  run ]
 ]
 
@@ -253,7 +255,19 @@ CooBenchRunner >> withAdaptiveWeightedMetaFetcher [
 ]
 
 { #category : 'experience' }
+CooBenchRunner >> withAdaptiveWeightedMetaFetcherPrefix [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
 CooBenchRunner >> withBaseline [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
+CooBenchRunner >> withBaselinePrefix [
 
 	^ self subclassResponsibility
 ]
@@ -264,7 +278,19 @@ CooBenchRunner >> withDependency [
 ]
 
 { #category : 'experience' }
+CooBenchRunner >> withDependencyPrefix [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
 CooBenchRunner >> withLateralDependency [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
+CooBenchRunner >> withLateralDependencyPrefix [
 
 	^ self subclassResponsibility
 ]
@@ -276,7 +302,19 @@ CooBenchRunner >> withPackageScope [
 ]
 
 { #category : 'experience' }
+CooBenchRunner >> withPackageScopePrefix [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
 CooBenchRunner >> withReverseDependency [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
+CooBenchRunner >> withReverseDependencyPrefix [
 
 	^ self subclassResponsibility
 ]
@@ -287,13 +325,31 @@ CooBenchRunner >> withSemantics [
 ]
 
 { #category : 'experience' }
+CooBenchRunner >> withSemanticsPrefix [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
 CooBenchRunner >> withTransitiveDependency [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
+CooBenchRunner >> withTransitiveDependencyPrefix [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
 CooBenchRunner >> withWeightedMetaFetcher [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'experience' }
+CooBenchRunner >> withWeightedMetaFetcherPrefix [
 
 	^ self subclassResponsibility
 ]

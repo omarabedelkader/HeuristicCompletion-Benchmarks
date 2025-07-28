@@ -368,6 +368,23 @@ CooBenchRunnerVariables >> withBaseline [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerVariables >> withBaselinePrefix [
+	"self new 
+		package: NECEntry package;
+		withGlobalSorterScope"
+
+	| builder benchmark |
+	builder := CoGlobalSorterResultSetBuilder new.
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Flat global sorter variable';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	benchmark inspect.
+	^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withDependency [
 	"self new 
 		package: NECEntry package;
@@ -381,6 +398,29 @@ CooBenchRunnerVariables >> withDependency [
 			 add: CoInstanceAccessibleVariablesHeuristic new;
 			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
 						  CoDependencyPackageScopedGlobalVariableFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Dependency';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerVariables >> withDependencyPrefix [
+	"self new 
+		package: NECEntry package;
+		withDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoDependencyPackageScopedGlobalVariableFetcherPrefix);
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
 		             name: 'Dependency';
@@ -414,6 +454,29 @@ CooBenchRunnerVariables >> withLateralDependency [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerVariables >> withLateralDependencyPrefix [ 
+	"self new 
+		package: AnalyserData1 package;
+		withReverseDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoLateralPackageGlobalVariableFetcherPrefix);
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Lateral Dependency';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withPackageScope [
 	"self new 
 		package: AnalyserData1 package;
@@ -437,6 +500,29 @@ CooBenchRunnerVariables >> withPackageScope [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerVariables >> withPackageScopePrefix [
+	"self new 
+		package: AnalyserData1 package;
+		withPackageScope"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoRepositoryPackageScopedGlobalVariableFetcherPrefix);
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Packages Scope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withReverseDependency [
 	"self new 
 		package: AnalyserData1 package;
@@ -450,6 +536,29 @@ CooBenchRunnerVariables >> withReverseDependency [
 			 add: CoInstanceAccessibleVariablesHeuristic new;
 			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
 						  CoReverseDependencyPackageScopedGlobalVariableFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Reverse Dependency';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerVariables >> withReverseDependencyPrefix [ 
+	"self new 
+		package: AnalyserData1 package;
+		withReverseDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix);
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
 		             name: 'Reverse Dependency';
@@ -507,6 +616,29 @@ CooBenchRunnerVariables >> withTransitiveDependency [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerVariables >> withTransitiveDependencyPrefix [
+	"self new 
+		package: AnalyserData1 package;
+		withTransitiveDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoTransitiveDependencyPackageScopedGlobalVariableFetcherPrefix);
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Transitive Dependency';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
 CooBenchRunnerVariables >> withWeightedMetaFetcher [
 	"self new 
 		package: AnalyserData1 package;
@@ -520,6 +652,29 @@ CooBenchRunnerVariables >> withWeightedMetaFetcher [
 			 add: CoInstanceAccessibleVariablesHeuristic new;
 			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
 						  CoWeightedMetaGlobalVariableFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Weighted Dependency';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerVariables >> withWeightedMetaFetcherPrefix [
+	"self new 
+		package: AnalyserData1 package;
+		withWeightedMetaFetcher"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoWeightedMetaGlobalVariableFetcherPrefix);
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
 		             name: 'Weighted Dependency';
