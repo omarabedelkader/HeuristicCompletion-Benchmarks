@@ -194,7 +194,6 @@ CooSession >> messageEntriesForPrefix: prefix limit: k inContext: aCompletionCon
 { #category : 'initialization' }
 CooSession >> saveToDefaultFile [ 
 
-    "Optional: persist history to a STON file next to the image."
     | file ref dict |
     ref := FileLocator imageDirectory / 'coo-history.ston'.
     dict := self history collect: [ :item |
