@@ -12,7 +12,7 @@ Class {
 CooHistoryInstaller class >> install [ 
 
     <script>
-    CooSession install.  "subscribe for method additions (your existing code)"
+    CooSession install.
     CooSessionMessagesHeuristic installSessionInSystem.
     CooSessionVariableHeuristic installSessionInSystem.
 ]
