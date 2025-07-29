@@ -10,8 +10,9 @@ Class {
 		'name',
 		'columns'
 	],
-	#category : 'ExtendedHeuristicCompletion-Benchmarks',
-	#package : 'ExtendedHeuristicCompletion-Benchmarks'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Results',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks',
+	#tag : 'Results'
 }
 
 { #category : 'inspector' }

@@ -8,8 +8,9 @@ Class {
 		'title',
 		'elements'
 	],
-	#category : 'ExtendedHeuristicCompletion-Benchmarks',
-	#package : 'ExtendedHeuristicCompletion-Benchmarks'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Results',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks',
+	#tag : 'Results'
 }
 
 { #category : 'accessing' }

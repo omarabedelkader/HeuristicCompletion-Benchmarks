@@ -89,8 +89,9 @@ StObjectTranscriptLogger new
 Class {
 	#name : 'CooStaticBenchmarksMessage',
 	#superclass : 'CooStaticBenchmarks',
-	#category : 'ExtendedHeuristicCompletion-Benchmarks',
-	#package : 'ExtendedHeuristicCompletion-Benchmarks'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Benchmarks',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks',
+	#tag : 'Benchmarks'
 }
 
 { #category : 'benchmarks' }

@@ -5,8 +5,9 @@ Class {
 		'prefixes',
 		'mapping'
 	],
-	#category : 'ExtendedHeuristicCompletion-Benchmarks',
-	#package : 'ExtendedHeuristicCompletion-Benchmarks'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Prefix',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks',
+	#tag : 'Prefix'
 }
 
 { #category : 'initialization' }

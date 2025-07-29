@@ -34,8 +34,9 @@ CooBenchRunner new
 Class {
 	#name : 'CooBenchRunnerVariables',
 	#superclass : 'CooBenchRunner',
-	#category : 'ExtendedHeuristicCompletion-Benchmarks',
-	#package : 'ExtendedHeuristicCompletion-Benchmarks'
+	#category : 'ExtendedHeuristicCompletion-Benchmarks-Benchmarks',
+	#package : 'ExtendedHeuristicCompletion-Benchmarks',
+	#tag : 'Benchmarks'
 }
 
 { #category : 'examples' }
