@@ -9,6 +9,15 @@ Class {
 	#tag : 'Heuristics-Extensions'
 }
 
+{ #category : 'nil' }
+CooUnknownMessageHeuristic >> buildFetcherFor: aNode inContext: completionContext [
+
+	^ self globalMessageFetcherClass new
+		  completionClass: completionContext completionClass;
+		  astNode: aNode;
+		  yourself
+]
+
 { #category : 'as yet unclassified' }
 CooUnknownMessageHeuristic >> globalMessageFetcher [
     "Return the fetcher instance that supplies global selectors for unknown messages.
