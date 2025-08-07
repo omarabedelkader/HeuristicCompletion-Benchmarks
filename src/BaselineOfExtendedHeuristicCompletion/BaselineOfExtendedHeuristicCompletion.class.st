@@ -51,7 +51,7 @@ BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 	spec package: 'ExtendedHeuristicCompletion-History'.
 	spec
 		package: 'ExtendedHeuristicCompletion-Model'
-		with: [ spec requires: 'ExtendedHeuristicCompletion-PackageScope' ].
+		with: [ spec requires: 'ExtendedHeuristicCompletion-PackageScope-Variable' ].
 
 	"analyser"
 	spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.
