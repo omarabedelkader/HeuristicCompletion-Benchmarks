@@ -172,7 +172,8 @@ CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 			  self new
 				  package: pack;
 				  baseline: #withBaseline;
-				  others: { #withSemantics . #withPackageScope . #withSemanticsPlusPackageScope . #withFlatPackageScope };
+				  others:
+					  { #withSemantics. #withPackageScope. #withSemanticsPlusPackageScope. #withDependency. #withTransitiveDependency. #withReverseDependency. #withLateralDependency };
 				  run ]
 ]
 
@@ -239,19 +240,63 @@ CooBenchRunnerMessage class >> specTests [
 { #category : 'experience' }
 CooBenchRunnerMessage >> withBaseline [
 	"self new 
-		package: AnalyserData1 package;
+		package: CompletionSorter package;
 		withBaseline"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
 	builder messageHeuristic: (builder newHeuristicBuilder
-			 add: CoUnknownMessageHeuristic new ;
+			 add: CoUnknownMessageHeuristic new;
 			 build).
 	benchmark := CooStaticBenchmarksMessage new
 		             name: 'Baseline';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withDependency [
+	"self new 
+        package: CompletionSorter package;
+        withDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
+						  CoDependencyPackageScopedGlobalSelectorFetcher);
+			 build).
+
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Package Scope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withLateralDependency [ 
+	"self new 
+        package: CompletionSorter package;
+        withLateralDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
+						  CoLateralPackageGlobalSelectorFetcher);
+			 build).
+
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Package Scope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+
 	^ benchmark
 ]
 
@@ -275,6 +320,28 @@ CooBenchRunnerMessage >> withPackageScope [
         run.
 
     ^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withReverseDependency [ 
+	"self new 
+        package: CompletionSorter package;
+        withReverseDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
+						  CoReverseDependencyPackageScopedGlobalSelectorFetcher);
+			 build).
+
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Package Scope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+
+	^ benchmark
 ]
 
 { #category : 'experience' }
@@ -327,5 +394,27 @@ CooBenchRunnerMessage >> withSemanticsPlusPackageScope [
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> withTransitiveDependency [ 
+	"self new 
+        package: CompletionSorter package;
+        withTransitiveDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
+						  CoTransitiveDependencyPackageScopedGlobalSelectorFetcher);
+			 build).
+
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Package Scope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+
 	^ benchmark
 ]

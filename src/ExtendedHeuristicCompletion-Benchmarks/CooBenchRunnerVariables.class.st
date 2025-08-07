@@ -226,6 +226,20 @@ CooBenchRunnerVariables class >> roassalTests [
  'Roassal-UML-Tests' }) inspect
 ]
 
+{ #category : 'benchmarks' }
+CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
+
+	^ aCol collect: [ :pack |
+			  self new
+				  package: pack;
+				  baseline: #withBaseline;
+				  others:
+					  { #withPackageScope. #withDependency.
+					  #withTransitiveDependency. #withReverseDependency.
+					  #withLateralDependency };
+				  run ]
+]
+
 { #category : 'examples' }
 CooBenchRunnerVariables class >> seaside [
 
