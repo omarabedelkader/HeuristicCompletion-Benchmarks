@@ -34,13 +34,11 @@ CooBenchRunnerMessage class >> iceberg [
 
 	<script>
 	^ (self allResultsFor:
-		   { 'Iceberg'. 'Iceberg-ArchitecturalRules'.
-		   'Iceberg-Libgit'. 'Iceberg-Libgit-Filetree'.
-		   'Iceberg-Libgit-Tonel'. 'Iceberg-Memory'. 'Iceberg-Metacello-Integration'.
-		   'Iceberg-Playground-Plugin-Gist'. 'Iceberg-Plugin'.
-		   'Iceberg-Plugin-Github'. 'Iceberg-Plugin-Metacello'.
-		   'Iceberg-Plugin-Migration'. 'Iceberg-Plugin-Pharo'.
-		   'Iceberg-TipUI'. 'Iceberg-TipUI-SnapShotBrowser' }) inspect
+		   { 'Iceberg'. 'Iceberg-ArchitecturalRules'.'Iceberg-Libgit'. 'Iceberg-Libgit-Filetree'.
+		   'Iceberg-Libgit-Tonel'.'Iceberg-Memory'. 'Iceberg-Metacello-Integration'.'Iceberg-Playground-Plugin-Gist'.
+		   'Iceberg-Plugin'. 'Iceberg-Plugin-Github'.'Iceberg-Plugin-Metacello'. 'Iceberg-Plugin-Migration'.
+		   'Iceberg-Plugin-Pharo'. 'Iceberg-TipUI'. 'Iceberg-TipUI-SnapShotBrowser' })
+		  inspect
 ]
 
 { #category : 'examples' }
@@ -49,8 +47,7 @@ CooBenchRunnerMessage class >> icebergTest [
 	<script>
 	^ (self allResultsFor:
 		   { 'Iceberg-Plugin-Migration-Tests'.
-		   'Iceberg-Tests'. 'Iceberg-Tests-MetacelloIntegration'.
-		   'Iceberg-TipUI-SnapshotBrowser-Tests' }) inspect
+		   'Iceberg-Tests'. 'Iceberg-Tests-MetacelloIntegration' .'Iceberg-TipUI-SnapshotBrowser-Tests'. 'Iceberg-UI-Tests'}) inspect
 ]
 
 { #category : 'examples' }

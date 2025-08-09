@@ -57,7 +57,7 @@ CooBenchRunnerVariables class >> icebergTest [
 	<script>
 	^ (self allResultsFor:
 		   { 'Iceberg-Plugin-Migration-Tests'.
-		   'Iceberg-Tests'. 'Iceberg-Tests-MetacelloIntegration' .'Iceberg-TipUI-SnapshotBrowser-Tests'}) inspect
+		   'Iceberg-Tests'. 'Iceberg-Tests-MetacelloIntegration' .'Iceberg-TipUI-SnapshotBrowser-Tests'. 'Iceberg-UI-Tests'}) inspect
 ]
 
 { #category : 'examples' }
