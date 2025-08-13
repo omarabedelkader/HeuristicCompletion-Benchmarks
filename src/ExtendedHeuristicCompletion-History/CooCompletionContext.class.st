@@ -32,14 +32,15 @@ CooCompletionContext class >> engine: aCompletionEngine class: aClass source: aS
 ]
 
 { #category : 'activation' }
-CooCompletionContext >> activateEntryAt: anIndex [ 
+CooCompletionContext >> activateEntryAt: anIndex [
 
-    | entry |
-    entry := (self entries at: anIndex).
-    [ entry activateOn: self ] ensure: [
-        "Record selection into the session history."
-        CooSession current completionSelected: entry in: self ].
-    ^ entry
+	| entry |
+	self halt.
+	entry := self entries at: anIndex.
+	'.' traceCr.
+	[ entry activateOn: self ] ensure: [ "Record selection into the session history."
+		CooTemporalHistorySession current completionSelected: entry in: self ].
+	^ entry
 ]
 
 { #category : 'testing' }

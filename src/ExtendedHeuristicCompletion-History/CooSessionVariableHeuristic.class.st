@@ -4,26 +4,12 @@ Class {
 	#instVars : [
 		'session'
 	],
+	#classVars : [
+		'SessionClass'
+	],
 	#category : 'ExtendedHeuristicCompletion-History',
 	#package : 'ExtendedHeuristicCompletion-History'
 }
-
-{ #category : 'requests' }
-CooSessionVariableHeuristic class >> installSessionInSystem [ 
-
-    <script>
-    "Install this heuristic in front of the variables chain."
-    | engine builder heuBuilder newElement |
-    engine := CoCompletionEngine new.
-    builder := CoASTHeuristicsResultSetBuilder new.
-    heuBuilder := CoHeuristicBuilder new.
-
-    newElement := heuBuilder add: CooSessionVariableHeuristic new; build.
-    newElement next: builder variablesHeuristic.
-
-    engine completionBuilder: (builder variablesHeuristic: newElement).
-    RubSmalltalkEditor completionEngineInstance: engine
-]
 
 { #category : 'requests' }
 CooSessionVariableHeuristic >> appliesForNode: aNode inContext: aContext [ 
@@ -43,12 +29,24 @@ CooSessionVariableHeuristic >> buildFetcherFor: aNode inContext: aContext [
 ]
 
 { #category : 'requests' }
-CooSessionVariableHeuristic >> session [ 
+CooSessionVariableHeuristic >> session [
 
-    ^ session ifNil: [ session := CooSession current ]
+	^ session ifNil: [ session := self sessionClass current ]
 ]
 
 { #category : 'requests' }
 CooSessionVariableHeuristic >> session: aSession [ 
 	session := aSession
+]
+
+{ #category : 'as yet unclassified' }
+CooSessionVariableHeuristic >> sessionClass [
+
+	^ SessionClass ifNil: [ SessionClass := CooTemporalHistorySession ]
+]
+
+{ #category : 'as yet unclassified' }
+CooSessionVariableHeuristic >> sessionClass: aClass [
+
+	SessionClass := aClass
 ]

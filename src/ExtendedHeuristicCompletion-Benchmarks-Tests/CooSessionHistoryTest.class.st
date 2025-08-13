@@ -13,7 +13,7 @@ Class {
 CooSessionHistoryTest >> setUp [ 
 
     super setUp.
-    session := CooSession new.
+    session := CooTemporalHistorySession new.
     context := CooDummyContext new completionClass: Object; yourself
 ]
 

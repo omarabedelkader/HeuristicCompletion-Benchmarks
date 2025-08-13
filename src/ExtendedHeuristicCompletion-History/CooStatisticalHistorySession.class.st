@@ -3,7 +3,7 @@ I implement a session that collects execution information.
 I collect the last words in modified methods.
 "
 Class {
-	#name : 'CooSession',
+	#name : 'CooStatisticalHistorySession',
 	#superclass : 'Object',
 	#instVars : [
 		'vocabularyCache',
@@ -19,22 +19,22 @@ Class {
 }
 
 { #category : 'actions' }
-CooSession class >> current [ 
+CooStatisticalHistorySession class >> current [ 
 
 	^ Current ifNil: [ Current := self new ]
 ]
 
 { #category : 'actions' }
-CooSession class >> deinstall [
+CooStatisticalHistorySession class >> deinstall [
 	<script>
 	
 	self environment codeChangeAnnouncer unsubscribe: self current.
-	CooSession allInstances 
+	CooTemporalHistorySession allInstances 
 		do: [ :each | self environment codeChangeAnnouncer unsubscribe: each ]
 ]
 
 { #category : 'actions' }
-CooSession class >> install [
+CooStatisticalHistorySession class >> install [
 	<script>
 	
 	self environment codeChangeAnnouncer
@@ -51,7 +51,7 @@ CooSession class >> install [
 ]
 
 { #category : 'actions' }
-CooSession class >> reset [
+CooStatisticalHistorySession class >> reset [
 	<script>
 	Current ifNotNil: [ 
 		self environment codeChangeAnnouncer
@@ -59,26 +59,20 @@ CooSession class >> reset [
 	Current := nil ]
 ]
 
-{ #category : 'accessing' }
-CooSession >> addMessageInVocabulary: anAnn [
+{ #category : 'vocabulary' }
+CooStatisticalHistorySession >> addNewMethodInVocabulary: anAnn [
 
-	self addVocabulary: anAnn selectedItem selector  at: DateAndTime now
+	vocabularyCache add: anAnn methodAdded selector
 ]
 
 { #category : 'vocabulary' }
-CooSession >> addNewMethodInVocabulary: anAnn [
-	
-	self addVocabulary: (anAnn selector -> anAnn method ast) at: DateAndTime now 
-]
-
-{ #category : 'vocabulary' }
-CooSession >> addVocabulary: aString at: aDateAndTime [
+CooStatisticalHistorySession >> addVocabulary: aString at: aDateAndTime [
 
 	vocabularyCache at: aString put: aDateAndTime
 ]
 
 { #category : 'initialization' }
-CooSession >> completionSelected: anEntry in: aCompletionContext [ 
+CooStatisticalHistorySession >> completionSelected: anEntry in: aCompletionContext [ 
 
     "Record that a completion item was activated by the user."
     | nm kind pkgName clsName now item |
@@ -104,14 +98,14 @@ CooSession >> completionSelected: anEntry in: aCompletionContext [
 ]
 
 { #category : 'initialization' }
-CooSession >> defaultWeights [ 
+CooStatisticalHistorySession >> defaultWeights [ 
 
     "Tuneable weights for scoring."
     ^ weights ifNil: [ weights := { #recency -> 0.4. #frequency -> 0.6 } asDictionary ]
 ]
 
 { #category : 'initialization' }
-CooSession >> globalEntriesForPrefix: prefix limit: k inContext: aCompletionContext [ 
+CooStatisticalHistorySession >> globalEntriesForPrefix: prefix limit: k inContext: aCompletionContext [ 
 
     "Return NECGlobalEntry instances ranked by history."
     ^ (self globalsMatching: prefix limit: k inContext: aCompletionContext)
@@ -119,7 +113,7 @@ CooSession >> globalEntriesForPrefix: prefix limit: k inContext: aCompletionCont
 ]
 
 { #category : 'initialization' }
-CooSession >> globalsMatching: prefix limit: k inContext: aCompletionContext [ 
+CooStatisticalHistorySession >> globalsMatching: prefix limit: k inContext: aCompletionContext [ 
 
     | now pkgName clsName matches |
     now := DateAndTime now.
@@ -137,30 +131,22 @@ CooSession >> globalsMatching: prefix limit: k inContext: aCompletionContext [
         first: (k min: matches size)
 ]
 
-{ #category : 'initialization' }
-CooSession >> halfLifeDays [ 
-
-    ^ halfLifeDays ifNil: [ halfLifeDays := 3 ]  "decay half-life in days"
-]
-
 { #category : 'accessing' }
-CooSession >> history [ 
+CooStatisticalHistorySession >> history [ 
 
     ^ history ifNil: [ history := Dictionary new ]
 ]
 
 { #category : 'initialization' }
-CooSession >> initialize [ 
+CooStatisticalHistorySession >> initialize [
 
-    super initialize.
-    vocabularyCache := LRUCache new maximumWeight: 1000.
-    history := Dictionary new.
-    weights := nil.
-    halfLifeDays := 3.
+	super initialize.
+	vocabularyCache := Bag new.
+
 ]
 
-{ #category : 'initialization' }
-CooSession >> loadFromDefaultFile [ 
+{ #category : 'file in/out' }
+CooStatisticalHistorySession >> loadFromDefaultFile [ 
 
     | ref file dict |
     ref := FileLocator imageDirectory / 'coo-history.ston'.
@@ -184,15 +170,15 @@ CooSession >> loadFromDefaultFile [
 ]
 
 { #category : 'initialization' }
-CooSession >> messageEntriesForPrefix: prefix limit: k inContext: aCompletionContext [ 
+CooStatisticalHistorySession >> messageEntriesForPrefix: prefix limit: k inContext: aCompletionContext [ 
 
     "Return NECSelectorEntry instances ranked by history."
     ^ (self selectorsMatching: prefix limit: k inContext: aCompletionContext)
         collect: [ :it | NECSelectorEntry contents: it name node: nil ]
 ]
 
-{ #category : 'initialization' }
-CooSession >> saveToDefaultFile [ 
+{ #category : 'file in/out' }
+CooStatisticalHistorySession >> saveToDefaultFile [ 
 
     | file ref dict |
     ref := FileLocator imageDirectory / 'coo-history.ston'.
@@ -211,32 +197,25 @@ CooSession >> saveToDefaultFile [
 ]
 
 { #category : 'initialization' }
-CooSession >> selectorsMatching: prefix limit: k inContext: aCompletionContext [ 
+CooStatisticalHistorySession >> selectorsMatching: prefix limit: k inContext: aCompletionContext [
+	"Return the best matching message names by score."
 
-    "Return the best matching message names by score."
-    | now pkgName clsName matches |
-    now := DateAndTime now.
-    pkgName := (aCompletionContext completionClass ifNotNil: [ :c | c package name ]) ifNil: [ nil ].
-    clsName := (aCompletionContext completionClass ifNotNil: [ :c | c name ]) ifNil: [ nil ].
-
-    matches := self history values
-        select: [ :it | it kind = #message and: [ it name beginsWith: prefix ] ].
-
-    ^ (matches
-        asSortedCollection: [ :a :b |
-            (a scoreAt: now withWeights: self defaultWeights halfLifeDays: self halfLifeDays inPackage: pkgName inClass: clsName)
-                >
-            (b scoreAt: now withWeights: self defaultWeights halfLifeDays: self halfLifeDays inPackage: pkgName inClass: clsName) ])
-        first: (k min: matches size)
+	| matching |
+	matching := Bag new.
+	vocabularyCache keysAndValuesDo: [ :sel :count |
+			(sel beginsWith: prefix) ifTrue: [
+				count timesRepeat: [ matching add: sel ] ] ].
+	^ (matching sortedElements collect: [ :each |   CooHistoryItem new name: each key; yourself ]) "first:
+		  (k min: matching size)"
 ]
 
 { #category : 'accessing' }
-CooSession >> size [
+CooStatisticalHistorySession >> size [
 	^ vocabularyCache size
 ]
 
 { #category : 'accessing' }
-CooSession >> words [
+CooStatisticalHistorySession >> words [
 
 	^ vocabularyCache keys
 ]

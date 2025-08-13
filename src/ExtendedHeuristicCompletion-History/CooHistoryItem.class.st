@@ -1,6 +1,6 @@
 Class {
 	#name : 'CooHistoryItem',
-	#superclass : 'CoASTNodeFetcherHeuristic',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'kind',
@@ -105,6 +105,13 @@ CooHistoryItem >> packages [
 CooHistoryItem >> packages: anObject [
 
 	packages := anObject
+]
+
+{ #category : 'printing' }
+CooHistoryItem >> printOn: aStream [
+
+	super printOn: aStream.
+	name ifNotNil: [ aStream << '('; << name; <<')' ]
 ]
 
 { #category : 'initialization' }
