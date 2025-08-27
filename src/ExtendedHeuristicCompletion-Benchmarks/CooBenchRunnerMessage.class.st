@@ -223,6 +223,14 @@ CooBenchRunnerMessage class >> spec [
 ]
 
 { #category : 'examples' }
+CooBenchRunnerMessage class >> specTEST [
+
+	<script>
+	^ (self allResultsFor:
+		   { 'Spec2-Core' }) inspect
+]
+
+{ #category : 'examples' }
 CooBenchRunnerMessage class >> specTests [
 
 	<script>
