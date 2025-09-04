@@ -67,5 +67,5 @@ CoPackageScopedGlobalSelectorFetcher >> packageLocalSelectors: aBlock [
             aBlock value: ((NECGlobalEntry contents: sel node: nil)
                             fetcher: self;
                             yourself) ] ].
-    ^ selectors
+    ^ selectors size
 ]

@@ -52,26 +52,23 @@ This fetcher is valuable when:
 It complements forward-based fetchers (like transitive or direct dependency-based ones) by providing the **inverse view**—what depends on me?
 "
 Class {
-	#name : 'CoReverseDependencyPackageScopedGlobalVariableFetcher',
+	#name : 'CoOnlyReverseDependencyGlobalVariableFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#instVars : [
 		'reverseDependencies'
-	],
-	#classInstVars : [
-		'dependencies'
 	],
 	#category : 'ExtendedHeuristicCompletion-Dependency',
 	#package : 'ExtendedHeuristicCompletion-Dependency'
 }
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> computeDependenciesOf: aPackageName [
+CoOnlyReverseDependencyGlobalVariableFetcher class >> computeDependenciesOf: aPackageName [
 
 	^ StDependencyChecker new dependenciesOf: aPackageName
 ]
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> dependenciesOf: aPackageName [
+CoOnlyReverseDependencyGlobalVariableFetcher class >> dependenciesOf: aPackageName [
 
 	^ dependencies
 		  at: aPackageName
@@ -79,20 +76,20 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher class >> dependenciesOf: a
 ]
 
 { #category : 'class initialization' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> initialize [
+CoOnlyReverseDependencyGlobalVariableFetcher class >> initialize [
 
 	dependencies := Dictionary new
 ]
 
 { #category : 'enumerating' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
+CoOnlyReverseDependencyGlobalVariableFetcher >> entriesDo: aBlock [
 
 	| closeClassNames keys dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self ].
 	
 	organizer := package organizer.
 
-	closeClassNames := self packageLocalClasses: aBlock.
+	"closeClassNames := self packageLocalClasses: aBlock."
 
 	"Then include dependent classes from reverse dependencies"
 	dependentClassNames := OrderedCollection new.
@@ -110,7 +107,7 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 
 	"Avoid duplicates from systemNavigation environment"
 	keys := self systemNavigation environment keys asOrderedCollection.
-	closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
+	"closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ]."
 	dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
 
 	keys do: [ :globalName |
@@ -119,7 +116,7 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 ]
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> reverseDependenciesOf: aPackageName [
+CoOnlyReverseDependencyGlobalVariableFetcher >> reverseDependenciesOf: aPackageName [
 
 	| allPackages dependentPackages |
 	allPackages := PackageOrganizer default packages. 

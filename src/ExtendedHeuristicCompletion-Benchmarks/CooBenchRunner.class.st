@@ -148,7 +148,7 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 			  self new
 				  package: pack;
 				  baseline: #withBaseline;
-				  others: { #withSemantics .#withPackageScope. #withDependency.
+				  others: { #withSemantics .#withRepositoryWithLocalPackage. #withDependency.
 					 #withTransitiveDependency. #withReverseDependency. 
 					  #withLateralDependency};
 				  run ]
@@ -297,13 +297,13 @@ CooBenchRunner >> withLateralDependencyPrefix [
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withPackageScope [
+CooBenchRunner >> withPackageScopePrefix [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'experience' }
-CooBenchRunner >> withPackageScopePrefix [
+CooBenchRunner >> withRepositoryWithLocalPackage [
 
 	^ self subclassResponsibility
 ]

@@ -41,7 +41,7 @@ Use this fetcher when:
 
 "
 Class {
-	#name : 'CoDependencyPackageScopedGlobalVariableFetcherPrefix',
+	#name : 'CoDependencyPackageWithoutLocalGlobalVariableFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#instVars : [
 		'dependencies'
@@ -51,43 +51,37 @@ Class {
 }
 
 { #category : 'accessing' }
-CoDependencyPackageScopedGlobalVariableFetcherPrefix >> dependencies [
+CoDependencyPackageWithoutLocalGlobalVariableFetcher >> dependencies [
 
 	^ dependencies
 ]
 
 { #category : 'accessing' }
-CoDependencyPackageScopedGlobalVariableFetcherPrefix >> dependencies: anObject [
+CoDependencyPackageWithoutLocalGlobalVariableFetcher >> dependencies: anObject [
 
 	dependencies := anObject
 ]
 
 { #category : 'enumerating' }
-CoDependencyPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBlock [
+CoDependencyPackageWithoutLocalGlobalVariableFetcher >> entriesDo: aBlock [
 
-	| dependentClassNames dependentPackages  |
+	| dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self ].
-
-	self packageLocalClasses: aBlock.
 
 	dependentClassNames := SortedCollection sortUsing: [ :a :b | a <= b ].
 	dependentPackages := self dependenciesOf: package name.
 	dependentPackages do: [ :packageName |
-		dependentClassNames addAll:
-			((organizer packageNamed: packageName ifAbsent: [ ])
-				definedClasses collect: [ :each | each name ]) ].
-
+			dependentClassNames addAll:
+				((organizer packageNamed: packageName ifAbsent: [ ])
+					 definedClasses collect: [ :each | each name ]) ].
 	dependentClassNames do: [ :depClassName |
-		(filter accepts: depClassName) ifTrue: [
-			aBlock value: ((NECGlobalEntry
-					contents: depClassName
-					node: nil)
-				fetcher: self;
-				yourself) ] ].
-
-	"In the past this fetcher was handling the global namespace search by removing the  
-	already seen classes from the namespace. In fact this is not needed because  
-	the heuristics handles the repetition of proposition.  
+			(filter accepts: depClassName) ifTrue: [
+					aBlock value: ((NECGlobalEntry contents: depClassName node: nil)
+							 fetcher: self;
+							 yourself) ] ].
+	
+	"In the past this fetcher was handling the global namespace search by removing the 
+	already seen classes from the namespace. In fact this is not needed because 
+	the heuristics handles the repettion of proposition. 
 	So here we default to the configuration and following fetcher."
-
 ]

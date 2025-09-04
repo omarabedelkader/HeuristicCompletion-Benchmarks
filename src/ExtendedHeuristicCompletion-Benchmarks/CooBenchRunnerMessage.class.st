@@ -168,9 +168,9 @@ CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 	^ aCol collect: [ :pack |
 			  self new
 				  package: pack;
-				  baseline: #withBaseline;
+				  baseline: #withDependency;
 				  others:
-					  { #withSemantics. #withPackageScope. #withSemanticsPlusPackageScope. #withDependency. #withTransitiveDependency. #withReverseDependency. #withLateralDependency };
+					  { #withDependency };
 				  run ]
 ]
 
@@ -306,7 +306,7 @@ CooBenchRunnerMessage >> withLateralDependency [
 ]
 
 { #category : 'experience' }
-CooBenchRunnerMessage >> withPackageScope [ 
+CooBenchRunnerMessage >> withRepositoryWithLocalPackage [ 
     "self new 
         package: CompletionSorter package;
         withPackageScope"
