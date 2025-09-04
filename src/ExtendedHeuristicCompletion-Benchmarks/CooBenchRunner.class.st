@@ -30,11 +30,6 @@ CooBenchRunner class >> allResultsFor: aColOfPackageNames [
 		  latex }
 ]
 
-{ #category : 'examples' }
-CooBenchRunner class >> iceberg [
-	^ self subclassResponsibility
-]
-
 { #category : 'benchmarks' }
 CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
 	"Produce a LaTeX table showing the results from each benchmark in aCol."
@@ -110,37 +105,6 @@ CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
 	^ header , body , footer
 ]
 
-{ #category : 'examples' }
-CooBenchRunner class >> moose [
-	^ self subclassResponsibility
-]
-
-{ #category : 'examples' }
-CooBenchRunner class >> mooseTests [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'examples' }
-CooBenchRunner class >> nec [
-	^ self subclassResponsibility
-]
-
-{ #category : 'examples' }
-CooBenchRunner class >> necTests [
-	^ self subclassResponsibility
-]
-
-{ #category : 'examples' }
-CooBenchRunner class >> roassal [
-	^ self subclassResponsibility
-]
-
-{ #category : 'examples' }
-CooBenchRunner class >> roassalTests [
-	^ self subclassResponsibility
-]
-
 { #category : 'benchmarks' }
 CooBenchRunner class >> runComparisonForPackages: aCol [
 
@@ -152,29 +116,6 @@ CooBenchRunner class >> runComparisonForPackages: aCol [
 					 #withTransitiveDependency. #withReverseDependency. 
 					  #withLateralDependency};
 				  run ]
-]
-
-{ #category : 'examples' }
-CooBenchRunner class >> seaside [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'examples' }
-CooBenchRunner class >> seasideTests [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'examples' }
-CooBenchRunner class >> spec [
-	^ self subclassResponsibility
-]
-
-{ #category : 'examples' }
-CooBenchRunner class >> specTests [
-
-	^ self subclassResponsibility
 ]
 
 { #category : 'benchmarks' }
@@ -249,108 +190,37 @@ CooBenchRunner >> run [
 		results at: s put: (self perform: s) ]
 ]
 
-{ #category : 'experience' }
-CooBenchRunner >> withAdaptiveWeightedMetaFetcher [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
-CooBenchRunner >> withAdaptiveWeightedMetaFetcherPrefix [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunner >> withBaseline [
-
 	^ self subclassResponsibility
 ]
 
-{ #category : 'experience' }
-CooBenchRunner >> withBaselinePrefix [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunner >> withDependency [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'experience' }
-CooBenchRunner >> withDependencyPrefix [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunner >> withLateralDependency [
-
 	^ self subclassResponsibility
 ]
 
-{ #category : 'experience' }
-CooBenchRunner >> withLateralDependencyPrefix [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
-CooBenchRunner >> withPackageScopePrefix [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunner >> withRepositoryWithLocalPackage [
-
 	^ self subclassResponsibility
 ]
 
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunner >> withReverseDependency [
-
 	^ self subclassResponsibility
 ]
 
-{ #category : 'experience' }
-CooBenchRunner >> withReverseDependencyPrefix [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunner >> withSemantics [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'experience' }
-CooBenchRunner >> withSemanticsPrefix [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunner >> withTransitiveDependency [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
-CooBenchRunner >> withTransitiveDependencyPrefix [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
-CooBenchRunner >> withWeightedMetaFetcher [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'experience' }
-CooBenchRunner >> withWeightedMetaFetcherPrefix [
-
 	^ self subclassResponsibility
 ]
