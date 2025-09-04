@@ -234,9 +234,8 @@ CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 				  package: pack;
 				  baseline: #withBaseline;
 				  others:
-					  { #withRepositoryWithLocalPackage. #withDependency.
-					  #withTransitiveDependency. #withReverseDependency.
-					  #withLateralDependency };
+					  { #onlyDependencyWithLocalPackage.  #onlyDependencyWithoutLocalPackage. #onlyRepositoryWithLocalPackage . #onlyReverseDependency
+. #onlyTransitiveDependencyWithoutLocalPackage};
 				  run ]
 ]
 
@@ -324,6 +323,14 @@ CooBenchRunnerVariables class >> spec [
  'Spec2-Morphic'.
  'Spec2-Morphic-Examples'.
  'Spec2-Transmission' }) inspect
+]
+
+{ #category : 'examples' }
+CooBenchRunnerVariables class >> specTEST [
+
+	<script>
+	^ (self allResultsFor:
+		   { 'Spec2-Core' }) inspect
 ]
 
 { #category : 'examples' }

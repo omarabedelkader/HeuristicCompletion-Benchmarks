@@ -108,14 +108,7 @@ CooBenchRunner class >> latexTableResultForABenchCollection: aCol [
 { #category : 'benchmarks' }
 CooBenchRunner class >> runComparisonForPackages: aCol [
 
-	^ aCol collect: [ :pack |
-			  self new
-				  package: pack;
-				  baseline: #withBaseline;
-				  others: { #withSemantics .#withRepositoryWithLocalPackage. #withDependency.
-					 #withTransitiveDependency. #withReverseDependency. 
-					  #withLateralDependency};
-				  run ]
+	^ self subclassResponsibility
 ]
 
 { #category : 'benchmarks' }
