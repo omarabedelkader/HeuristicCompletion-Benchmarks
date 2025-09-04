@@ -6,9 +6,36 @@ Class {
 		'completionClass',
 		'organizer'
 	],
+	#classVars : [
+		'Dependencies'
+	],
 	#category : 'ExtendedHeuristicCompletion-PackageScope-Message',
 	#package : 'ExtendedHeuristicCompletion-PackageScope-Message'
 }
+
+{ #category : 'accessing' }
+CoPackageScopedGlobalSelectorFetcher class >> computeDependenciesOf: aPackageName [
+	
+	^ StDependencyChecker new dependenciesOf: aPackageName
+]
+
+{ #category : 'accessing' }
+CoPackageScopedGlobalSelectorFetcher class >> dependenciesOf: aPackageName [
+
+	^ self dependencyCache at: aPackageName ifAbsentPut: [ self computeDependenciesOf: aPackageName ]
+]
+
+{ #category : 'accessing' }
+CoPackageScopedGlobalSelectorFetcher class >> dependencyCache [
+
+	^ Dependencies ifNil: [ Dependencies := Dictionary new ]
+]
+
+{ #category : 'accessing' }
+CoPackageScopedGlobalSelectorFetcher class >> resetCache [
+	<script>
+	Dependencies := nil
+]
 
 { #category : 'accessing' }
 CoPackageScopedGlobalSelectorFetcher >> completionClass [ 
@@ -22,6 +49,12 @@ CoPackageScopedGlobalSelectorFetcher >> completionClass: aClass [
     completionClass ifNotNil: [
         package := completionClass package.
         organizer := package organizer ].
+]
+
+{ #category : 'enumerating' }
+CoPackageScopedGlobalSelectorFetcher >> dependenciesOf: aString [
+	
+	^ self class dependenciesOf: aString
 ]
 
 { #category : 'accessing' }

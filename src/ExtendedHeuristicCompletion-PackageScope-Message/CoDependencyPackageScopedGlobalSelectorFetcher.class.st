@@ -17,7 +17,7 @@ CoDependencyPackageScopedGlobalSelectorFetcher >> entriesDo: aBlock [
     self packageLocalSelectors: aBlock.
 
     dependentSelectors := OrderedCollection new.
-    dependentPackages := (StDependencyChecker new dependenciesOf: package name) asOrderedCollection.
+    dependentPackages := self dependenciesOf: package name.
 
     dependentPackages do: [ :pkgName |
         | pkg |

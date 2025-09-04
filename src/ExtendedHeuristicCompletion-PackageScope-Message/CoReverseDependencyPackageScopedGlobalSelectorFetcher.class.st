@@ -18,7 +18,7 @@ CoReverseDependencyPackageScopedGlobalSelectorFetcher >> entriesDo: aBlock [
 
     reversePackages := (PackageOrganizer default packages select: [ :pkg |
         | deps |
-        deps := StDependencyChecker new dependenciesOf: pkg name.
+        deps := self dependenciesOf: pkg name.
         deps includes: package name ]) collect: [ :pkg | pkg name ].
 
     reverseSelectors := OrderedCollection new.

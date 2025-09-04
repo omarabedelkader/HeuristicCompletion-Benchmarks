@@ -16,13 +16,13 @@ CoTransitiveDependencyPackageScopedGlobalSelectorFetcher >> entriesDo: aBlock [
     dependentSelectors := OrderedCollection new.
     visited := Set with: package name.
 
-    dependentPackages := OrderedCollection withAll: (StDependencyChecker new dependenciesOf: package name).
+    dependentPackages := OrderedCollection withAll: (self dependenciesOf: package name).
 
     [ dependentPackages isEmpty ] whileFalse: [
         | pkgName more pkg |
         pkgName := dependentPackages removeFirst.
         visited add: pkgName.
-        more := (StDependencyChecker new dependenciesOf: pkgName) reject: [ :each | visited includes: each ].
+        more := (self dependenciesOf: pkgName) reject: [ :each | visited includes: each ].
         dependentPackages addAll: more.
         pkg := organizer packageNamed: pkgName ifAbsent: [ nil ].
         pkg ifNotNil: [

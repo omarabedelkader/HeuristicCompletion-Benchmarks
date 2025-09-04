@@ -1,3 +1,6 @@
+"
+Look only on lateral packages and not in the current one.
+"
 Class {
 	#name : 'CoLateralPackageGlobalSelectorFetcher',
 	#superclass : 'CoPackageScopedGlobalSelectorFetcher',
