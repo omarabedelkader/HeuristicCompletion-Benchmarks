@@ -61,26 +61,6 @@ Class {
 	#package : 'ExtendedHeuristicCompletion-Dependency'
 }
 
-{ #category : 'accessing' }
-CoOnlyReverseDependencyGlobalVariableFetcher class >> computeDependenciesOf: aPackageName [
-
-	^ StDependencyChecker new dependenciesOf: aPackageName
-]
-
-{ #category : 'accessing' }
-CoOnlyReverseDependencyGlobalVariableFetcher class >> dependenciesOf: aPackageName [
-
-	^ dependencies
-		  at: aPackageName
-		  ifAbsentPut: [ self computeDependenciesOf: aPackageName ]
-]
-
-{ #category : 'class initialization' }
-CoOnlyReverseDependencyGlobalVariableFetcher class >> initialize [
-
-	dependencies := Dictionary new
-]
-
 { #category : 'enumerating' }
 CoOnlyReverseDependencyGlobalVariableFetcher >> entriesDo: aBlock [
 
