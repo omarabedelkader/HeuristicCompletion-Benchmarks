@@ -342,7 +342,7 @@ CooBenchRunnerVariables class >> specTests [
 		   'Spec2-Tests'}) inspect
 ]
 
-{ #category : 'tests - readonly vars' }
+{ #category : 'ONLY' }
 CooBenchRunnerVariables >> onlyDependencyWithLocalPackage [
 	"self new 
 		package: NECEntry package;
@@ -366,7 +366,7 @@ CooBenchRunnerVariables >> onlyDependencyWithLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'tests - readonly vars' }
+{ #category : 'ONLY' }
 CooBenchRunnerVariables >> onlyDependencyWithoutLocalPackage [
 	"self new 
 		package: NECEntry package;
@@ -386,7 +386,7 @@ CooBenchRunnerVariables >> onlyDependencyWithoutLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'tests - readonly vars' }
+{ #category : 'ONLY' }
 CooBenchRunnerVariables >> onlyRepositoryWithLocalPackage [
 	"self new 
 		package: AnalyserData1 package;
@@ -410,7 +410,7 @@ CooBenchRunnerVariables >> onlyRepositoryWithLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'tests - readonly vars' }
+{ #category : 'ONLY' }
 CooBenchRunnerVariables >> onlyReverseDependency [
 	"self new 
 		package: (PackageOrganizer default packageNamed: 'NECompletion-Tests') ;
@@ -434,7 +434,7 @@ CooBenchRunnerVariables >> onlyReverseDependency [
 	^ benchmark
 ]
 
-{ #category : 'tests - readonly vars' }
+{ #category : 'ONLY' }
 CooBenchRunnerVariables >> onlyTransitiveDependencyWithoutLocalPackage [
 	"self new 
 		package: NECEntry package;
@@ -454,7 +454,7 @@ CooBenchRunnerVariables >> onlyTransitiveDependencyWithoutLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'tests - sunit' }
+{ #category : 'UNIT' }
 CooBenchRunnerVariables >> unitDependencyWithoutLocalPackage [
 	"self new 
 		package: NECEntry package;
@@ -474,7 +474,7 @@ CooBenchRunnerVariables >> unitDependencyWithoutLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'tests - sunit' }
+{ #category : 'UNIT' }
 CooBenchRunnerVariables >> unitNullHeuristic [
 	"self new 
 		package: AnalyserData1 package;
@@ -493,7 +493,7 @@ CooBenchRunnerVariables >> unitNullHeuristic [
 	^ benchmark
 ]
 
-{ #category : 'tests - sunit' }
+{ #category : 'UNIT' }
 CooBenchRunnerVariables >> unitPackageLocal [
 	"self new 
 		package: (PackageOrganizer default packageNamed: 'NECompletion-Tests') ;
@@ -517,7 +517,7 @@ CooBenchRunnerVariables >> unitPackageLocal [
 	^ benchmark
 ]
 
-{ #category : 'tests - sunit' }
+{ #category : 'UNIT' }
 CooBenchRunnerVariables >> unitRepositoryWithoutLocalPackage [
 	"self new 
 		package: AnalyserData1 package;
@@ -541,7 +541,7 @@ CooBenchRunnerVariables >> unitRepositoryWithoutLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'tests - sunit' }
+{ #category : 'UNIT' }
 CooBenchRunnerVariables >> unitReverseDependencyWithoutLocalPackage [
 	"self new 
 		package: (PackageOrganizer default packageNamed: 'NECompletion-Tests') ;
@@ -565,7 +565,7 @@ CooBenchRunnerVariables >> unitReverseDependencyWithoutLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'tests - sunit' }
+{ #category : 'UNIT' }
 CooBenchRunnerVariables >> unitTransitiveDependencyWithoutLocalPackage [
 	"self new 
 		package: NECEntry package;
@@ -608,7 +608,7 @@ CooBenchRunnerVariables >> withAdaptiveWeightedMetaFetcher [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunnerVariables >> withBaseline [
 	"self new 
 		package: NECEntry package;
@@ -642,7 +642,7 @@ CooBenchRunnerVariables >> withBaselinePrefix [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunnerVariables >> withDependency [
 	"self new 
 		package: NECEntry package;
@@ -734,7 +734,7 @@ CooBenchRunnerVariables >> withLateralDependencyPrefix [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunnerVariables >> withLocalPackage [
 	"self new 
 		package: AnalyserData1 package;
@@ -788,7 +788,7 @@ CooBenchRunnerVariables >> withPackageScopePrefix [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunnerVariables >> withRepositoryWithLocalPackage [
 	"self new 
 		package: AnalyserData1 package;
@@ -811,7 +811,7 @@ CooBenchRunnerVariables >> withRepositoryWithLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunnerVariables >> withReverseDependency [
 	"self new 
 		package: AnalyserData1 package;
@@ -857,7 +857,7 @@ CooBenchRunnerVariables >> withReverseDependencyPrefix [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunnerVariables >> withSemantics [
 	"self new 
 		package: NECEntry package;
@@ -881,7 +881,7 @@ CooBenchRunnerVariables >> withSemantics [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'WITH' }
 CooBenchRunnerVariables >> withTransitiveDependency [
 	"self new 
 		package: AnalyserData1 package;
