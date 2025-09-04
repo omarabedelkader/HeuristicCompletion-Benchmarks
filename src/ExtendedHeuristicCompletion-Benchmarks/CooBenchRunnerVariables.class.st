@@ -585,7 +585,7 @@ CooBenchRunnerVariables >> unitTransitiveDependencyWithoutLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'unused' }
 CooBenchRunnerVariables >> withAdaptiveWeightedMetaFetcher [
 	"self new 
 		package: AnalyserData1 package;
@@ -625,7 +625,7 @@ CooBenchRunnerVariables >> withBaseline [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'unused' }
 CooBenchRunnerVariables >> withBaselinePrefix [
 	"self new 
 		package: NECEntry package;
@@ -665,7 +665,7 @@ CooBenchRunnerVariables >> withDependency [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'unused' }
 CooBenchRunnerVariables >> withDependencyPrefix [
 	"self new 
 		package: NECEntry package;
@@ -735,6 +735,37 @@ CooBenchRunnerVariables >> withLateralDependencyPrefix [
 ]
 
 { #category : 'experience' }
+CooBenchRunnerVariables >> withLocalPackage [
+	"self new 
+		package: AnalyserData1 package;
+		withLocalPackage"
+		
+	"self new 
+		package: (PackageOrganizer default packageNamed: 'Microdown') ;
+		withLocalPackage"		
+		
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder variablesHeuristic: (builder newHeuristicBuilder
+			 add: CoLocalScopeVariablesHeuristic new;
+			 add: CoWorkspaceVariablesHeuristic new;
+			 add: CoGlobalVariablesHeuristic new;
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
+						  CoPackageScopedGlobalVariableFetcher);
+			 add: CoInstanceAccessibleVariablesHeuristic new;
+			 
+			 
+			 build).
+	benchmark := CooStaticBenchmarksVariables new
+		             name: 'Packages Scope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'unused' }
 CooBenchRunnerVariables >> withPackageScopePrefix [
 	"self new 
 		package: AnalyserData1 package;
@@ -803,7 +834,7 @@ CooBenchRunnerVariables >> withReverseDependency [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'unused' }
 CooBenchRunnerVariables >> withReverseDependencyPrefix [ 
 	"self new 
 		package: AnalyserData1 package;
@@ -873,7 +904,7 @@ CooBenchRunnerVariables >> withTransitiveDependency [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'unused' }
 CooBenchRunnerVariables >> withTransitiveDependencyPrefix [
 	"self new 
 		package: AnalyserData1 package;
@@ -896,7 +927,7 @@ CooBenchRunnerVariables >> withTransitiveDependencyPrefix [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'unused' }
 CooBenchRunnerVariables >> withWeightedMetaFetcher [
 	"self new 
 		package: AnalyserData1 package;
@@ -919,7 +950,7 @@ CooBenchRunnerVariables >> withWeightedMetaFetcher [
 	^ benchmark
 ]
 
-{ #category : 'experience' }
+{ #category : 'unused' }
 CooBenchRunnerVariables >> withWeightedMetaFetcherPrefix [
 	"self new 
 		package: AnalyserData1 package;
