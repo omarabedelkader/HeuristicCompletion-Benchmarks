@@ -235,7 +235,7 @@ CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 				  baseline: #withBaseline;
 				  others:
 					  { #onlyDependencyWithLocalPackage.  #onlyDependencyWithoutLocalPackage. #onlyRepositoryWithLocalPackage . #onlyReverseDependency
-. #onlyTransitiveDependencyWithoutLocalPackage};
+. #onlyTransitiveDependencyWithoutLocalPackage. #unitDependencyWithoutLocalPackage . #unitNullHeuristic. #unitPackageLocal . #unitRepositoryWithoutLocalPackage .#unitReverseDependencyWithoutLocalPackage . #unitTransitiveDependencyWithoutLocalPackage . #withBaseline . #withDependency . #withLateralDependency . #withRepositoryWithLocalPackage . #withSemantics . #withTransitiveDependency };
 				  run ]
 ]
 
