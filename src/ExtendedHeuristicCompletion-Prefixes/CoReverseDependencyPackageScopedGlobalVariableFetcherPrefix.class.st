@@ -60,8 +60,8 @@ Class {
 	#classInstVars : [
 		'dependencies'
 	],
-	#category : 'ExtendedHeuristicCompletion-Dependency',
-	#package : 'ExtendedHeuristicCompletion-Dependency'
+	#category : 'ExtendedHeuristicCompletion-Prefixes',
+	#package : 'ExtendedHeuristicCompletion-Prefixes'
 }
 
 { #category : 'accessing' }

@@ -4,8 +4,8 @@ Fetcher that takes into account the lateral dependencies
 Class {
 	#name : 'CoLateralPackageGlobalVariableFetcherPrefix',
 	#superclass : 'CoPackageScopedGlobalVariableFetcher',
-	#category : 'ExtendedHeuristicCompletion-Dependency',
-	#package : 'ExtendedHeuristicCompletion-Dependency'
+	#category : 'ExtendedHeuristicCompletion-Prefixes',
+	#package : 'ExtendedHeuristicCompletion-Prefixes'
 }
 
 { #category : 'enumerating' }
