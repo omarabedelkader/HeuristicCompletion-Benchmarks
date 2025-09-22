@@ -52,7 +52,7 @@ This fetcher is valuable when:
 It complements forward-based fetchers (like transitive or direct dependency-based ones) by providing the **inverse view**—what depends on me?
 "
 Class {
-	#name : 'CoOnlyReverseDependencyGlobalVariableFetcher',
+	#name : 'CoReverseDependencyWithoutLocalPackageFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#instVars : [
 		'reverseDependencies'
@@ -62,7 +62,7 @@ Class {
 }
 
 { #category : 'enumerating' }
-CoOnlyReverseDependencyGlobalVariableFetcher >> entriesDo: aBlock [
+CoReverseDependencyWithoutLocalPackageFetcher >> entriesDo: aBlock [
 
 	| closeClassNames keys dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self ].
@@ -96,7 +96,7 @@ CoOnlyReverseDependencyGlobalVariableFetcher >> entriesDo: aBlock [
 ]
 
 { #category : 'accessing' }
-CoOnlyReverseDependencyGlobalVariableFetcher >> reverseDependenciesOf: aPackageName [
+CoReverseDependencyWithoutLocalPackageFetcher >> reverseDependenciesOf: aPackageName [
 
 	| allPackages dependentPackages |
 	allPackages := PackageOrganizer default packages. 

@@ -573,19 +573,19 @@ CooBenchRunnerVariables >> unitReverseDependencyWithoutLocalPackage [
 	"self new 
 		package: (PackageOrganizer default packageNamed: 'NECompletion-Tests') ;
 		unitReverseDependencyWithoutLocalPackage"
-	
+
 	"self new 
 		package: (PackageOrganizer default packageNamed: 'Microdown') ;
-		unitReverseDependencyWithoutLocalPackage"	
+		unitReverseDependencyWithoutLocalPackage"
 
 	| builder benchmark |
 	builder := CoASTHeuristicsResultSetBuilder new.
 	builder variablesHeuristic: (builder newHeuristicBuilder
 			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoOnlyReverseDependencyGlobalVariableFetcher);
+						  CoReverseDependencyWithoutLocalPackageFetcher);
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
-		             name: 'Only Reverse Dependency with Local Package';
+		             name: 'Unit Reverse Dependency without Local Package';
 		             scope: (CoBenchmarkPackage on: package);
 		             builder: builder;
 		             run.
