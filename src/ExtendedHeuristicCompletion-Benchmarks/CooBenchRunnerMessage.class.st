@@ -168,9 +168,9 @@ CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 	^ aCol collect: [ :pack |
 			  self new
 				  package: pack;
-				  baseline: #withDependency;
+				  baseline: #withBaseline ;
 				  others:
-					  { #withDependency };
+					  {#withDependency. #withRepositoryWithLocalPackage. #withReverseDependency. #withSemantics. #withSemanticsPlusPackageScope. #withTransitiveDependency };
 				  run ]
 ]
 
