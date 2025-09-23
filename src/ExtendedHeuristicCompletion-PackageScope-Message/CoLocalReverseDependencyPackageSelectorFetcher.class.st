@@ -1,6 +1,6 @@
 Class {
-	#name : 'CoReverseDependencyPackageScopedGlobalSelectorFetcher',
-	#superclass : 'CoPackageScopedGlobalSelectorFetcher',
+	#name : 'CoLocalReverseDependencyPackageSelectorFetcher',
+	#superclass : 'CoPackageScopedSelectorFetcher',
 	#instVars : [
 		'reverseDependencies'
 	],
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : 'enumerating' }
-CoReverseDependencyPackageScopedGlobalSelectorFetcher >> entriesDo: aBlock [ 
+CoLocalReverseDependencyPackageSelectorFetcher >> entriesDo: aBlock [ 
 
     | reversePackages reverseSelectors |
     completionClass isNil ifTrue: [ ^ self ].
@@ -21,11 +21,9 @@ CoReverseDependencyPackageScopedGlobalSelectorFetcher >> entriesDo: aBlock [
         deps := self dependenciesOf: pkg name.
         deps includes: package name ]) collect: [ :pkg | pkg name ].
 
-    reverseSelectors := OrderedCollection new.
+    reverseSelectors := Set new.
     reversePackages do: [ :pkgName |
-        | pkg |
-        pkg := organizer packageNamed: pkgName ifAbsent: [ nil ].
-        pkg ifNotNil: [ pkg definedClasses do: [ :cls | cls selectors do: [ :sel | reverseSelectors add: sel ] ] ] ].
+			self treatPackageNamed: pkgName into: reverseSelectors ].
 
     reverseSelectors do: [ :sel |
         (filter accepts: sel) ifTrue: [
