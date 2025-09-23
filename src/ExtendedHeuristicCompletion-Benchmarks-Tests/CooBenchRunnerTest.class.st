@@ -162,3 +162,59 @@ CooBenchRunnerTest >> testPrefixSizesEnumeratesTwoToEight [
 
         self assert: result prefixSizes equals: (2 to: 8)
 ]
+
+{ #category : 'tests' }
+CooBenchRunnerTest >> testRunPopulatesResultsUsingSelectors [
+        | runner |
+        runner := CooBenchRunnerTestRunnerStub new.
+        runner baseline: #baselineResultSelector.
+        runner others: { #otherResultSelector }.
+
+        runner run.
+
+        self
+                assert: (runner results at: #baselineResultSelector)
+                equals: 'baseline-result'.
+        self
+                assert: (runner results at: #otherResultSelector)
+                equals: 'other-result'.
+        self assert: runner baselineCallCount equals: 1.
+        self assert: runner otherCallCount equals: 1
+]
+
+{ #category : 'tests' }
+CooBenchRunnerTest >> testStringResultForBenchCollectionIncludesAllMetrics [
+        | package bench firstResult secondResult formatted |
+        package := CooBenchRunnerTestPackageStub new.
+        package name: 'SamplePackage'.
+
+        bench := CooBenchRunnerTestBenchStub new.
+        bench package: package.
+
+        firstResult := CooBenchRunnerTestResultStub new.
+        firstResult mmrString: self sampleMmrString.
+
+        secondResult := CooBenchRunnerTestResultStub new.
+        secondResult mmrString:
+                (String streamContents: [ :stream |
+                        stream
+                                nextPutAll: 'mmr: 0.5';
+                                cr;
+                                nextPutAll: '2 0.4';
+                                cr;
+                                nextPutAll: '3 0.3' ]).
+
+        bench
+                results:
+                        (Dictionary newFrom:
+                                 { #metricA -> firstResult.
+                                 #metricB -> secondResult }).
+
+        formatted := CooBenchRunner stringResultForABenchCollection: { bench }.
+
+        self assert: (formatted includesSubstring: 'SamplePackage').
+        self assert: (formatted includesSubstring: 'metricA').
+        self assert: (formatted includesSubstring: 'metricB').
+        self assert: (formatted includesSubstring: 'mmr: 0.9').
+        self assert: (formatted includesSubstring: 'mmr: 0.5')
+]

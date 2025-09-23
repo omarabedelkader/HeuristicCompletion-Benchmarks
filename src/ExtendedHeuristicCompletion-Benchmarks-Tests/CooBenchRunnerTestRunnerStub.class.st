@@ -1,6 +1,6 @@
 Class {
 	#name : 'CooBenchRunnerTestRunnerStub',
-	#superclass : 'Object',
+	#superclass : 'CooBenchRunner',
 	#instVars : [
 		'baselineCallCount',
 		'otherCallCount'
