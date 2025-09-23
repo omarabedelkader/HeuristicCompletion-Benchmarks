@@ -74,7 +74,7 @@ CooBenchRunnerVariables class >> moose [
  'Moose-Query'.
  'Moose-Query-Extensions'.
  'Moose-SmalltalkImporter'.
- 'Moose-WelcomeBrowser'.
+ 'MooseIDE-WelcomeBrowser'.
  'MooseIDE-Analysis'.
  'MooseIDE-AttributedText'.
  'MooseIDE-ButterflyMap'.
