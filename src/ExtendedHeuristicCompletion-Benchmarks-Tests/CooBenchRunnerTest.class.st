@@ -63,6 +63,33 @@ CooBenchRunnerTest >> testComputeDeltaReturnsDifferenceBetweenBaselineAndOther [
 ]
 
 { #category : 'tests' }
+CooBenchRunnerTest >> testComputeDeltaUsesFirstOtherWhenMultipleOthersArePresent [
+        | runner baselineResult firstOther secondOther |
+        runner := CooBenchRunner new.
+        runner baseline: #baseline.
+        runner others: { #otherOne. #otherTwo }.
+
+        baselineResult := CooBenchRunnerTestBenchmarkStub new
+                                mmr: 4;
+                                yourself.
+        firstOther := CooBenchRunnerTestBenchmarkStub new
+                                mmr: 10;
+                                yourself.
+        secondOther := CooBenchRunnerTestBenchmarkStub new
+                                mmr: 100;
+                                yourself.
+
+        self
+                setResultsOn: runner
+                with: (Dictionary newFrom:
+                                { #baseline -> baselineResult.
+                                #otherOne -> firstOther.
+                                #otherTwo -> secondOther }).
+
+        self assert: runner computeDelta equals: 6
+]
+
+{ #category : 'tests' }
 CooBenchRunnerTest >> testComputeRatioBuildsResultFromAccuracyTables [
 
         | runner baselineResult otherResult ratio |
@@ -91,4 +118,29 @@ CooBenchRunnerTest >> testComputeRatioBuildsResultFromAccuracyTables [
                         self
                                 assert: column elements first
                                 equals: 0.5 ]
+]
+
+{ #category : 'tests' }
+CooBenchRunnerTest >> testLatexTableResultIncludesPackageMetricAndValues [
+        | package bench result latex |
+        package := CooBenchRunnerTestPackageStub new.
+        package name: 'SamplePackage'.
+
+        bench := CooBenchRunnerTestBenchStub new.
+        bench package: package.
+
+        result := CooBenchRunnerTestResultStub new.
+        result mmrString: self sampleMmrString.
+
+        bench results: (Dictionary newFrom: { #metric -> result }).
+
+        latex := CooBenchRunner latexTableResultForABenchCollection: { bench }.
+
+        self
+                assert: (latex includesSubstring: '\begin{tabular}{lll').
+        self
+                assert: (latex includesSubstring: 'Package & Metric & MMR & 2 & 3 \\').
+        self
+                assert: (latex includesSubstring: 'SamplePackage & metric & 0.9 & 0.8 & 0.7 \\').
+        self assert: (latex includesSubstring: '\end{tabular}')
 ]
