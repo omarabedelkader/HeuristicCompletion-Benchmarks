@@ -52,7 +52,7 @@ This fetcher is valuable when:
 It complements forward-based fetchers (like transitive or direct dependency-based ones) by providing the **inverse view**—what depends on me?
 "
 Class {
-	#name : 'CoReverseDependencyPackageScopedGlobalVariableFetcher',
+	#name : 'CoReverseDependencyPackageWithLocalPackageFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#instVars : [
 		'reverseDependencies'
@@ -65,13 +65,13 @@ Class {
 }
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> computeDependenciesOf: aPackageName [
+CoReverseDependencyPackageWithLocalPackageFetcher class >> computeDependenciesOf: aPackageName [
 
 	^ StDependencyChecker new dependenciesOf: aPackageName
 ]
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> dependenciesOf: aPackageName [
+CoReverseDependencyPackageWithLocalPackageFetcher class >> dependenciesOf: aPackageName [
 
 	^ dependencies
 		  at: aPackageName
@@ -79,13 +79,13 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher class >> dependenciesOf: a
 ]
 
 { #category : 'class initialization' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher class >> initialize [
+CoReverseDependencyPackageWithLocalPackageFetcher class >> initialize [
 
 	dependencies := Dictionary new
 ]
 
 { #category : 'enumerating' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
+CoReverseDependencyPackageWithLocalPackageFetcher >> entriesDo: aBlock [
 
 	| closeClassNames keys dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self ].
@@ -119,7 +119,7 @@ CoReverseDependencyPackageScopedGlobalVariableFetcher >> entriesDo: aBlock [
 ]
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcher >> reverseDependenciesOf: aPackageName [
+CoReverseDependencyPackageWithLocalPackageFetcher >> reverseDependenciesOf: aPackageName [
 
 	| allPackages dependentPackages |
 	allPackages := PackageOrganizer default packages. 

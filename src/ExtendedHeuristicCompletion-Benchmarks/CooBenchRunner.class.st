@@ -132,6 +132,31 @@ CooBenchRunner >> baseline: aSymbol [
 	baseline := aSymbol
 ]
 
+{ #category : 'WITH' }
+CooBenchRunner >> complete2LevelDependency [
+	^ self subclassResponsibility
+]
+
+{ #category : 'WITH' }
+CooBenchRunner >> completeDependency [
+	^ self subclassResponsibility
+]
+
+{ #category : 'WITH' }
+CooBenchRunner >> completeLateralPackageWithLocalPackage [
+	^ self subclassResponsibility
+]
+
+{ #category : 'WITH' }
+CooBenchRunner >> completeReverseDependency [
+	^ self subclassResponsibility
+]
+
+{ #category : 'WITH' }
+CooBenchRunner >> completeSemantics [
+	^ self subclassResponsibility
+]
+
 { #category : 'accessing' }
 CooBenchRunner >> computeDelta [
 
@@ -184,36 +209,11 @@ CooBenchRunner >> run [
 ]
 
 { #category : 'WITH' }
-CooBenchRunner >> with2LevelDependency [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
 CooBenchRunner >> withBaseline [
 	^ self subclassResponsibility
 ]
 
 { #category : 'WITH' }
-CooBenchRunner >> withDependency [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
 CooBenchRunner >> withLateralDependency [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> withLateralPackageWithLocalPackage [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> withReverseDependency [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> withSemantics [
 	^ self subclassResponsibility
 ]

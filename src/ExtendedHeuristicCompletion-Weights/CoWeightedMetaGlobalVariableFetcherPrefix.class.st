@@ -76,7 +76,7 @@ CoWeightedMetaGlobalVariableFetcherPrefix >> initialize [
 	super initialize.
 	fetchersAndWeights := {(CoDependencyPackageScopedGlobalVariableFetcher
 			                       new -> 0.7).
-		                      (CoRepositoryPackageScopedGlobalVariableFetcher
+		                      (CoLateralPackageWithLocalPackageFetcher
 			                       new -> 0.05).
 		                      
 		                      (CoTransitiveDependencyPackageScopedGlobalVariableFetcher

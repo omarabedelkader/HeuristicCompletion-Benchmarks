@@ -170,7 +170,7 @@ CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 				  package: pack;
 				  baseline: #withBaseline ;
 				  others:
-					  {#withDependency. #withRepositoryWithLocalPackage. #withReverseDependency. #withSemantics. #withSemanticsPlusPackageScope. #withTransitiveDependency };
+					  {#completeDependency. #withRepositoryWithLocalPackage. #completeReverseDependency. #completeSemantics. #withSemanticsPlusPackageScope. #withTransitiveDependency };
 				  run ]
 ]
 
@@ -243,7 +243,7 @@ CooBenchRunnerMessage class >> specTests [
 ]
 
 { #category : 'experience' }
-CooBenchRunnerMessage >> with2LevelDependency [ 
+CooBenchRunnerMessage >> complete2LevelDependency [ 
 	"self new 
         package: CompletionSorter package;
         withTransitiveDependency"
@@ -261,6 +261,98 @@ CooBenchRunnerMessage >> with2LevelDependency [
 		             builder: builder;
 		             run.
 
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> completeDependency [
+	"self new 
+        package: CompletionSorter package;
+        withDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
+						  CoDependencyPackageScopedGlobalSelectorFetcher);
+			 build).
+
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Package Scope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> completeLateralPackageWithLocalPackage [ 
+    "self new 
+        package: CompletionSorter package;
+        withPackageScope"
+
+    | builder benchmark |
+    builder := CoASTHeuristicsResultSetBuilder new.
+    builder messageHeuristic: (builder newHeuristicBuilder
+        add: (CooUnknownMessageHeuristic new
+                globalMessageFetcherClass: CoRepositoryPackageScopedGlobalSelectorFetcher);
+        build).
+
+    benchmark := CooStaticBenchmarksMessage new
+        name: 'Package Scope';
+        scope: (CoBenchmarkPackage on: package);
+        builder: builder;
+        run.
+
+    ^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> completeReverseDependency [ 
+	"self new 
+        package: CompletionSorter package;
+        withReverseDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
+						  CoReverseDependencyPackageScopedGlobalSelectorFetcher);
+			 build).
+
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Package Scope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+
+	^ benchmark
+]
+
+{ #category : 'experience' }
+CooBenchRunnerMessage >> completeSemantics [
+	"self new 
+		package: AnalyserData1 package;
+		withSemantics"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: CoSelfMessageHeuristic new;
+			 add: CoSuperMessageHeuristic new;
+			 add: CoTypedReceiverMessageHeuristic new;
+			 add: CoInitializeInferencedMessageHeuristic new;
+			 add: CoLiteralMessageHeuristic new;
+			 add: CoGlobalVariableMessageHeuristic new;
+			 add: CoVariableWithTypeNameMessageHeuristic new;
+			 add: CoUnknownMessageHeuristic new ;
+			 build).
+	benchmark := CooStaticBenchmarksMessage new
+		             name: '';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
 	^ benchmark
 ]
 
@@ -284,28 +376,6 @@ CooBenchRunnerMessage >> withBaseline [
 ]
 
 { #category : 'experience' }
-CooBenchRunnerMessage >> withDependency [
-	"self new 
-        package: CompletionSorter package;
-        withDependency"
-
-	| builder benchmark |
-	builder := CoASTHeuristicsResultSetBuilder new.
-	builder messageHeuristic: (builder newHeuristicBuilder
-			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
-						  CoDependencyPackageScopedGlobalSelectorFetcher);
-			 build).
-
-	benchmark := CooStaticBenchmarksMessage new
-		             name: 'Package Scope';
-		             scope: (CoBenchmarkPackage on: package);
-		             builder: builder;
-		             run.
-
-	^ benchmark
-]
-
-{ #category : 'experience' }
 CooBenchRunnerMessage >> withLateralDependency [ 
 	"self new 
         package: CompletionSorter package;
@@ -324,76 +394,6 @@ CooBenchRunnerMessage >> withLateralDependency [
 		             builder: builder;
 		             run.
 
-	^ benchmark
-]
-
-{ #category : 'experience' }
-CooBenchRunnerMessage >> withLateralPackageWithLocalPackage [ 
-    "self new 
-        package: CompletionSorter package;
-        withPackageScope"
-
-    | builder benchmark |
-    builder := CoASTHeuristicsResultSetBuilder new.
-    builder messageHeuristic: (builder newHeuristicBuilder
-        add: (CooUnknownMessageHeuristic new
-                globalMessageFetcherClass: CoRepositoryPackageScopedGlobalSelectorFetcher);
-        build).
-
-    benchmark := CooStaticBenchmarksMessage new
-        name: 'Package Scope';
-        scope: (CoBenchmarkPackage on: package);
-        builder: builder;
-        run.
-
-    ^ benchmark
-]
-
-{ #category : 'experience' }
-CooBenchRunnerMessage >> withReverseDependency [ 
-	"self new 
-        package: CompletionSorter package;
-        withReverseDependency"
-
-	| builder benchmark |
-	builder := CoASTHeuristicsResultSetBuilder new.
-	builder messageHeuristic: (builder newHeuristicBuilder
-			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass:
-						  CoReverseDependencyPackageScopedGlobalSelectorFetcher);
-			 build).
-
-	benchmark := CooStaticBenchmarksMessage new
-		             name: 'Package Scope';
-		             scope: (CoBenchmarkPackage on: package);
-		             builder: builder;
-		             run.
-
-	^ benchmark
-]
-
-{ #category : 'experience' }
-CooBenchRunnerMessage >> withSemantics [
-	"self new 
-		package: AnalyserData1 package;
-		withSemantics"
-
-	| builder benchmark |
-	builder := CoASTHeuristicsResultSetBuilder new.
-	builder messageHeuristic: (builder newHeuristicBuilder
-			 add: CoSelfMessageHeuristic new;
-			 add: CoSuperMessageHeuristic new;
-			 add: CoTypedReceiverMessageHeuristic new;
-			 add: CoInitializeInferencedMessageHeuristic new;
-			 add: CoLiteralMessageHeuristic new;
-			 add: CoGlobalVariableMessageHeuristic new;
-			 add: CoVariableWithTypeNameMessageHeuristic new;
-			 add: CoUnknownMessageHeuristic new ;
-			 build).
-	benchmark := CooStaticBenchmarksMessage new
-		             name: '';
-		             scope: (CoBenchmarkPackage on: package);
-		             builder: builder;
-		             run.
 	^ benchmark
 ]
 
