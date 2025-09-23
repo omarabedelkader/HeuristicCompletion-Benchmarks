@@ -39,6 +39,16 @@ CooBenchRunnerTest >> setResultsOn: aRunner with: aDictionary [
 ]
 
 { #category : 'tests' }
+CooBenchRunnerTest >> testCompletionIndexesDefinesMappingsForResultColumns [
+        | result |
+        result := CooBenchResult new.
+
+        self
+                assert: result completionIndexes
+                equals: { 1 to: 1. 2 to: 2. 3 to: 3. 4 to: 10. 0 to: 0 }
+]
+
+{ #category : 'tests' }
 CooBenchRunnerTest >> testComputeDeltaReturnsDifferenceBetweenBaselineAndOther [
 
         | runner baselineResult otherResult |
@@ -143,4 +153,12 @@ CooBenchRunnerTest >> testLatexTableResultIncludesPackageMetricAndValues [
         self
                 assert: (latex includesSubstring: 'SamplePackage & metric & 0.9 & 0.8 & 0.7 \\').
         self assert: (latex includesSubstring: '\end{tabular}')
+]
+
+{ #category : 'tests' }
+CooBenchRunnerTest >> testPrefixSizesEnumeratesTwoToEight [
+        | result |
+        result := CooBenchResult new.
+
+        self assert: result prefixSizes equals: (2 to: 8)
 ]
