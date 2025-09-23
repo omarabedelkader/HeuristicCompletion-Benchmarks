@@ -232,7 +232,7 @@ CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 	^ aCol collect: [ :pack |
 			  self new
 				  package: pack;
-				  baseline: #withBaseline;
+				  baseline: #completeBaseline;
 				  others:
 					  { #complete2LevelDependency. #completeBaseline. #completeDependency. #completeLateralPackageWithLocalPackage. #completeReverseDependency. #completeSemantics. #local2LevelDependencyWithLocalPackage. #localDependencyWithLocalPackage. #localLateralWithLocalPackage. #localReverseDependencyWithLocalPackage. #unit2LevelDependencyWithoutLocalPackage. #unitDirectDependencyWithoutLocalPackage. #unitEmptyHeuristic. #unitLateralsWithoutLocalPackage. #unitPackageLocal. #unitReverseDependencyWithoutLocalPackage};
 				  run ]

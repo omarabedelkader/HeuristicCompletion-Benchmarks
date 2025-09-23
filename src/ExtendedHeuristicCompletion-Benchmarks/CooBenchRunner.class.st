@@ -132,31 +132,6 @@ CooBenchRunner >> baseline: aSymbol [
 	baseline := aSymbol
 ]
 
-{ #category : 'WITH' }
-CooBenchRunner >> complete2LevelDependency [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> completeDependency [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> completeLateralPackageWithLocalPackage [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> completeReverseDependency [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> completeSemantics [
-	^ self subclassResponsibility
-]
-
 { #category : 'accessing' }
 CooBenchRunner >> computeDelta [
 
@@ -206,14 +181,4 @@ CooBenchRunner >> run [
 	results := Dictionary new.
 	{ baseline } , others do: [ :s |
 		results at: s put: (self perform: s) ]
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> withBaseline [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> withLateralDependency [
-	^ self subclassResponsibility
 ]
