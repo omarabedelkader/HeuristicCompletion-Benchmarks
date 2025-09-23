@@ -28,9 +28,8 @@ BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 
 	spec package: 'ExtendedHeuristicCompletion-Benchmarks'.
 
-	spec
-		package: 'ExtendedHeuristicCompletion-Benchmarks-Tests'
-		with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
+	spec package: 'ExtendedHeuristicCompletion-Benchmarks-Tests' with: [ spec requires: #( 'ExtendedHeuristicCompletion-Benchmarks'
+                                           'ExtendedHeuristicCompletion-Dependency')  ].
 
 	spec
 		package: 'ExtendedHeuristicCompletion-PackageScope-Message'
@@ -40,30 +39,17 @@ BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 		package: 'ExtendedHeuristicCompletion-PackageScope-Variable'
 		with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
 
-	spec
-		package: 'ExtendedHeuristicCompletion-Dependency'
-		with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
+	spec package: 'ExtendedHeuristicCompletion-Dependency' with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
 
-	spec
-		package: 'ExtendedHeuristicCompletion-Weights'
-		with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
-	
-	spec
-		package: 'ExtendedHeuristicCompletion-Prefixes'
-		with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
+	spec package: 'ExtendedHeuristicCompletion-Weights' with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
+
+	spec package: 'ExtendedHeuristicCompletion-Prefixes' with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
 
 	spec package: 'ExtendedHeuristicCompletion-History'.
-	spec
-		package: 'ExtendedHeuristicCompletion-Model'
-		with: [
-		spec requires: 'ExtendedHeuristicCompletion-PackageScope-Variable' ].
-
-	"analyser"
+	spec package: 'ExtendedHeuristicCompletion-Model' with: [ spec requires: 'ExtendedHeuristicCompletion-PackageScope-Variable' ]. "analyser"
 	spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.
 	spec package: 'ExtendedHeuristicCompletion-Analyser-Data2'.
-	spec
-		package: 'ExtendedHeuristicCompletion-Analyser-Data3'
-		with: [ spec requires: 'ExtendedHeuristicCompletion-Analyser-Data2' ].
+	spec package: 'ExtendedHeuristicCompletion-Analyser-Data3' with: [ spec requires: 'ExtendedHeuristicCompletion-Analyser-Data2' ].
 
 	spec package: 'ExtendedHeuristicCompletion-Analyser-Data4' with: [
 			spec requires: 'ExtendedHeuristicCompletion-Analyser-Data'.
