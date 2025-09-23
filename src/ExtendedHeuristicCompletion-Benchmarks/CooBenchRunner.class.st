@@ -184,6 +184,11 @@ CooBenchRunner >> run [
 ]
 
 { #category : 'WITH' }
+CooBenchRunner >> with2LevelDependency [
+	^ self subclassResponsibility
+]
+
+{ #category : 'WITH' }
 CooBenchRunner >> withBaseline [
 	^ self subclassResponsibility
 ]
@@ -199,7 +204,7 @@ CooBenchRunner >> withLateralDependency [
 ]
 
 { #category : 'WITH' }
-CooBenchRunner >> withRepositoryWithLocalPackage [
+CooBenchRunner >> withLateralPackageWithLocalPackage [
 	^ self subclassResponsibility
 ]
 
@@ -210,10 +215,5 @@ CooBenchRunner >> withReverseDependency [
 
 { #category : 'WITH' }
 CooBenchRunner >> withSemantics [
-	^ self subclassResponsibility
-]
-
-{ #category : 'WITH' }
-CooBenchRunner >> withTransitiveDependency [
 	^ self subclassResponsibility
 ]

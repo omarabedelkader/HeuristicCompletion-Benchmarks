@@ -2,14 +2,14 @@
 I am a fetcher looking for globals in an environment.
 "
 Class {
-	#name : 'CoRepositoryPackageWithoutLocalGlobalVariableFetcher',
+	#name : 'CoLateralPackageWithoutLocalPackageFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#category : 'ExtendedHeuristicCompletion-PackageScope-Variable',
 	#package : 'ExtendedHeuristicCompletion-PackageScope-Variable'
 }
 
 { #category : 'enumerating' }
-CoRepositoryPackageWithoutLocalGlobalVariableFetcher >> entriesDo: aBlock [
+CoLateralPackageWithoutLocalPackageFetcher >> entriesDo: aBlock [
 
 	|  packageNamePart friendClassNames friendPackageNames | 
 	completionClass isNil ifTrue: [ ^ self ].

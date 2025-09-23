@@ -41,7 +41,7 @@ Use this fetcher when:
 
 "
 Class {
-	#name : 'CoDependencyPackageWithoutLocalGlobalVariableFetcher',
+	#name : 'CoDependencyPackageWithoutLocalPackageFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#instVars : [
 		'dependencies'
@@ -51,19 +51,19 @@ Class {
 }
 
 { #category : 'accessing' }
-CoDependencyPackageWithoutLocalGlobalVariableFetcher >> dependencies [
+CoDependencyPackageWithoutLocalPackageFetcher >> dependencies [
 
 	^ dependencies
 ]
 
 { #category : 'accessing' }
-CoDependencyPackageWithoutLocalGlobalVariableFetcher >> dependencies: anObject [
+CoDependencyPackageWithoutLocalPackageFetcher >> dependencies: anObject [
 
 	dependencies := anObject
 ]
 
 { #category : 'enumerating' }
-CoDependencyPackageWithoutLocalGlobalVariableFetcher >> entriesDo: aBlock [
+CoDependencyPackageWithoutLocalPackageFetcher >> entriesDo: aBlock [
 
 	| dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self ].

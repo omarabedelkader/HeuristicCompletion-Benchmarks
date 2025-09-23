@@ -26,31 +26,40 @@
    - It ensures that classes already suggested from local or dependent packages are not repeated when pulling from the global environment.
 "
 Class {
-	#name : 'CoTransitiveDependencyWithoutLocalGlobalVariableFetcher',
+	#name : 'CoTransitiveDependencyPackageScopedGlobalVariableFetcherPrefix',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
-	#category : 'ExtendedHeuristicCompletion-Dependency',
-	#package : 'ExtendedHeuristicCompletion-Dependency'
+	#category : 'ExtendedHeuristicCompletion-Prefixes',
+	#package : 'ExtendedHeuristicCompletion-Prefixes'
 }
 
 { #category : 'enumerating' }
-CoTransitiveDependencyWithoutLocalGlobalVariableFetcher >> entriesDo: aBlock [
-	| dependentClassNames dependentPackages |
+CoTransitiveDependencyPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBlock [
+	| dependentClassNames dependentPackages normalizer |
 	completionClass isNil ifTrue: [ ^ self ].
+
+	normalizer := CoNamePrefixNormalizer new.
+	normalizer prefixes: { 'Sp' }.
+
+	"1) First local classes"
+	self packageLocalClasses: aBlock.
 
 	"2) Add classes from transitive dependencies"
 	dependentPackages := self dependenciesOf: package name.
-	dependentClassNames := dependentPackages inject: OrderedCollection new into: [ :acc :pkgName |
-		| pkg |
-		pkg := organizer packageNamed: pkgName ifAbsent: [ nil ].
-		pkg isNil ifFalse: [
-			acc addAll: (pkg definedClasses collect: [ :each | each name ])
-		].
-		acc
-	].
+	dependentClassNames := dependentPackages
+		inject: OrderedCollection new
+		into: [ :acc :pkgName |
+			| pkg |
+			pkg := organizer packageNamed: pkgName ifAbsent: [ nil ].
+			pkg isNil ifFalse: [
+				acc addAll: (pkg definedClasses collect: [ :each | each name ]) ].
+			acc ].
 
 	dependentClassNames do: [ :className |
-		(filter accepts: className)
-			ifTrue: [ aBlock value: (NECGlobalEntry contents: className node: nil) ] ].
-
+		| normalized |
+		normalized := normalizer normalize: className.
+		(filter accepts: normalized) ifTrue: [
+			aBlock value: (NECGlobalEntry
+				contents: (normalizer denormalize: normalized)
+				node: nil) ] ]
 
 ]

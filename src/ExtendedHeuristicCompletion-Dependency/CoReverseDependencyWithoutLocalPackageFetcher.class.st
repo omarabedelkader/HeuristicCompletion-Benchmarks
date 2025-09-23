@@ -52,81 +52,51 @@ This fetcher is valuable when:
 It complements forward-based fetchers (like transitive or direct dependency-based ones) by providing the **inverse view**—what depends on me?
 "
 Class {
-	#name : 'CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix',
+	#name : 'CoReverseDependencyWithoutLocalPackageFetcher',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#instVars : [
 		'reverseDependencies'
-	],
-	#classInstVars : [
-		'dependencies'
 	],
 	#category : 'ExtendedHeuristicCompletion-Dependency',
 	#package : 'ExtendedHeuristicCompletion-Dependency'
 }
 
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix class >> computeDependenciesOf: aPackageName [
-
-	^ StDependencyChecker new dependenciesOf: aPackageName
-]
-
-{ #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix class >> dependenciesOf: aPackageName [
-
-	^ dependencies
-		  at: aPackageName
-		  ifAbsentPut: [ self computeDependenciesOf: aPackageName ]
-]
-
-{ #category : 'class initialization' }
-CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix class >> initialize [
-
-	dependencies := Dictionary new
-]
-
 { #category : 'enumerating' }
-CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBlock [
+CoReverseDependencyWithoutLocalPackageFetcher >> entriesDo: aBlock [
 
-	| closeClassNames keys dependentClassNames dependentPackages normalizer |
+	| closeClassNames keys dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self ].
+	
+	organizer := package organizer.
 
-	normalizer := CoNamePrefixNormalizer new.
-	normalizer prefixes: { 'Sp' }.
-
-	closeClassNames := self packageLocalClasses: aBlock.
+	"closeClassNames := self packageLocalClasses: aBlock."
 
 	"Then include dependent classes from reverse dependencies"
 	dependentClassNames := OrderedCollection new.
-	dependentPackages := self reverseDependenciesOf: package name.
+	dependentPackages := self reverseDependenciesOf:  package name.
+
 	dependentPackages do: [ :packageName |
 			dependentClassNames addAll:
 				((organizer packageNamed: packageName ifAbsent: [ nil ])
-					 ifNotNil: [ :pkg |
-					 pkg definedClasses collect: [ :each | each name ] ]
+					 ifNotNil: [ :pkg | pkg definedClasses collect: [ :each | each name ] ]
 					 ifNil: [ #(  ) ]) ].
 
 	dependentClassNames do: [ :depclassName |
-			| normalized |
-			normalized := normalizer normalize: depclassName.
-			(filter accepts: normalized) ifTrue: [
-					aBlock value: (NECGlobalEntry
-							 contents: (normalizer denormalize: normalized)
-							 node: nil) ] ].
+			(filter accepts: depclassName) ifTrue: [
+				aBlock value: (NECGlobalEntry contents: depclassName node: nil) ] ].
 
 	"Avoid duplicates from systemNavigation environment"
 	keys := self systemNavigation environment keys asOrderedCollection.
-	closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
+	"closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ]."
 	dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
 
-        keys do: [ :globalName |
-                        | normalized |
-                        normalized := normalizer normalize: globalName.
-                        (filter accepts: normalized) ifTrue: [
-                                aBlock value: (NECGlobalEntry contents: (normalizer denormalize: normalized) node: astNode) ] ]
+	keys do: [ :globalName |
+			(filter accepts: globalName) ifTrue: [
+				aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
 ]
 
 { #category : 'accessing' }
-CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix >> reverseDependenciesOf: aPackageName [
+CoReverseDependencyWithoutLocalPackageFetcher >> reverseDependenciesOf: aPackageName [
 
 	| allPackages dependentPackages |
 	allPackages := PackageOrganizer default packages. 
