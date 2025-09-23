@@ -52,51 +52,81 @@ This fetcher is valuable when:
 It complements forward-based fetchers (like transitive or direct dependency-based ones) by providing the **inverse view**—what depends on me?
 "
 Class {
-	#name : 'CoOnlyReverseDependencyGlobalVariableFetcher',
+	#name : 'CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#instVars : [
 		'reverseDependencies'
 	],
-	#category : 'ExtendedHeuristicCompletion-Dependency',
-	#package : 'ExtendedHeuristicCompletion-Dependency'
+	#classInstVars : [
+		'dependencies'
+	],
+	#category : 'ExtendedHeuristicCompletion-Prefixes',
+	#package : 'ExtendedHeuristicCompletion-Prefixes'
 }
 
-{ #category : 'enumerating' }
-CoOnlyReverseDependencyGlobalVariableFetcher >> entriesDo: aBlock [
+{ #category : 'accessing' }
+CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix class >> computeDependenciesOf: aPackageName [
 
-	| closeClassNames keys dependentClassNames dependentPackages |
-	completionClass isNil ifTrue: [ ^ self ].
-	
-	organizer := package organizer.
-
-	"closeClassNames := self packageLocalClasses: aBlock."
-
-	"Then include dependent classes from reverse dependencies"
-	dependentClassNames := OrderedCollection new.
-	dependentPackages := self reverseDependenciesOf:  package name.
-
-	dependentPackages do: [ :packageName |
-			dependentClassNames addAll:
-				((organizer packageNamed: packageName ifAbsent: [ nil ])
-					 ifNotNil: [ :pkg | pkg definedClasses collect: [ :each | each name ] ]
-					 ifNil: [ #(  ) ]) ].
-
-	dependentClassNames do: [ :depclassName |
-			(filter accepts: depclassName) ifTrue: [
-				aBlock value: (NECGlobalEntry contents: depclassName node: nil) ] ].
-
-	"Avoid duplicates from systemNavigation environment"
-	keys := self systemNavigation environment keys asOrderedCollection.
-	"closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ]."
-	dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
-
-	keys do: [ :globalName |
-			(filter accepts: globalName) ifTrue: [
-				aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
+	^ StDependencyChecker new dependenciesOf: aPackageName
 ]
 
 { #category : 'accessing' }
-CoOnlyReverseDependencyGlobalVariableFetcher >> reverseDependenciesOf: aPackageName [
+CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix class >> dependenciesOf: aPackageName [
+
+	^ dependencies
+		  at: aPackageName
+		  ifAbsentPut: [ self computeDependenciesOf: aPackageName ]
+]
+
+{ #category : 'class initialization' }
+CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix class >> initialize [
+
+	dependencies := Dictionary new
+]
+
+{ #category : 'enumerating' }
+CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBlock [
+
+	| closeClassNames keys dependentClassNames dependentPackages normalizer |
+	completionClass isNil ifTrue: [ ^ self ].
+
+	normalizer := CoNamePrefixNormalizer new.
+	normalizer prefixes: { 'Sp' }.
+
+	closeClassNames := self packageLocalClasses: aBlock.
+
+	"Then include dependent classes from reverse dependencies"
+	dependentClassNames := OrderedCollection new.
+	dependentPackages := self reverseDependenciesOf: package name.
+	dependentPackages do: [ :packageName |
+			dependentClassNames addAll:
+				((organizer packageNamed: packageName ifAbsent: [ nil ])
+					 ifNotNil: [ :pkg |
+					 pkg definedClasses collect: [ :each | each name ] ]
+					 ifNil: [ #(  ) ]) ].
+
+	dependentClassNames do: [ :depclassName |
+			| normalized |
+			normalized := normalizer normalize: depclassName.
+			(filter accepts: normalized) ifTrue: [
+					aBlock value: (NECGlobalEntry
+							 contents: (normalizer denormalize: normalized)
+							 node: nil) ] ].
+
+	"Avoid duplicates from systemNavigation environment"
+	keys := self systemNavigation environment keys asOrderedCollection.
+	closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
+	dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
+
+        keys do: [ :globalName |
+                        | normalized |
+                        normalized := normalizer normalize: globalName.
+                        (filter accepts: normalized) ifTrue: [
+                                aBlock value: (NECGlobalEntry contents: (normalizer denormalize: normalized) node: astNode) ] ]
+]
+
+{ #category : 'accessing' }
+CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix >> reverseDependenciesOf: aPackageName [
 
 	| allPackages dependentPackages |
 	allPackages := PackageOrganizer default packages. 

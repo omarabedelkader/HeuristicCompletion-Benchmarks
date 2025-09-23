@@ -39,7 +39,7 @@ BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 	spec
 		package: 'ExtendedHeuristicCompletion-PackageScope-Variable'
 		with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
-		
+
 	spec
 		package: 'ExtendedHeuristicCompletion-Dependency'
 		with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
@@ -47,11 +47,16 @@ BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 	spec
 		package: 'ExtendedHeuristicCompletion-Weights'
 		with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
+	
+	spec
+		package: 'ExtendedHeuristicCompletion-Prefixes'
+		with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
 
 	spec package: 'ExtendedHeuristicCompletion-History'.
 	spec
 		package: 'ExtendedHeuristicCompletion-Model'
-		with: [ spec requires: 'ExtendedHeuristicCompletion-PackageScope-Variable' ].
+		with: [
+		spec requires: 'ExtendedHeuristicCompletion-PackageScope-Variable' ].
 
 	"analyser"
 	spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.

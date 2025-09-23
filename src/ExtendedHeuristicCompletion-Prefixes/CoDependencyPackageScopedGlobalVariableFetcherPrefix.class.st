@@ -41,35 +41,32 @@ Use this fetcher when:
 
 "
 Class {
-	#name : 'CoNormalizedDependencyPackageScopedGlobalVariableFetcherPrefix',
+	#name : 'CoDependencyPackageScopedGlobalVariableFetcherPrefix',
 	#superclass : 'CoAbstractPackageDependentScopeGlobalVariableFetcher',
 	#instVars : [
 		'dependencies'
 	],
-	#category : 'ExtendedHeuristicCompletion-Dependency',
-	#package : 'ExtendedHeuristicCompletion-Dependency'
+	#category : 'ExtendedHeuristicCompletion-Prefixes',
+	#package : 'ExtendedHeuristicCompletion-Prefixes'
 }
 
 { #category : 'accessing' }
-CoNormalizedDependencyPackageScopedGlobalVariableFetcherPrefix >> dependencies [
+CoDependencyPackageScopedGlobalVariableFetcherPrefix >> dependencies [
 
 	^ dependencies
 ]
 
 { #category : 'accessing' }
-CoNormalizedDependencyPackageScopedGlobalVariableFetcherPrefix >> dependencies: anObject [
+CoDependencyPackageScopedGlobalVariableFetcherPrefix >> dependencies: anObject [
 
 	dependencies := anObject
 ]
 
 { #category : 'enumerating' }
-CoNormalizedDependencyPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBlock [
+CoDependencyPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBlock [
 
-	| dependentClassNames dependentPackages normalizer |
+	| dependentClassNames dependentPackages  |
 	completionClass isNil ifTrue: [ ^ self ].
-
-	normalizer := CoNamePrefixNormalizer new.
-	normalizer prefixes: { 'Sp' }.
 
 	self packageLocalClasses: aBlock.
 
@@ -81,11 +78,9 @@ CoNormalizedDependencyPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBl
 				definedClasses collect: [ :each | each name ]) ].
 
 	dependentClassNames do: [ :depClassName |
-		| normalized |
-		normalized := normalizer normalize: depClassName.
-		(filter accepts: normalized) ifTrue: [
+		(filter accepts: depClassName) ifTrue: [
 			aBlock value: ((NECGlobalEntry
-					contents: (normalizer denormalize: normalized)
+					contents: depClassName
 					node: nil)
 				fetcher: self;
 				yourself) ] ].
