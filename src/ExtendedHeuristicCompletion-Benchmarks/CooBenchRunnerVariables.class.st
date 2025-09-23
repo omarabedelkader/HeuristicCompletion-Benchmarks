@@ -431,7 +431,7 @@ CooBenchRunnerVariables >> completeLateralPackageWithLocalPackage [
 	^ benchmark
 ]
 
-{ #category : 'COMPLETE' }
+{ #category : 'unused' }
 CooBenchRunnerVariables >> completeLocalPackage [
 	"self new 
 		package: AnalyserData1 package;

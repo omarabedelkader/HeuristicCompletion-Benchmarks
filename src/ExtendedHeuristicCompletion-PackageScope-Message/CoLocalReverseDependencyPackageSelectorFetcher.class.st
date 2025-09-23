@@ -9,25 +9,30 @@ Class {
 }
 
 { #category : 'enumerating' }
-CoLocalReverseDependencyPackageSelectorFetcher >> entriesDo: aBlock [ 
+CoLocalReverseDependencyPackageSelectorFetcher >> entriesDo: aBlock [
 
-    | reversePackages reverseSelectors |
-    completionClass isNil ifTrue: [ ^ self ].
+	| reversePackages reverseSelectors |
+	completionClass isNil ifTrue: [ ^ self ].
 
-    self packageLocalSelectors: aBlock.
+	self packageLocalSelectors: aBlock.
 
-    reversePackages := (PackageOrganizer default packages select: [ :pkg |
-        | deps |
-        deps := self dependenciesOf: pkg name.
-        deps includes: package name ]) collect: [ :pkg | pkg name ].
+	reverseSelectors := Set new.
+	reversePackages := (PackageOrganizer default packages select: [ :pkg |
+			                    | deps |
+			                    deps := self dependenciesOf: pkg name.
+			                    deps includes: package name ]) collect: [ :pkg | pkg name ].
 
-    reverseSelectors := Set new.
-    reversePackages do: [ :pkgName |
-			self treatPackageNamed: pkgName into: reverseSelectors ].
+	reversePackages do: [ :pkgName | self treatPackageNamed: pkgName into: reverseSelectors ].
 
-    reverseSelectors do: [ :sel |
-        (filter accepts: sel) ifTrue: [
-            aBlock value: ((NECGlobalEntry contents: sel node: nil)
-                            fetcher: self;
-                            yourself) ] ].
+	reverseSelectors do: [ :sel |
+			(filter accepts: sel) ifTrue: [
+					aBlock value: ((NECGlobalEntry contents: sel node: nil)
+							 fetcher: self;
+							 yourself) ] ]
+]
+
+{ #category : 'accessing' }
+CoLocalReverseDependencyPackageSelectorFetcher >> packageLocalSelectors: aBlock [
+
+	
 ]

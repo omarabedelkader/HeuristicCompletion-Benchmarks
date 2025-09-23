@@ -486,6 +486,136 @@ CooBenchRunnerMessage >> localReverseDependency [
 	^ benchmark
 ]
 
+{ #category : 'UNIT' }
+CooBenchRunnerMessage >> unit2LevelDependency [
+	"self new 
+        package: CompletionSorter package;
+        unit2LevelDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass: CoUnit2LevelDependencyPackageSelectorFetcher);
+			 build).
+
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Unit 2 Level message Dependency Package Scope';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+
+	^ benchmark
+]
+
+{ #category : 'UNIT' }
+CooBenchRunnerMessage >> unitDependency [
+	"self new 
+        package: CompletionSorter package;
+        unitDependency"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass: CoUnitDependencyPackageSelectorFetcher);
+			 build).
+
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Unit Direct Message Dependency Package';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+
+	^ benchmark
+]
+
+{ #category : 'UNIT' }
+CooBenchRunnerMessage >> unitEmptyHeuristic [
+	"self new 
+		package: NECEntry package;
+		unitEmptyHeuristic"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: CoNullFetcherHeuristic new;
+			 build).
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Unit Empty Heuristic';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'UNIT' }
+CooBenchRunnerMessage >> unitLateralsWithoutLocalPackage [
+	"self new 
+		package: NECEntry package;
+		unitLateralsWithoutLocalPackage"
+
+	"self new 
+		package: (PackageOrganizer default packageNamed: 'Microdown') ;
+		unitLateralsWithoutLocalPackage"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass: CoUnitLateralPackageSelectorFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Unit Lateral Packages Without Local Package';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'UNIT' }
+CooBenchRunnerMessage >> unitPackage [
+	"self new 
+		package: NECEntry package;
+		unitPackage"
+
+	"self new 
+		package: (PackageOrganizer default packageNamed: 'Microdown') ;
+		unitPackage"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass: CoUnitPackageSelectorFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Unit Lateral Packages Without Local Package';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
+{ #category : 'UNIT' }
+CooBenchRunnerMessage >> unitReverseDependencyWithoutLocalPackage [
+	"self new 
+		package: (PackageOrganizer default packageNamed: 'NECompletion') ;
+		unitReverseDependencyWithoutLocalPackage"
+
+	"self new 
+		package: (PackageOrganizer default packageNamed: 'Microdown') ;
+		unitReverseDependencyWithoutLocalPackage"
+
+	| builder benchmark |
+	builder := CoASTHeuristicsResultSetBuilder new.
+	builder messageHeuristic: (builder newHeuristicBuilder
+			 add: (CooUnknownMessageHeuristic new globalMessageFetcherClass: CoUnitReverseDependencyPackageSelectorFetcher);
+			 build).
+	benchmark := CooStaticBenchmarksMessage new
+		             name: 'Unit Reverse Dependency without Local Package';
+		             scope: (CoBenchmarkPackage on: package);
+		             builder: builder;
+		             run.
+	^ benchmark
+]
+
 { #category : 'experience' }
 CooBenchRunnerMessage >> withLateralDependency [ 
 	"self new 
