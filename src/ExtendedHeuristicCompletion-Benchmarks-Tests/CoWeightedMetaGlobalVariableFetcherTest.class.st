@@ -25,6 +25,53 @@ CoWeightedMetaGlobalVariableFetcherTest >> setUp [
 ]
 
 { #category : 'running' }
+CoWeightedMetaGlobalVariableFetcherTest >> testAggregatedWeightsDetermineOrdering [
+	| firstStub secondStub thirdStub localFetcher collected |
+	firstStub := CoWeightedMetaGlobalVariableFetcherTestFetcherStub new.
+	firstStub entries: { (NECGlobalEntry contents: 'Beta' node: nil) }.
+
+	secondStub := CoWeightedMetaGlobalVariableFetcherTestFetcherStub new.
+	secondStub entries: {
+	                (NECGlobalEntry contents: 'Alpha' node: nil).
+	                (NECGlobalEntry contents: 'Beta' node: nil) }.
+
+	thirdStub := CoWeightedMetaGlobalVariableFetcherTestFetcherStub new.
+	thirdStub entries: { (NECGlobalEntry contents: 'Gamma' node: nil) }.
+
+	localFetcher := CoWeightedMetaGlobalVariableFetcher new.
+	localFetcher fetchersAndWeights: {
+	                (firstStub -> 0.3).
+	                (secondStub -> 0.5).
+	                (thirdStub -> 0.1) }.
+	localFetcher filter: (CoBeginsWithFilter caseSensitive: false filterString: '').
+
+	collected := OrderedCollection new.
+	localFetcher entriesDo: [ :entry | collected add: entry contents ].
+
+	self assert: collected asArray equals: #( 'Beta' 'Alpha' 'Gamma' )
+]
+
+{ #category : 'running' }
+CoWeightedMetaGlobalVariableFetcherTest >> testCompletionClassPropagatesToFetchers [
+	| stubs completionClass |
+	stubs := {
+	                CoWeightedMetaGlobalVariableFetcherTestFetcherStub new.
+	                CoWeightedMetaGlobalVariableFetcherTestFetcherStub new }.
+
+	fetcher fetchersAndWeights: {
+	                (stubs first -> 0.4).
+	                (stubs second -> 0.6) }.
+
+	completionClass := Object.
+	fetcher completionClass: completionClass.
+
+	stubs do: [ :each |
+	        self
+	                assert: each completionClass
+	                identicalTo: completionClass ]
+]
+
+{ #category : 'running' }
 CoWeightedMetaGlobalVariableFetcherTest >> testWeightedOrdering [ 
 
     | fetched |
