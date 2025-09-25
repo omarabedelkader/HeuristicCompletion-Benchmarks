@@ -170,7 +170,7 @@ CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 				  package: pack;
 				  baseline: #completeBaseline ;
 				  others:
-					  {#completeDependency. #withRepositoryWithLocalPackage. #completeReverseDependency. #completeSemantics. #withSemanticsPlusPackageScope. #withTransitiveDependency };
+					  {#complete2LevelDependency. #completeDependency. #completeLateralPackage. #completeReverseDependency. #completeSemantics. #local2LevelDependency. #localDependency. #localLateralPackageWithLocalPackage. #localReverseDependency. #unit2LevelDependency. #unitDependency. #unitEmptyHeuristic. #unitLateralsWithoutLocalPackage. #unitPackage. #unitReverseDependencyWithoutLocalPackage. #withLateralDependency. #withSemanticsPlusPackageScope };
 				  run ]
 ]
 
