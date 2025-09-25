@@ -58,7 +58,7 @@ CooBenchRunnerMessage class >> moose [
 		   'Moose-Blueprint-Models'. 'Moose-Blueprint-Visualization-Models'.
 		   'Moose-Configuration'. 'Moose-Core'. 'Moose-Core-Generator'.
 		   'Moose-Importers'. 'Moose-Query'. 'Moose-Query-Extensions'.
-		   'Moose-SmalltalkImporter'. 'Moose-WelcomeBrowser'.
+		   'Moose-SmalltalkImporter'. 'MooseIDE-WelcomeBrowser'.
 		   'MooseIDE-Analysis'. 'MooseIDE-AttributedText'.
 		   'MooseIDE-ButterflyMap'. 'MooseIDE-ClassBlueprint'.
 		   'MooseIDE-CoUsageMap'. 'MooseIDE-Core'. 'MooseIDE-Core-Reporter'.
