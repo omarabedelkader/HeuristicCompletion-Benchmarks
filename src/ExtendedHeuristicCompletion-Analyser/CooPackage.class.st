@@ -20,48 +20,79 @@ CooPackage class >> listClassesFor: packageNames [
 ]
 
 { #category : 'analyzing' }
-CooPackage class >> runForPackageNames: packageNames [ 
-    | rows totClasses totDefined totMethods totInternalRatio internalUserCount totExternalRefs |
-    rows := packageNames collect: [ :name |
-        | pkg analyser internalRatio internalCount externalCount |
-        pkg := PackageOrganizer default packageNamed: name.
-        pkg ifNil: [
-            Transcript show: 'Package ', name, ' is not loaded.'; cr.
-            { name . 0 . 0 . 0 . 0.0 . 0 . 0 }
-        ] ifNotNil: [
-            analyser := PackageAnalyser new.
-            analyser runAnalysisForPackage: pkg.
-            internalRatio := analyser internalUserRatio.
-            internalCount := analyser internalUserCount.
-            externalCount := analyser externalReferences size.
-            {
-                name .
-                pkg classes size .
-                pkg definedClasses size .
-                pkg methods size .
-                internalRatio .
-                internalCount .
-                externalCount
-            }
-        ]
-    ].
+CooPackage class >> listMethodsFor: packageNames [
 
-    totClasses := rows inject: 0 into: [ :sum :r | sum + (r at: 2) ].
-    totDefined := rows inject: 0 into: [ :sum :r | sum + (r at: 3) ].
-    totMethods := rows inject: 0 into: [ :sum :r | sum + (r at: 4) ].
-    totInternalRatio := rows inject: 0.0 into: [ :sum :r | sum + (r at: 5) ].
-    internalUserCount := rows inject: 0 into: [ :sum :r | sum + (r at: 6) ].
-    totExternalRefs := rows inject: 0 into: [ :sum :r | sum + (r at: 7) ].
+	| allMethods |
+	allMethods := packageNames flatCollect: [ :packageName |
+			              (PackageOrganizer default packageNamed: packageName) definedClasses flatCollect: [ :eachClass |
+				              eachClass methodDictionary keys collect: [ :eachMethod | eachClass name , ' >> ' , eachMethod asString ] ] ].
+	allMethods do: [ :methodName |
+			Transcript
+				show: '- ' , methodName;
+				cr ]
+]
 
-    rows := rows copyWith: {
-        'TOTAL'.
-        totClasses.
-        totDefined.
-        totMethods.
-        totInternalRatio / packageNames size asFloat.
-        internalUserCount.
-        totExternalRefs
-    }.
+{ #category : 'analyzing' }
+CooPackage class >> runForPackageNames: packageNames [
 
-    ^ rows
+	| rows totClasses totDefined totMethods totInternalRatio internalUserCount totExternalRefs |
+	rows := packageNames collect: [ :name |
+			        | pkg analyser internalRatio internalCount externalCount |
+			        pkg := PackageOrganizer default packageNamed: name.
+			        pkg
+				        ifNil: [
+						        Transcript
+							        show: 'Package ' , name , ' is not loaded.';
+							        cr.
+						        {
+							        name.
+							        0.
+							        0.
+							        0.
+							        0.0.
+							        0.
+							        0 } ]
+				        ifNotNil: [
+						        analyser := PackageAnalyser new.
+						        analyser runAnalysisForPackage: pkg.
+						        internalRatio := analyser internalUserRatio.
+						        internalCount := analyser internalUserCount.
+						        externalCount := analyser externalReferences size.
+						        {
+							        name.
+							        pkg classes size.
+							        pkg definedClasses size.
+							        pkg methods size.
+							        internalRatio.
+							        internalCount.
+							        externalCount } ] ].
+
+	totClasses := rows inject: 0 into: [ :sum :r | sum + (r at: 2) ].
+	totDefined := rows inject: 0 into: [ :sum :r | sum + (r at: 3) ].
+	totMethods := rows inject: 0 into: [ :sum :r | sum + (r at: 4) ].
+	totInternalRatio := rows inject: 0.0 into: [ :sum :r | sum + (r at: 5) ].
+	internalUserCount := rows inject: 0 into: [ :sum :r | sum + (r at: 6) ].
+	totExternalRefs := rows inject: 0 into: [ :sum :r | sum + (r at: 7) ].
+
+	rows := rows copyWith: {
+			        'TOTAL'.
+			        totClasses.
+			        totDefined.
+			        totMethods.
+			        (totInternalRatio / packageNames size asFloat).
+			        internalUserCount.
+			        totExternalRefs }. "⇓ Print header first ⇓"
+	Transcript
+		show: 'Package|Classes|Defined|Methods|InternalRatio|InternalUsers|ExternalRefs#';
+		cr. "⇓ Print each row with | as separator and # at end ⇓"
+	rows do: [ :r |
+			Transcript
+				show: (String streamContents: [ :s |
+								 r do: [ :item |
+											 s nextPutAll: item asString.
+											 s nextPut: $| ].
+								 s nextPut: $# "end of row marker" ]);
+				cr ].
+
+	^ rows
 ]

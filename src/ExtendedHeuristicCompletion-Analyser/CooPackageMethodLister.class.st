@@ -1,70 +1,15 @@
-"
-```smalltalk
-
-| packageNames rows totClasses totDefined totMethods packageCount |
-packageNames := #(
-    'Iceberg'
-    'Iceberg-Libgit'
-    'Iceberg-Libgit-Filetree'
-    'Iceberg-Libgit-Tonel'
-    'Iceberg-Metacello-Integration'
-    'Iceberg-Plugin'
-    'Iceberg-Plugin-Github'
-    'Iceberg-Plugin-Migration'
-    'Iceberg-Plugin-Pharo'
-    'Iceberg-TipUI'
-    'Iceberg-TipUI-SnapShotBrowser'
-).
-
-rows := packageNames collect: [ :name |
-	| pkg |
-	pkg := PackageOrganizer default packageNamed: name.
-	pkg ifNil: [
-		self inform: 'Package ', name, ' is not loaded.'.
-		^{ name . 0 . 0 . 0 }   ""keep list lengths equal""
-	] ifNotNil: [
-		{
-			name .
-			pkg classes size .
-			pkg definedClasses size .
-			pkg methods size
-		}
-	]
-].
-
-totClasses := rows inject: 0 into: [:sum :r | sum + (r at: 2)].
-totDefined := rows inject: 0 into: [:sum :r | sum + (r at: 3)].
-totMethods := rows inject: 0 into: [:sum :r | sum + (r at: 4)].
-
-rows := rows copyWith: { 'TOTAL' . totClasses . totDefined . totMethods }.
-Transcript
-	cr; show: 'Package'; tab; show: 'Classes'; tab; show: 'Defined'; tab; show: 'Methods'; cr.
-rows do: [:row |
-	Transcript
-		show: row first; tab;
-		show: row second; tab;
-		show: row third; tab;
-		show: row fourth; cr ].
-
-rows inspect.
-
-""How many packages?""
-packageCount := packageNames size.   ""← **this is the number you want**""
-
-```
-"
 Class {
-	#name : 'CooPackageMetrics',
+	#name : 'CooPackageMethodLister',
 	#superclass : 'CooPackage',
 	#category : 'ExtendedHeuristicCompletion-Analyser',
 	#package : 'ExtendedHeuristicCompletion-Analyser'
 }
 
 { #category : 'examples' }
-CooPackageMetrics class >> iceberg [
+CooPackageMethodLister class >> iceberg [
 
 	<script>
-	^ (self runForPackageNames:
+	^ (self listMethodsFor: 
 		   { 'Iceberg'. 'Iceberg-ArchitecturalRules'. 'Iceberg-Libgit'. 'Iceberg-Libgit-Filetree'. 'Iceberg-Libgit-Tonel'.
 		   'Iceberg-Memory'. 'Iceberg-Metacello-Integration'. 'Iceberg-Playground-Plugin-Gist'. 'Iceberg-Plugin'. 'Iceberg-Plugin-Github'.
 		   'Iceberg-Plugin-Metacello'. 'Iceberg-Plugin-Migration'. 'Iceberg-Plugin-Pharo'. 'Iceberg-TipUI'. 'Iceberg-TipUI-SnapShotBrowser' })
@@ -72,19 +17,19 @@ CooPackageMetrics class >> iceberg [
 ]
 
 { #category : 'examples' }
-CooPackageMetrics class >> icebergTest [
+CooPackageMethodLister class >> icebergTest [
 
 	<script>
-	^ (self runForPackageNames:
+	^ (self listMethodsFor:
 		   { 'Iceberg-Plugin-Migration-Tests'. 'Iceberg-Tests'. 'Iceberg-Tests-MetacelloIntegration'.
 		   'Iceberg-TipUI-SnapshotBrowser-Tests'. 'Iceberg-UI-Tests' }) inspect
 ]
 
 { #category : 'examples' }
-CooPackageMetrics class >> moose [
+CooPackageMethodLister class >> moose [
 
 	<script>
-	^ (self runForPackageNames: { 'Moose-Blueprint-Invocations-Models'. 'Moose-Blueprint-Models'. 'Moose-Blueprint-Visualization-Models'.
+	^ (self listMethodsFor: { 'Moose-Blueprint-Invocations-Models'. 'Moose-Blueprint-Models'. 'Moose-Blueprint-Visualization-Models'.
 		   'Moose-Configuration'. 'Moose-Core'. 'Moose-Core-Generator'. 'Moose-Importers'. 'Moose-Query'. 'Moose-Query-Extensions'.
 		   'Moose-SmalltalkImporter'. 'MooseIDE-WelcomeBrowser'. 'MooseIDE-Analysis'. 'MooseIDE-AttributedText'.
 		   'MooseIDE-ButterflyMap'. 'MooseIDE-ClassBlueprint'. 'MooseIDE-CoUsageMap'. 'MooseIDE-Core'. 'MooseIDE-Core-Reporter'.
@@ -94,10 +39,10 @@ CooPackageMetrics class >> moose [
 ]
 
 { #category : 'examples' }
-CooPackageMetrics class >> mooseTests [
+CooPackageMethodLister class >> mooseTests [
 
 	<script>
-	^ (self runForPackageNames:
+	^ (self listMethodsFor:
 		   { 'Moose-Blueprint-Models-Tests'. 'Moose-Core-Tests'. 'Moose-Core-Tests-Entities'. 'Moose-Importers-Tests'.
 		   'Moose-Query-Test'. 'Moose-SmalltalkImporter-Core-Tests'. 'Moose-SmalltalkImporter-KGB-Tests'.
 		   'Moose-SmalltalkImporter-LAN-Tests'. 'Moose-TestResources-KGB-P10InteractedReferee'.
@@ -117,26 +62,10 @@ CooPackageMetrics class >> mooseTests [
 ]
 
 { #category : 'examples' }
-CooPackageMetrics class >> nec [
+CooPackageMethodLister class >> roassal [
 
 	<script>
-	^ (self runForPackageNames: {'NECompletion' })
-		  inspect
-]
-
-{ #category : 'examples' }
-CooPackageMetrics class >> necTests [
-
-	<script>
-	^ (self runForPackageNames: {'NECompletion-Tests' })
-		  inspect
-]
-
-{ #category : 'examples' }
-CooPackageMetrics class >> roassal [
-
-	<script>
-	^ (self runForPackageNames:
+	^ (self listMethodsFor:
 		   { 'Roassal'. 'Roassal-Animation'. 'Roassal-BaselineMap'. 'Roassal-Builders'. 'Roassal-Chart'. 'Roassal-Chart-Examples'.
 		   'Roassal-Class-Examples'. 'Roassal-Colors'. 'Roassal-DSM'. 'Roassal-Event'. 'Roassal-Examples'. 'Roassal-Experimental'.
 		   'Roassal-Exporters'. 'Roassal-Exporters-Examples'. 'Roassal-FlameGraph-Examples'. 'Roassal-Inspector'. 'Roassal-Interaction'.
@@ -147,20 +76,20 @@ CooPackageMetrics class >> roassal [
 ]
 
 { #category : 'examples' }
-CooPackageMetrics class >> roassalTests [
+CooPackageMethodLister class >> roassalTests [
 
 	<script>
-	^ (self runForPackageNames:
+	^ (self listMethodsFor:
 		   { 'Roassal-Animation-Tests'. 'Roassal-BaselineMap-Tests'. 'Roassal-Chart-Tests'. 'Roassal-Exporters-Tests'.
 		   'Roassal-Global-Tests'. 'Roassal-Inspector-Tests'. 'Roassal-Interaction-Tests'. 'Roassal-LayoutStudio-Tests'.
 		   'Roassal-Layouts-Tests'. 'Roassal-Shapes-Tests'. 'Roassal-Spec-Tests'. 'Roassal-SVG-Tests'. 'Roassal-UML-Tests' }) inspect
 ]
 
 { #category : 'examples' }
-CooPackageMetrics class >> seaside [
+CooPackageMethodLister class >> seaside [
 
 	<script>
-	^ (self runForPackageNames:
+	^ (self listMethodsFor:
 		   { 'Seaside-Ajaxifier-Core'. 'Seaside-Canvas'. 'Seaside-Component'. 'Seaside-Continuation'. 'Seaside-Core'. 'Seaside-Development'.
 		   'Seaside-Email'. 'Seaside-Environment'. 'Seaside-Examples'. 'Seaside-Flow'. 'Seaside-JSON-Core'. 'Seaside-Pharo-Canvas'.
 		   'Seaside-Pharo-Continuation'. 'Seaside-Pharo-Core'. 'Seaside-Pharo-Development'. 'Seaside-Pharo-Email'. 'Seaside-Pharo-Environment'.
@@ -170,20 +99,20 @@ CooPackageMetrics class >> seaside [
 ]
 
 { #category : 'examples' }
-CooPackageMetrics class >> seasideTests [
+CooPackageMethodLister class >> seasideTests [
 
 	<script>
-	^ (self runForPackageNames:
+	^ (self listMethodsFor:
 		   { 'Seaside-Tests-Canvas'. 'Seaside-Tests-Component'. 'Seaside-Tests-Core'. 'Seaside-Tests-Environment'.
 		   'Seaside-Tests-Flow'. 'Seaside-Tests-Functional'. 'Seaside-Tests-Pharo-Canvas'. 'Seaside-Tests-Pharo-Continuation'.
 		   'Seaside-Tests-Pharo-Core'. 'Seaside-Tests-Pharo-Functional'. 'Seaside-Tests-RenderLoop'. 'Seaside-Tests-Session' }) inspect
 ]
 
 { #category : 'examples' }
-CooPackageMetrics class >> spec [
+CooPackageMethodLister class >> spec [
 
 	<script>
-	^ (self runForPackageNames:
+	^ (self listMethodsFor:
 		   { 'Spec2-Adapters-Morphic'. 'Spec2-Adapters-Morphic-ListView'. 'Spec2-Adapters-Stub'. 'Spec2-Code'. 'Spec2-Code-Commands'.
 		   'Spec2-Code-Diff'. 'Spec2-Code-Diff-Morphic'. 'Spec2-Code-Morphic'. 'Spec2-CommandLine'. 'Spec2-Commander2'.
 		   'Spec2-Commands'. 'Spec2-CommonWidgets'. 'Spec2-Core'. 'Spec2-Dialogs'. 'Spec2-Examples'. 'Spec2-Interactions'.
@@ -192,10 +121,10 @@ CooPackageMetrics class >> spec [
 ]
 
 { #category : 'examples' }
-CooPackageMetrics class >> specTests [
+CooPackageMethodLister class >> specTests [
 
 	<script>
-	^ (self runForPackageNames:
+	^ (self listMethodsFor:
 		   { 'Spec2-Adapters-Morphic-Tests'. 'Spec2-Adapters-Stub'. 'Spec2-Backend-Tests'. 'Spec2-Code-Backend-Tests'.
 		   'Spec2-Code-Diff-Tests'. 'Spec2-Code-Tests'. 'Spec2-Commander2-Tests'. 'Spec2-Dialogs-Tests'. 'Spec2-Morphic-Backend-Tests'.
 		   'Spec2-Morphic-Tests'. 'Spec2-Tests' }) inspect
