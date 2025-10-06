@@ -24,5 +24,6 @@ CoLocalLateralPackageSelectorFetcher >> entriesDo: aBlock [
 	friendPackageNames do: [ :eachPackageName |
 		(packageNamePart , '*' match: eachPackageName) ifTrue: [ self treatPackageNamed: eachPackageName into: friendSelectors ] ].
 
-	friendSelectors do: [ :sel | (filter accepts: sel) ifTrue: [ aBlock value: (NECGlobalEntry contents: sel node: nil) ] ]
+	friendSelectors do: [ :sel | (filter accepts: sel) 
+		ifTrue: [ aBlock value: ((NECGlobalEntry contents: sel node: nil)  fetcher: self ; yourself) ] ]
 ]

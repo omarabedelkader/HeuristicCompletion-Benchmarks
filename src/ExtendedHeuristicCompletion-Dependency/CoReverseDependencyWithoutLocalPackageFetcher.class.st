@@ -76,6 +76,7 @@ CoReverseDependencyWithoutLocalPackageFetcher >> entriesDo: aBlock [
 	dependentPackages := self reverseDependenciesOf:  package name.
 
 	dependentPackages do: [ :packageName |
+	
 			dependentClassNames addAll:
 				((organizer packageNamed: packageName ifAbsent: [ nil ])
 					 ifNotNil: [ :pkg | pkg definedClasses collect: [ :each | each name ] ]
@@ -83,7 +84,7 @@ CoReverseDependencyWithoutLocalPackageFetcher >> entriesDo: aBlock [
 
 	dependentClassNames do: [ :depclassName |
 			(filter accepts: depclassName) ifTrue: [
-				aBlock value: (NECGlobalEntry contents: depclassName node: nil) ] ].
+				aBlock value: ((NECGlobalEntry contents: depclassName node: nil) fetcher: self ; yourself) ] ].
 
 	"Avoid duplicates from systemNavigation environment"
 	keys := self systemNavigation environment keys asOrderedCollection.
@@ -92,7 +93,7 @@ CoReverseDependencyWithoutLocalPackageFetcher >> entriesDo: aBlock [
 
 	keys do: [ :globalName |
 			(filter accepts: globalName) ifTrue: [
-				aBlock value: (NECGlobalEntry contents: globalName node: astNode) ] ]
+				aBlock value: ((NECGlobalEntry contents: globalName node: astNode) fetcher: self; yourself) ] ]
 ]
 
 { #category : 'accessing' }
@@ -105,6 +106,7 @@ CoReverseDependencyWithoutLocalPackageFetcher >> reverseDependenciesOf: aPackage
 			                     | dependencies |
 			                     dependencies := self dependenciesOf: pack name.
 			                     dependencies includes: aPackageName ].
-
+		
+	
 	^ dependentPackages collect: [ :pkg | pkg name ]
 ]

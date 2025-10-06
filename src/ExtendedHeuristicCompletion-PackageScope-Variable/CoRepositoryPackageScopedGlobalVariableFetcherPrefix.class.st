@@ -39,5 +39,5 @@ CoRepositoryPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBlock [
                 | normalized |
                 normalized := normalizer normalize: friend.
                 (filter accepts: normalized)
-                        ifTrue: [ aBlock value: (NECGlobalEntry contents: (normalizer denormalize: normalized) node: nil) ]].
+                        ifTrue: [ aBlock value: ((NECGlobalEntry contents: (normalizer denormalize: normalized) node: nil)  fetcher: self ; yourself) ]].
 ]

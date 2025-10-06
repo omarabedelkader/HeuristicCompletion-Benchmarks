@@ -58,8 +58,8 @@ CoTransitiveDependencyPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBl
 		| normalized |
 		normalized := normalizer normalize: className.
 		(filter accepts: normalized) ifTrue: [
-			aBlock value: (NECGlobalEntry
+			aBlock value: ((NECGlobalEntry
 				contents: (normalizer denormalize: normalized)
-				node: nil) ] ]
+				node: nil)  fetcher: self ; yourself) ] ]
 
 ]

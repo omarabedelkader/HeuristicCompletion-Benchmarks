@@ -58,7 +58,7 @@ CoWeightedMetaGlobalVariableFetcher >> entriesDo: aBlock [
 		asSortedCollection: [ :a :b | a value > b value ]) do: [ :assoc |
 				| name |
 				name := assoc key.
-				aBlock value: (NECGlobalEntry contents: name node: nil) ].
+				aBlock value: ((NECGlobalEntry contents: name node: nil)  fetcher: self ; yourself)].
 
 ]
 

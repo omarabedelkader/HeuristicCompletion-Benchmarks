@@ -109,9 +109,9 @@ CoReverseDependencyPackageScopedGlobalVariableFetcherPrefix >> entriesDo: aBlock
 			| normalized |
 			normalized := normalizer normalize: depclassName.
 			(filter accepts: normalized) ifTrue: [
-					aBlock value: (NECGlobalEntry
+					aBlock value: (( NECGlobalEntry
 							 contents: (normalizer denormalize: normalized)
-							 node: nil) ] ].
+							 node: nil)  fetcher: self ; yourself) ] ].
 
 	"Avoid duplicates from systemNavigation environment"
 	keys := self systemNavigation environment keys asOrderedCollection.

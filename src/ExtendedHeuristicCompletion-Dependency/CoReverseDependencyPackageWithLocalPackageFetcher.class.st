@@ -106,7 +106,7 @@ CoReverseDependencyPackageWithLocalPackageFetcher >> entriesDo: aBlock [
 
 	dependentClassNames do: [ :depclassName |
 			(filter accepts: depclassName) ifTrue: [
-				aBlock value: (NECGlobalEntry contents: depclassName node: nil) ] ].
+				aBlock value: ((NECGlobalEntry contents: depclassName node: nil)  fetcher: self ; yourself) ] ].
 
 	"Avoid duplicates from systemNavigation environment"
 	keys := self systemNavigation environment keys asOrderedCollection.
