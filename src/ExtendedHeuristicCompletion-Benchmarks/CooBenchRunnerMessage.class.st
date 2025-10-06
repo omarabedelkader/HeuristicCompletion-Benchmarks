@@ -170,7 +170,7 @@ CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 				  package: pack;
 				  baseline: #completeBaseline ;
 				  others:
-					  {#complete2LevelDependency. #completeDependency. #completeLateralPackage. #completeReverseDependency. #completeSemantics. #local2LevelDependency. #localDependency. #localLateralPackageWithLocalPackage. #localReverseDependency. #unit2LevelDependency. #unitDependency. #unitEmpty. #unitLateral. #unitPackage. #unitReverseDependency };
+					  {#complete2LevelDependency. #completeBaseline. #completeDependency. #completeLateralPackage. #completeReverseDependency. #completeSemantics. #local2LevelDependency. #localDependency. #localLateralPackage. #localReverseDependency. #unit2LevelDependency. #unitDependency. #unitEmpty. #unitLateral. #unitPackage. #unitReverseDependency };
 				  run ]
 ]
 
@@ -443,7 +443,7 @@ CooBenchRunnerMessage >> localDependency [
 ]
 
 { #category : 'LOCAL' }
-CooBenchRunnerMessage >> localLateralPackageWithLocalPackage [ 
+CooBenchRunnerMessage >> localLateralPackage [ 
     "self new 
         package: CompletionSorter package;
         localLateralPackageWithLocalPackage"
