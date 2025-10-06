@@ -64,7 +64,7 @@ Class {
 { #category : 'enumerating' }
 CoReverseDependencyWithoutLocalPackageFetcher >> entriesDo: aBlock [
 
-	| closeClassNames keys dependentClassNames dependentPackages |
+	| dependentClassNames dependentPackages |
 	completionClass isNil ifTrue: [ ^ self ].
 	
 	organizer := package organizer.
@@ -86,14 +86,7 @@ CoReverseDependencyWithoutLocalPackageFetcher >> entriesDo: aBlock [
 			(filter accepts: depclassName) ifTrue: [
 				aBlock value: ((NECGlobalEntry contents: depclassName node: nil) fetcher: self ; yourself) ] ].
 
-	"Avoid duplicates from systemNavigation environment"
-	keys := self systemNavigation environment keys asOrderedCollection.
-	"closeClassNames do: [ :e | keys remove: e ifAbsent: [ ] ]."
-	dependentClassNames do: [ :e | keys remove: e ifAbsent: [ ] ].
-
-	keys do: [ :globalName |
-			(filter accepts: globalName) ifTrue: [
-				aBlock value: ((NECGlobalEntry contents: globalName node: astNode) fetcher: self; yourself) ] ]
+	
 ]
 
 { #category : 'accessing' }
