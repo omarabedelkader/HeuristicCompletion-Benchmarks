@@ -170,7 +170,7 @@ CooBenchRunnerMessage class >> runComparisonForPackages: aCol [
 				  package: pack;
 				  baseline: #completeBaseline ;
 				  others:
-					  {#complete2LevelDependency. #completeDependency. #completeLateralPackage. #completeReverseDependency. #completeSemantics. #local2LevelDependency. #localDependency. #localLateralPackageWithLocalPackage. #localReverseDependency. #unit2LevelDependency. #unitDependency. #unitEmptyHeuristic. #unitLateralsWithoutLocalPackage. #unitPackage. #unitReverseDependencyWithoutLocalPackage. #withLateralDependency. #withSemanticsPlusPackageScope };
+					  {#complete2LevelDependency. #completeDependency. #completeLateralPackage. #completeReverseDependency. #completeSemantics. #local2LevelDependency. #localDependency. #localLateralPackageWithLocalPackage. #localReverseDependency. #unit2LevelDependency. #unitDependency. #unitEmpty. #unitLateral. #unitPackage. #unitReverseDependency };
 				  run ]
 ]
 
@@ -529,7 +529,7 @@ CooBenchRunnerMessage >> unitDependency [
 ]
 
 { #category : 'UNIT' }
-CooBenchRunnerMessage >> unitEmptyHeuristic [
+CooBenchRunnerMessage >> unitEmpty [
 	"self new 
 		package: NECEntry package;
 		unitEmptyHeuristic"
@@ -548,7 +548,7 @@ CooBenchRunnerMessage >> unitEmptyHeuristic [
 ]
 
 { #category : 'UNIT' }
-CooBenchRunnerMessage >> unitLateralsWithoutLocalPackage [
+CooBenchRunnerMessage >> unitLateral [
 	"self new 
 		package: NECEntry package;
 		unitLateralsWithoutLocalPackage"
@@ -594,7 +594,7 @@ CooBenchRunnerMessage >> unitPackage [
 ]
 
 { #category : 'UNIT' }
-CooBenchRunnerMessage >> unitReverseDependencyWithoutLocalPackage [
+CooBenchRunnerMessage >> unitReverseDependency [
 	"self new 
 		package: (PackageOrganizer default packageNamed: 'NECompletion') ;
 		unitReverseDependencyWithoutLocalPackage"

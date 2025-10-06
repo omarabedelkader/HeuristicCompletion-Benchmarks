@@ -234,7 +234,7 @@ CooBenchRunnerVariables class >> runComparisonForPackages: aCol [
 				  package: pack;
 				  baseline: #completeBaseline;
 				  others:
-					  { #complete2LevelDependency. #completeBaseline. #completeDependency. #completeLateralPackageWithLocalPackage. #completeReverseDependency. #completeSemantics. #local2LevelDependencyWithLocalPackage. #localDependencyWithLocalPackage. #localLateralWithLocalPackage. #localReverseDependencyWithLocalPackage. #unit2LevelDependencyWithoutLocalPackage. #unitDirectDependencyWithoutLocalPackage. #unitEmptyHeuristic. #unitLateralsWithoutLocalPackage. #unitPackageLocal. #unitReverseDependencyWithoutLocalPackage};
+					  { #complete2LevelDependency. #completeBaseline. #completeDependency. #completeLateralPackage. #completeReverseDependency. #completeSemantics. #local2LevelDependency. #localDependency. #localLateral. #localReverseDependency. #unit2LevelDependency. #unitDirectDependency. #unitEmpty. #unitLateral. #unitPackageLocal. #unitReverseDependency};
 				  run ]
 ]
 
@@ -410,7 +410,7 @@ CooBenchRunnerVariables >> completeDependency [
 ]
 
 { #category : 'COMPLETE' }
-CooBenchRunnerVariables >> completeLateralPackageWithLocalPackage [
+CooBenchRunnerVariables >> completeLateralPackage [
 	"self new 
 		package: AnalyserData1 package;
 		completeLateralPackageWithLocalPackage"
@@ -503,7 +503,7 @@ CooBenchRunnerVariables >> completeSemantics [
 ]
 
 { #category : 'LOCAL' }
-CooBenchRunnerVariables >> local2LevelDependencyWithLocalPackage [
+CooBenchRunnerVariables >> local2LevelDependency [
 	"self new 
 		package: NECEntry package;
 		local2LevelDependencyWithLocalPackage"
@@ -523,7 +523,7 @@ CooBenchRunnerVariables >> local2LevelDependencyWithLocalPackage [
 ]
 
 { #category : 'LOCAL' }
-CooBenchRunnerVariables >> localDependencyWithLocalPackage [
+CooBenchRunnerVariables >> localDependency [
 	"self new 
 		package: NECEntry package;
 		localDependencyWithLocalPackage"
@@ -547,7 +547,7 @@ CooBenchRunnerVariables >> localDependencyWithLocalPackage [
 ]
 
 { #category : 'LOCAL' }
-CooBenchRunnerVariables >> localLateralWithLocalPackage [
+CooBenchRunnerVariables >> localLateral [
 	"self new 
 		package: AnalyserData1 package;
 		localLateralWithLocalPackage"
@@ -571,7 +571,7 @@ CooBenchRunnerVariables >> localLateralWithLocalPackage [
 ]
 
 { #category : 'LOCAL' }
-CooBenchRunnerVariables >> localReverseDependencyWithLocalPackage [
+CooBenchRunnerVariables >> localReverseDependency [
 	"self new 
 		package: (PackageOrganizer default packageNamed: 'NECompletion-Tests') ;
 		localReverseDependencyWithLocalPackage"
@@ -595,7 +595,7 @@ CooBenchRunnerVariables >> localReverseDependencyWithLocalPackage [
 ]
 
 { #category : 'UNIT' }
-CooBenchRunnerVariables >> unit2LevelDependencyWithoutLocalPackage [
+CooBenchRunnerVariables >> unit2LevelDependency [
 	"self new 
 		package: NECEntry package;
 		unit2LevelDependencyWithoutLocalPackage"
@@ -615,7 +615,7 @@ CooBenchRunnerVariables >> unit2LevelDependencyWithoutLocalPackage [
 ]
 
 { #category : 'UNIT' }
-CooBenchRunnerVariables >> unitDirectDependencyWithoutLocalPackage [
+CooBenchRunnerVariables >> unitDirectDependency [
 	"self new 
 		package: NECEntry package;
 		unitDirectDependencyWithoutLocalPackage"
@@ -635,7 +635,7 @@ CooBenchRunnerVariables >> unitDirectDependencyWithoutLocalPackage [
 ]
 
 { #category : 'UNIT' }
-CooBenchRunnerVariables >> unitEmptyHeuristic [
+CooBenchRunnerVariables >> unitEmpty [
 	"self new 
 		package: AnalyserData1 package;
 		unitEmptyHeuristic"
@@ -654,7 +654,7 @@ CooBenchRunnerVariables >> unitEmptyHeuristic [
 ]
 
 { #category : 'UNIT' }
-CooBenchRunnerVariables >> unitLateralsWithoutLocalPackage [
+CooBenchRunnerVariables >> unitLateral [
 	"self new 
 		package: AnalyserData1 package;
 		unitLateralsWithoutLocalPackage"
@@ -702,7 +702,7 @@ CooBenchRunnerVariables >> unitPackageLocal [
 ]
 
 { #category : 'UNIT' }
-CooBenchRunnerVariables >> unitReverseDependencyWithoutLocalPackage [
+CooBenchRunnerVariables >> unitReverseDependency [
 	"self new 
 		package: (PackageOrganizer default packageNamed: 'NECompletion-Tests') ;
 		unitReverseDependencyWithoutLocalPackage"
