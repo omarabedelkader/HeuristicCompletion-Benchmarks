@@ -41,8 +41,6 @@ BaselineOfExtendedHeuristicCompletion >> definePackages: spec [
 
 	spec package: 'ExtendedHeuristicCompletion-Dependency' with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
 
-	spec package: 'ExtendedHeuristicCompletion-Weights' with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
-
 	spec package: 'ExtendedHeuristicCompletion-Prefixes' with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
 
 	spec package: 'ExtendedHeuristicCompletion-History'.
