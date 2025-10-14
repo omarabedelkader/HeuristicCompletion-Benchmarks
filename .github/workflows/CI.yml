@@ -3,8 +3,6 @@ name: CI
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the development branch
 on:
   push:
     branches:
@@ -17,15 +15,34 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ macos-latest, ubuntu-latest ]
+        os: [ macos-latest, ubuntu-latest, windows-latest, windows-latest  ]
         smalltalk: [ Pharo64-14 ]
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.smalltalk }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: hpi-swa/setup-smalltalkCI@v1
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+
+      - name: Setup Smalltalk CI
+        uses: hpi-swa/setup-smalltalkCI@v1
         with:
           smalltalk-version: ${{ matrix.smalltalk }}
-      - run: smalltalkci -s ${{ matrix.smalltalk }}
+
+      - name: Run tests for current repository
+        run: smalltalkci -s ${{ matrix.smalltalk }}
+        shell: bash
+        timeout-minutes: 15
+
+      # 👇 Added step: clone the external repo and test it too
+      - name: Clone HeuristicCompletion-Analyser repository
+        run: |
+          git clone https://github.com/omarabedelkader/HeuristicCompletion-Analyser.git
+          cd HeuristicCompletion-Analyser
+          ls -la
+
+      - name: Run tests in HeuristicCompletion-Analyser
+        run: |
+          cd HeuristicCompletion-Analyser
+          smalltalkci -s ${{ matrix.smalltalk }}
         shell: bash
         timeout-minutes: 15
