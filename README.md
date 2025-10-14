@@ -4,7 +4,7 @@
 
 Metacello new
   githubUser: 'omarabedelkader' project: 'HeuristicCompletion-Benchmarks' commitish: 'main' path: 'src';
-  baseline: 'ExtendedHeuristicCompletion';
+  baseline: 'ExtendedHeuristicCompletionBenchmarks';
   load
 
 ```
