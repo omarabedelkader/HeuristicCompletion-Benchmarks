@@ -27,7 +27,6 @@ BaselineOfExtendedHeuristicCompletion >> baseline: spec [
 
 	spec package: 'ExtendedHeuristicCompletion-Prefixes' with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
 
-	spec package: 'ExtendedHeuristicCompletion-History'.
 	spec package: 'ExtendedHeuristicCompletion-Model' with: [ spec requires: 'ExtendedHeuristicCompletion-PackageScope-Variable' ]. "analyser"
 	spec package: 'ExtendedHeuristicCompletion-Analyser-Data'.
 	spec package: 'ExtendedHeuristicCompletion-Analyser-Data2'.
