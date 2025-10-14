@@ -1,12 +1,12 @@
 Class {
-	#name : 'BaselineOfExtendedHeuristicCompletion',
+	#name : 'BaselineOfExtendedHeuristicCompletionBenchmakrs',
 	#superclass : 'BaselineOf',
-	#category : 'BaselineOfExtendedHeuristicCompletion',
-	#package : 'BaselineOfExtendedHeuristicCompletion'
+	#category : 'BaselineOfExtendedHeuristicCompletionBenchmarks',
+	#package : 'BaselineOfExtendedHeuristicCompletionBenchmarks'
 }
 
 { #category : 'baselines' }
-BaselineOfExtendedHeuristicCompletion >> baseline: spec [
+BaselineOfExtendedHeuristicCompletionBenchmakrs >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
