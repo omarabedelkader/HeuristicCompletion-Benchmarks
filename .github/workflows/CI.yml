@@ -3,8 +3,6 @@ name: CI
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the development branch
 on:
   push:
     branches:
@@ -17,21 +15,35 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ macos-latest, ubuntu-latest ]
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
         smalltalk: [ Pharo64-14 ]
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.smalltalk }}
     steps:
       - uses: actions/checkout@v2
+
       - uses: hpi-swa/setup-smalltalkCI@v1
         with:
           smalltalk-version: ${{ matrix.smalltalk }}
-      - run: smalltalkci -s ${{ matrix.smalltalk }}
-        shell: bash
-        timeout-minutes: 15
 
+      # -------------------------------
+      # Clone all HeuristicCompletion repositories
+      # -------------------------------
       - name: Clone HeuristicCompletion-Analyser repository
         run: git clone https://github.com/omarabedelkader/HeuristicCompletion-Analyser.git
+
+      # - name: Clone HeuristicCompletion-Weights repository
+      #   run: git clone https://github.com/omarabedelkader/HeuristicCompletion-Weights.git
+
+      # - name: Clone HeuristicCompletion-Dependency repository
+      #   run: git clone https://github.com/omarabedelkader/HeuristicCompletion-Dependency.git
+
+      # - name: Clone HeuristicCompletion-History repository
+      #   run: git clone https://github.com/omarabedelkader/HeuristicCompletion-History.git
+
+      # -------------------------------
+      # Run tests in each repository
+      # -------------------------------
 
       - name: Clean previous build folder
         run: rm -rf ~/.smalltalkCI/_builds
@@ -42,3 +54,33 @@ jobs:
           smalltalkci -s ${{ matrix.smalltalk }}
         shell: bash
         timeout-minutes: 15
+
+      # - name: Clean previous build folder
+      #   run: rm -rf ~/.smalltalkCI/_builds
+
+      # - name: Run tests in HeuristicCompletion-Weights
+      #   run: |
+      #     cd HeuristicCompletion-Weights
+      #     smalltalkci -s ${{ matrix.smalltalk }}
+      #   shell: bash
+      #   timeout-minutes: 15
+
+      # - name: Clean previous build folder
+      #   run: rm -rf ~/.smalltalkCI/_builds
+
+      # - name: Run tests in HeuristicCompletion-Dependency
+      #   run: |
+      #     cd HeuristicCompletion-Dependency
+      #     smalltalkci -s ${{ matrix.smalltalk }}
+      #   shell: bash
+      #   timeout-minutes: 15
+
+      # - name: Clean previous build folder
+      #   run: rm -rf ~/.smalltalkCI/_builds
+
+      # - name: Run tests in HeuristicCompletion-History
+      #   run: |
+      #     cd HeuristicCompletion-History
+      #     smalltalkci -s ${{ matrix.smalltalk }}
+      #   shell: bash
+      #   timeout-minutes: 15
