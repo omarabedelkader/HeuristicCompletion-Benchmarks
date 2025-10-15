@@ -156,6 +156,46 @@ CooBenchRunnerTest >> testLatexTableResultIncludesPackageMetricAndValues [
 ]
 
 { #category : 'tests' }
+CooBenchRunnerTest >> testLatexTableResultRendersRowsForMultipleBenchmarks [
+        | firstPackage secondPackage firstBench secondBench firstResult secondResult latex |
+        firstPackage := CooBenchRunnerTestPackageStub new.
+        firstPackage name: 'SamplePackage'.
+        secondPackage := CooBenchRunnerTestPackageStub new.
+        secondPackage name: 'AnotherPackage'.
+
+        firstBench := CooBenchRunnerTestBenchStub new.
+        firstBench package: firstPackage.
+        firstResult := CooBenchRunnerTestResultStub new.
+        firstResult mmrString: self sampleMmrString.
+        firstBench results: (Dictionary newFrom: { #metric -> firstResult }).
+
+        secondBench := CooBenchRunnerTestBenchStub new.
+        secondBench package: secondPackage.
+        secondResult := CooBenchRunnerTestResultStub new.
+        secondResult
+                mmrString:
+                        (String streamContents: [ :stream |
+                                 stream
+                                         nextPutAll: 'mmr: 0.95';
+                                         cr;
+                                         nextPutAll: '2 0.85';
+                                         cr;
+                                         nextPutAll: '3 0.75';
+                                         cr;
+                                         nextPutAll: '4 0.65' ]).
+        secondBench results: (Dictionary newFrom: { #metric -> secondResult }).
+
+        latex := CooBenchRunner latexTableResultForABenchCollection: { firstBench. secondBench }.
+
+        self
+                assert: (latex includesSubstring: 'Package & Metric & MMR & 2 & 3 & 4 \\').
+        self
+                assert: (latex includesSubstring: 'SamplePackage & metric & 0.9 & 0.8 & 0.7 \\').
+        self
+                assert: (latex includesSubstring: 'AnotherPackage & metric & 0.95 & 0.85 & 0.75 & 0.65 \\').
+]
+
+{ #category : 'tests' }
 CooBenchRunnerTest >> testPrefixSizesEnumeratesTwoToEight [
         | result |
         result := CooBenchResult new.
