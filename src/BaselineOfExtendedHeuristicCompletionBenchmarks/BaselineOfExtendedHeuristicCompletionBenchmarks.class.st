@@ -14,9 +14,5 @@ BaselineOfExtendedHeuristicCompletionBenchmarks >> baseline: spec [
 
 			spec
 				package: 'ExtendedHeuristicCompletion-Benchmarks-Tests'
-				with: [ spec requires: #( 'ExtendedHeuristicCompletion-Benchmarks') ].
-
-			spec package: 'ExtendedHeuristicCompletion-Prefixes' with: [ spec requires: 'ExtendedHeuristicCompletion-Benchmarks' ].
-]
-		
+				with: [ spec requires: #( 'ExtendedHeuristicCompletion-Benchmarks' ) ]]
 ]
