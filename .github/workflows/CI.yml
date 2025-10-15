@@ -30,15 +30,3 @@ jobs:
         shell: bash
         timeout-minutes: 15
 
-      - name: Clone HeuristicCompletion-Analyser repository
-        run: git clone https://github.com/omarabedelkader/HeuristicCompletion-Analyser.git
-
-      - name: Clean previous build folder
-        run: rm -rf ~/.smalltalkCI/_builds
-
-      - name: Run tests in HeuristicCompletion-Analyser
-        run: |
-          cd HeuristicCompletion-Analyser
-          smalltalkci -s ${{ matrix.smalltalk }}
-        shell: bash
-        timeout-minutes: 15
