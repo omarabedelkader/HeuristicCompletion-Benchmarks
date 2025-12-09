@@ -5,11 +5,18 @@ Class {
 	#package : 'BaselineOfExtendedHeuristicCompletionBenchmarks'
 }
 
+{ #category : 'script' }
+BaselineOfExtendedHeuristicCompletionBenchmarks class >> postLoad [
+
+	CompletionContext sorterClass: NoSorter
+]
+
 { #category : 'baselines' }
 BaselineOfExtendedHeuristicCompletionBenchmarks >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
+			spec postLoadDoIt: #postLoad.
 			spec package: 'ExtendedHeuristicCompletion-Benchmarks'.
 
 			spec
