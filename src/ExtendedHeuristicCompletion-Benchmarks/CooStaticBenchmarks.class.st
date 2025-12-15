@@ -41,6 +41,22 @@
 ## Typical Usage:
 
 See my subclasses
+
+
+
+```
+results := CooStaticBenchmarksMessage runAllSortersOnPackage: NECEntry package.
+```
+
+
+```
+single := CooStaticBenchmarksMessage new
+    scope: (CoBenchmarkPackage on: CompletionSorter package);
+    builder: (CoGlobalSorterResultSetBuilder new
+        sorterClass: AlphabeticSorter;
+        yourself);
+    run.
+```
 "
 Class {
 	#name : 'CooStaticBenchmarks',
