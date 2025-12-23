@@ -133,6 +133,27 @@ CooStaticBenchmarks class >> runAllSortersOnPackage: aPackageIdentifier [
 ]
 
 { #category : 'running' }
+CooStaticBenchmarks class >> runAllSortersOnPackage: aPackageIdentifier exportReportTo: aFileReference [
+	"Run all known sorters on the given package and write a human readable report for each sorter to the given file reference or path. Returns the same Dictionary as #runAllSortersOnPackage:."
+
+	| results output |
+	results := self runAllSortersOnPackage: aPackageIdentifier.
+	output := aFileReference asFileReference.
+	output ensureCreateFile.
+	output writeStreamDo: [ :stream |
+		results keys asSortedCollection do: [ :sorterSymbol |
+			| benchmark |
+			benchmark := results at: sorterSymbol.
+			stream
+				nextPutAll: '### ';
+				nextPutAll: sorterSymbol asString;
+				nextPutAll: ' ###';
+				cr; cr.
+			stream nextPutAll: benchmark textReport; cr; cr ] ].
+	^ results
+]
+
+{ #category : 'running' }
 CooStaticBenchmarks class >> runOnPackage: aPackage heuristics: aHeuristicsBlock [
 
 	^ (self onPackage: aPackage heuristics: aHeuristicsBlock) run; yourself
@@ -319,6 +340,19 @@ CooStaticBenchmarks >> completionBenchs [
 CooStaticBenchmarks >> completionBenchs: anObject [
 
 	completionBenchs := anObject
+]
+
+{ #category : 'accessing' }
+CooStaticBenchmarks >> completionIndexLabelFor: completionIndexRange [ 
+
+	^ completionIndexRange size = 1
+		  ifTrue: [
+			  #( 'fail' '1st' '2nd' '3rd' )
+				  at: completionIndexRange first + 1
+				  ifAbsent: [ completionIndexRange first asString ] ]
+		  ifFalse: [
+			  completionIndexRange first asString , '-' ,
+			  completionIndexRange last asString ]
 ]
 
 { #category : 'benchmarks' }
@@ -1152,6 +1186,192 @@ CooStaticBenchmarks >> startMemoryMeasurement [
 CooStaticBenchmarks >> startTimeMeasurement [
 
 	self subclassResponsibility
+]
+
+{ #category : 'accessing' }
+CooStaticBenchmarks >> textReport [
+    "Return a plain text report with the main metrics for this benchmark instance."
+
+    | prefixSizes kValues |
+    prefixSizes := self prefixSizes.
+    kValues := #(1 3 5 10).
+
+    ^ String streamContents: [ :stream |
+
+        stream
+            nextPutAll: 'Name: ';
+            nextPutAll: self name;
+            cr.
+
+        (builder respondsTo: #sorterClass) ifTrue: [
+            stream
+                nextPutAll: 'Sorter: ';
+                nextPutAll: builder sorterClass name;
+                cr ].
+
+        stream
+            nextPutAll: 'Scope: ';
+            print: scope;
+            cr;
+            cr.
+
+        "Accuracy"
+        stream
+            nextPutAll: 'Accuracy (%)';
+            cr;
+            nextPutAll: 'Row'.
+
+        prefixSizes do: [ :prefixSize |
+            stream
+                nextPutAll: ' | ';
+                nextPutAll: prefixSize asString ].
+        stream cr.
+
+        self completionIndexes do: [ :completionIndexRange |
+            stream nextPutAll:
+                (self completionIndexLabelFor: completionIndexRange).
+
+            prefixSizes do: [ :prefixSize |
+                | percentage |
+                percentage :=
+                    (self
+                        accuracyForCompletionIndex: completionIndexRange
+                        withPrefixSize: prefixSize) * 100.
+
+                stream
+                    nextPutAll: ' | ';
+                    nextPutAll: (percentage asFloat round: 2) asString ].
+            stream cr ].
+
+        stream cr.
+
+        "Time"
+        stream
+            nextPutAll: 'Time (ms)';
+            cr;
+            nextPutAll: 'Prefix | Total | Count | Average';
+            cr.
+
+        prefixSizes do: [ :prefixSize |
+            | timeStats |
+            timeStats := completionTimes at: prefixSize ifAbsent: [ #(0 0) ].
+
+            stream
+                nextPutAll: prefixSize asString;
+                nextPutAll: ' | ';
+                nextPutAll: (self totalTimeForPrefix: prefixSize) asString;
+                nextPutAll: ' | ';
+                nextPutAll: timeStats second asString;
+                nextPutAll: ' | ';
+                nextPutAll:
+                    ((self averageTimeForPrefix: prefixSize) asFloat round: 2)
+                        asString;
+                cr ].
+
+        stream cr.
+
+        "Memory"
+        stream
+            nextPutAll: 'Memory Usage';
+            cr;
+            nextPutAll: 'Prefix | Total (bytes) | Average (bytes) | Total (MB)';
+            cr.
+
+        prefixSizes do: [ :prefixSize |
+            | total average |
+            total := self totalMemoryForPrefix: prefixSize.
+            average := self averageMemoryForPrefix: prefixSize.
+
+            stream
+                nextPutAll: prefixSize asString;
+                nextPutAll: ' | ';
+                nextPutAll: total asString;
+                nextPutAll: ' | ';
+                nextPutAll: (average asFloat round: 2) asString;
+                nextPutAll: ' | ';
+                nextPutAll: ((total / 1024 / 1024) asFloat round: 2) asString;
+                cr ].
+
+        stream cr.
+
+        "MMR"
+        stream
+            nextPutAll: 'MMR';
+            cr;
+            nextPutAll: 'Prefix | Mean Reciprocal Rank';
+            cr.
+
+        prefixSizes do: [ :prefixSize |
+            stream
+                nextPutAll: prefixSize asString;
+                nextPutAll: ' | ';
+                nextPutAll:
+                    ((self mmrForPrefixSize: prefixSize) asFloat round: 2)
+                        asString;
+                cr ].
+
+        stream cr.
+
+        "NDCG"
+        stream
+            nextPutAll: 'NDCG';
+            cr;
+            nextPutAll: 'Prefix | NDCG';
+            cr.
+
+        prefixSizes do: [ :prefixSize |
+            stream
+                nextPutAll: prefixSize asString;
+                nextPutAll: ' | ';
+                nextPutAll:
+                    ((self ndcgForPrefixSize: prefixSize) asFloat round: 2)
+                        asString;
+                cr ].
+
+        stream cr.
+
+        "Rank Distribution"
+        stream
+            nextPutAll:
+                'Rank Distribution (correct result count per rank)';
+            cr;
+            nextPutAll:
+                'Prefix | Rank1 | Rank2 | Rank3 | Rank4 | Rank5 | Rank6 | Rank7 | Rank8 | Rank9 | Rank10';
+            cr.
+
+        prefixSizes do: [ :prefixSize |
+            stream nextPutAll: prefixSize asString.
+            (self rankDistributionForPrefixSize: prefixSize) do: [ :rankCount |
+                stream
+                    nextPutAll: ' | ';
+                    nextPutAll: rankCount asString ].
+            stream cr ].
+
+        stream cr.
+
+        "Recall@K"
+        stream
+            nextPutAll: 'Recall@K (%)';
+            cr;
+            nextPutAll: 'K'.
+
+        prefixSizes do: [ :prefixSize |
+            stream
+                nextPutAll: ' | Prefix ';
+                nextPutAll: prefixSize asString ].
+        stream cr.
+
+        kValues do: [ :k |
+            stream nextPutAll: k asString.
+            prefixSizes do: [ :prefixSize |
+                stream
+                    nextPutAll: ' | ';
+                    nextPutAll:
+                        (((self recallAtK: k withPrefixSize: prefixSize) * 100)
+                            asFloat round: 2) asString ].
+            stream cr ]
+    ]
+
 ]
 
 { #category : 'inspector' }
