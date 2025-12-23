@@ -119,7 +119,7 @@ CooStaticBenchmarks class >> runAllSortersOnPackage: aPackageIdentifier [
         sorterClass := Smalltalk globals at: sorterSymbol.
         benchmark := self new
             scope: (CoBenchmarkPackage on: pkg);
-            builder: (CoGlobalSorterResultSetBuilder new
+            builder: (CooGlobalSorterResultSetBuilder new
                         sorterClass: sorterClass;
                         yourself);
             yourself.
