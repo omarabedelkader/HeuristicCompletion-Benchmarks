@@ -48,6 +48,11 @@ See my subclasses
 results := CooStaticBenchmarksMessage runAllSortersOnPackage: NECEntry package.
 ```
 
+```
+CooStaticBenchmarksMessage
+    runAllSortersOnPackage: NECEntry package
+    exportReportTo: 'nec-sorter-benchmarks.txt'.
+```
 
 ```
 single := CooStaticBenchmarksMessage new
