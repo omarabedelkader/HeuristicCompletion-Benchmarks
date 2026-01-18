@@ -10,7 +10,6 @@ BaselineOfExtendedHeuristicCompletionBenchmarks >> baseline: spec [
 
 	<baseline>
 	spec for: #common do: [
-			spec postLoadDoIt: #postLoad.
 			spec package: 'ExtendedHeuristicCompletion-Benchmarks'.
 
 			spec
