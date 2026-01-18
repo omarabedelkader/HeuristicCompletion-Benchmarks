@@ -1,6 +1,6 @@
 Class {
 	#name : 'CooGlobalSorterResultSetBuilder',
-	#superclass : 'CoGlobalSorterResultSetBuilder',
+	#superclass : 'CoASTResultSetBuilder',
 	#category : 'ExtendedHeuristicCompletion-Benchmarks',
 	#package : 'ExtendedHeuristicCompletion-Benchmarks'
 }
