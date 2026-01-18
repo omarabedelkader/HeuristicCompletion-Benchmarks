@@ -5,12 +5,6 @@ Class {
 	#package : 'BaselineOfExtendedHeuristicCompletionBenchmarks'
 }
 
-{ #category : 'script' }
-BaselineOfExtendedHeuristicCompletionBenchmarks >> postLoad [
-
-	CompletionContext sorterClass: NoSorter
-]
-
 { #category : 'baselines' }
 BaselineOfExtendedHeuristicCompletionBenchmarks >> baseline: spec [
 
