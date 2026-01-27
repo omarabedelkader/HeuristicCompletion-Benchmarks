@@ -360,8 +360,7 @@ CooBenchRunnerVariables >> complete2LevelDependency [
 			 add: CoLocalScopeVariablesHeuristic new;
 			 add: CoWorkspaceVariablesHeuristic new;
 			 add: CoInstanceAccessibleVariablesHeuristic new;
-			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoTransitiveDependencyPackageScopedGlobalVariableFetcher);
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass: Co2LevelDependencyWithoutLocalFetcher );
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
 		             name: 'Conplete 2 Level Dependency';
@@ -398,8 +397,7 @@ CooBenchRunnerVariables >> completeDependency [
 	builder := CoASTHeuristicsResultSetBuilder new.
 	builder variablesHeuristic: (builder newHeuristicBuilder
 			 add: CoInstanceAccessibleVariablesHeuristic new;
-			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass:
-						  CoDependencyPackageScopedGlobalVariableFetcher);
+			 add: (CoGlobalVariablesHeuristic new globalVariableFetcherClass: CoDependencyGlobalVariableFetcher );
 			 build).
 	benchmark := CooStaticBenchmarksVariables new
 		             name: 'Complete Dependency';
