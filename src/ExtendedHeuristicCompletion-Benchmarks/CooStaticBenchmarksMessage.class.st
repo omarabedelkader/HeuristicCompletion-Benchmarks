@@ -98,15 +98,15 @@ Class {
 CooStaticBenchmarksMessage >> benchCallsite: aMessageNode atPosition: aPosition [
 
 	| originalSelector |
-	originalSelector := aMessageNode selector.
+	originalSelector := aMessageNode selectorNode value.
 
 	2 to: (self maxPrefixSizeFor: originalSelector) do: [ :index |
 		| prefix startTime startMemory completion candidates completionIndex |
 		startTime := self startTimeMeasurement.
 		startMemory := self startMemoryMeasurement.
-
+		
 		prefix := self extractPrefixFrom: originalSelector at: index.
-		aMessageNode selector: prefix.
+		aMessageNode selectorNode value: prefix.
 
 		completion := self
 			              buildCompletionFor: aMessageNode
@@ -127,7 +127,7 @@ CooStaticBenchmarksMessage >> benchCallsite: aMessageNode atPosition: aPosition 
 		self logMemoryUsageSince: startMemory forPrefixSize: prefix size.
 		self logExecutionTimeSince: startTime forPrefixSize: prefix size ].
 
-	aMessageNode selector: originalSelector
+	aMessageNode selectorNode value: originalSelector
 ]
 
 { #category : 'benchmarks' }
