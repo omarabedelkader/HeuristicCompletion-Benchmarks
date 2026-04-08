@@ -191,8 +191,7 @@ CooStaticBenchmarks class >> runVariableOnNeCompletionPackage [
 CooStaticBenchmarks class >> sorterClasses [
 	"Answers an array of the symbols of all sorter classes to be run."
 
-	^ #( NoSorter SizeSorter CatBoostBM25 CatBoostEMB CatBoostTFIDF
-	     CatBoostFull CatBoostBasePairWaise CatBoostBasePointWise CatBoostBaseListWise CatBoostMRRPairWaise CatBoostMRRListWise CatBoostMRRPointWise )
+	^ #( NoSorter SizeSorter )
 ]
 
 { #category : 'metrics' }
