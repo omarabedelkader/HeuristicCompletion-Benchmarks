@@ -191,7 +191,7 @@ CooStaticBenchmarks class >> runVariableOnNeCompletionPackage [
 CooStaticBenchmarks class >> sorterClasses [
 	"Answers an array of the symbols of all sorter classes to be run."
 
-	^ #( NoSorter SizeSorter )
+	^ #( NoSorter SizeSorter AISorter )
 ]
 
 { #category : 'metrics' }
